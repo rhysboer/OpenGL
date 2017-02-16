@@ -71,12 +71,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -157,11 +159,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\AIE\Gizmos.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BaseApplication.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Colors.cpp" />
     <ClCompile Include="gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AIE\Gizmos.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="BaseApplication.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Colors.h" />
     <ClInclude Include="gl_core_4_4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
