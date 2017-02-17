@@ -11,6 +11,16 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
+
+///////////////////////////
+
+struct Vertex {
+	vec4 position;
+	vec4 colour;
+};
+
+///////////////////////////
+
 class Application : public BaseApplication {
 public:
 	Application(int width, int height, const char* name);
@@ -21,6 +31,22 @@ public:
 
 	const bool Startup();
 	void Shutdown();
+
+	//////////////// TESTING
+	void GenerateGrid(unsigned int rows, unsigned int cols);
+	void Start();
+
+	unsigned int m_VAO;
+	unsigned int m_VBO;	// Vertex Buffer Object
+	unsigned int m_IBO; // Index Buffer Object
+
+	unsigned int m_programID;
+
+	unsigned int m_rows;
+	unsigned int m_cols;
+
+	///////////////
+
 private:
 
 	void Input();
