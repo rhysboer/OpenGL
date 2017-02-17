@@ -5,6 +5,7 @@
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
 #include "Colors.h"
+#include "Camera.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -24,20 +25,15 @@ private:
 
 	void Input();
 
-	// Camera
-	mat4 view;
-	mat4 projection;
+	Camera camera;
 
-	mat4 m_sunTransform = mat4(1);
-	mat4 m_sunLocal = mat4(1);
-	mat4 m_sunRTransform = mat4(1);
+	mat4 m_sunMat = mat4(1);
 
-	mat4 m_earthTransform = mat4(1);
+	mat4 m_earthMat = mat4(1);
 	mat4 m_earthLocal = mat4(1);
-	mat4 m_earthRTransform = mat4(1);
 
-	mat4 m_moonTransform = mat4(1);
-	mat4 m_moonRTransform = mat4(1);
+	mat4 m_moonMat = mat4(1);
+	mat4 m_moonLocal = mat4(1);
 
 
 	// Rotation Matrices
