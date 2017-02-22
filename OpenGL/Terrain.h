@@ -18,11 +18,16 @@ public:
 	Terrain();
 	~Terrain();
 
+	void init(unsigned int rows, unsigned int cols);
+
 	void Draw(Camera& camera);
 
 private:
 
-	void GenerateGrid(unsigned int rows, unsigned int cols);
+	void GenerateGrid();
+
+	unsigned int m_rows;
+	unsigned int m_cols;
 
 	unsigned int m_VAO; 
 	unsigned int m_VBO;	// Vertex Buffer Object

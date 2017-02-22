@@ -18,6 +18,7 @@ public:
 	void SetLookAt(vec3 towards, vec3 center, vec3 worldUp);
 	void SetPosition(vec3 position);
 	void Move(vec3 translate);
+	void Rotate(float angle, vec3 axis);
 
 	const mat4 GetWorldTransform() const;
 	const mat4 GetView() const;
@@ -28,9 +29,10 @@ protected:
 	void InverseWorldTransform();
 	mat4 UpdateProjectionViewTransform();
 
-	glm::mat4 m_worldTransform;			 // global / model position
-	glm::mat4 m_viewTransform;			 // view
-	glm::mat4 m_projectionTransform;	 // projection
-	glm::mat4 m_projectionViewTransform; // projection * view
+	mat4 m_rotationMat;			// rotation
+	mat4 m_worldMat;			// global / model position
+	mat4 m_viewMat;				// view
+	mat4 m_projectionMat;		// projection
+	mat4 m_projectionViewMat;	// projection * view
 };
 
