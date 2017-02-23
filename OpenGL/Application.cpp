@@ -39,7 +39,7 @@ const bool Application::Startup() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(10, 10);
+	terrain.init(4, 4);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));

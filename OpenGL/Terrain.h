@@ -1,19 +1,19 @@
 #pragma once
-
-#include "STB\stb_image.h"
-
 #include "gl_core_4_4.h"
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
 #include "GLFW\glfw3.h"
 #include "Camera.h"
 
+#include "Texture.h"
+
+using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 
 struct Vertex {
 	vec4 position;
-	vec4 colour;
+	vec2 texturePos;
 };
 
 class Terrain {
@@ -37,12 +37,7 @@ private:
 
 	unsigned int m_programID;
 
-	// TEXTURE
-	int imageWidth = 0;
-	int imageHeight = 0;
-	int imageFormat = 0;
-
-	unsigned int m_texture = 0;
-	unsigned int m_blackTexture = 0;
+	// Texture
+	Texture* m_texture;
 };
 

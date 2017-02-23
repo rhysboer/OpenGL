@@ -1,36 +1,15 @@
-#define STB_IMAGE_IMPLEMENTATION
 #include "Terrain.h"
 
 Terrain::Terrain() {
 }
 
 Terrain::~Terrain() {
+	delete m_texture;
 }
 
 void Terrain::init(unsigned int rows, unsigned int cols) {
-
-	// TEXTURE loading
-	unsigned char* data = stbi_load("..//bin//textures//wy.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
-
-	glGenTextures(1, &m_texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	stbi_image_free(data);
-	// END
-	// TEXTURE
-	data = stbi_load("..//bin//textures//bnw.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
-
-	glGenTextures(1, &m_blackTexture);
-	glBindTexture(GL_TEXTURE_2D, m_blackTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	stbi_image_free(data);
-	// END
+	// Textures
+	m_texture = new Texture("../bin/textures/wy.png");
 
 	const char* vsSource = "#version 410\n \
 							layout(location=0) in vec4 position; \
@@ -38,16 +17,15 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 							out vec2 vTexCoord; \
 							uniform mat4 projectionViewWorldMatrix; \
 							void main() { \
-							vTexCoord = vec2(texCoord.x, -texCoord.y); \
+							vTexCoord = texCoord; \
 							gl_Position= projectionViewWorldMatrix * position; }";
 
 	const char* fsSource = "#version 410\n \
 							in vec2 vTexCoord; \
 							out vec4 fragColor; \
 							uniform sampler2D diffuse; \
-							uniform sampler2D blacky; \
 							void main() { \
-							fragColor = texture(diffuse,vTexCoord) * texture(blacky, vTexCoord); }";
+							fragColor = texture(diffuse,vTexCoord); }";
 
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, (const char**)&vsSource, 0);
@@ -65,18 +43,17 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	GenerateGrid();
 
 	// Grid Shader
-	/*
-	const char* vsSource = "#version 410\n \
+	
+	//const char* vsSource = "#version 410\n \
 							layout(location=0) in vec4 position; \
 							layout(location=1) in vec4 colour; \
 							out vec4 vColour; \
 							uniform mat4 projectionViewWorldMatrix; \
 							void main() { vColour = colour; gl_Position = projectionViewWorldMatrix * position; }";
 
-	const char* fsSource = "#version 410\n \
+	//const char* fsSource = "#version 410\n \
 							in vec4 vColour; \
 							out vec4 fragColor; \
 							void main() { fragColor = vColour; }";
@@ -86,7 +63,7 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	GenerateGrid();
 
-	int success = GL_FALSE;
+	/*int success = GL_FALSE;
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -132,85 +109,83 @@ void Terrain::Draw(Camera & camera) {
 	glUseProgram(m_programID);
 
 	// bind the camera
-	int loc = glGetUniformLocation(m_programID, "projectionViewWorldMatrix");
+	unsigned int loc = glGetUniformLocation(m_programID, "projectionViewWorldMatrix");
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &camera.GetProjectionView()[0][0]);
 
 	// set texture slot
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, m_blackTexture);
+	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureData());
 
 	// tell the shader where it is
 	loc = glGetUniformLocation(m_programID, "diffuse");
 	glUniform1i(loc, 0);
-
-
-	loc = glGetUniformLocation(m_programID, "blacky");
-	glUniform1i(loc, 1);
-
+	
 	// draw
 	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr); // 6
 }
 
 void Terrain::GenerateGrid() {
 
 	// premade grid
-	float vertexData[] = {
-		-5, 0, 5, 1, 0, 1,
-		5, 0, 5, 1, 1, 1,
-		5, 0, -5, 1, 1, 0,
-		-5, 0, -5, 1, 0, 0
-	};
+	//float vertexData[] = {
+	//	-5, 0, 5, 1, 0, 1,
+	//	5, 0, 5, 1, 1, 1,
+	//	5, 0, -5, 1, 1, 0,
+	//	-5, 0, -5, 1, 0, 0
+	//};
 
-	unsigned int indexData[] = {
-		0, 1, 2,
-		0, 2, 3
-	};
+	//unsigned int indexData[] = {
+	//	0, 1, 2,
+	//	0, 2, 3
+	//};
 
-	glGenVertexArrays(1, &m_VAO);
-	glBindVertexArray(m_VAO);
+	//glGenVertexArrays(1, &m_VAO);
+	//glBindVertexArray(m_VAO);
+	//
+	//glGenBuffers(1, &m_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, vertexData, GL_STATIC_DRAW);
+	//
+	//glGenBuffers(1, &m_IBO);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indexData, GL_STATIC_DRAW);
+	//
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+	//
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, ((char*)0) + 16);
+	//
+	//glBindVertexArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, &m_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, vertexData, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &m_IBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indexData, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, ((char*)0) + 16);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// TERRAIN
-	/*
+
 	Vertex* aoVertices = new Vertex[m_rows * m_cols];
 	for (unsigned int r = 0; r < m_rows; ++r) {
 		for (unsigned int c = 0; c < m_cols; ++c) {
-
 			aoVertices[r*m_cols + c].position = vec4((float)c, 0, (float)r, 1);
-
-			vec3 colour = vec3(sinf((c / (float)(m_cols - 1)) * (r / (float)(m_rows - 1))));
-			aoVertices[r*m_cols + c].colour = vec4(colour, 1);
+	
+			//vec3 colour = vec3(sinf((c / (float)(m_cols - 1)) * (r / (float)(m_rows - 1))));
+			//aoVertices[r*m_cols + c].colour = vec4(colour, 1);
 		}
 	}
-
+	
 	// Generate Buffers
 	glGenBuffers(1, &m_VBO);
 	glGenBuffers(1, &m_IBO);
-
 	glGenVertexArrays(1, &m_VAO);
-	glBindVertexArray(m_VAO);
 
+
+	glBindVertexArray(m_VAO);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, (m_rows * m_cols) * sizeof(Vertex), aoVertices, GL_STATIC_DRAW);
 
@@ -234,12 +209,15 @@ void Terrain::GenerateGrid() {
 	}
 
 	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(1);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec3) * 2)); //	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, ((char*)0) + 16);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO); // GL_ELEMT_ARRAY_BUFFER
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (m_rows - 1) * (m_cols - 1) * 6 * sizeof(unsigned int), auiIndices, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
@@ -247,5 +225,4 @@ void Terrain::GenerateGrid() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	delete[] aoVertices;
-	*/
 }
