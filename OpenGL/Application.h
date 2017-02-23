@@ -29,13 +29,19 @@ public:
 	void Shutdown();
 
 private:
+	void Input();
+	void UpdateMousePosition();
+
+	// For Camera Movenebt
+	vec3 GetMouseCameraMovement();
+
+	// Mouse
+	vec3 oldPos = vec3(0);
+	vec3 currPos = vec3(0);
 
 	Terrain terrain = Terrain();
 
-	void Input();
-
-	Camera camera;
-
+	Camera m_camera;
 
 	// CUBE
 	mat4 m_cubeMat = mat4(1);

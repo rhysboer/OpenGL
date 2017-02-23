@@ -1,8 +1,8 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "Terrain.h"
 
 Terrain::Terrain() {
 }
-
 
 Terrain::~Terrain() {
 }
@@ -23,7 +23,8 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	const char* vsSource = "#version 410\n \
 							layout(location=0) in vec4 position; \
-							layout(location=1) in vec2 texCoord; \ out vec2 vTexCoord; \
+							layout(location=1) in vec2 texCoord; \
+							out vec2 vTexCoord; \
 							uniform mat4 projectionViewWorldMatrix; \
 							void main() { \
 							vTexCoord = texCoord; \

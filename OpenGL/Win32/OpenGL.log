@@ -1,15 +1,3 @@
-﻿  Texture.cpp
-  Terrain.cpp
-c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(26): warning C4129: ' ': unrecognized character escape sequence
-  main.cpp
-  Colors.cpp
-  Camera.cpp
-  BaseApplication.cpp
-  Application.cpp
-  Gizmos.cpp
-  Generating Code...
-  gl_core_4_4.c
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-Terrain.obj : error LNK2019: unresolved external symbol _stbi_load referenced in function "public: void __thiscall Terrain::init(unsigned int,unsigned int)" (?init@Terrain@@QAEXII@Z)
-Terrain.obj : error LNK2019: unresolved external symbol _stbi_image_free referenced in function "public: void __thiscall Terrain::init(unsigned int,unsigned int)" (?init@Terrain@@QAEXII@Z)
-C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\Debug\OpenGL.exe : fatal error LNK1120: 2 unresolved externals
+﻿  Application.cpp
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+  OpenGL.vcxproj -> C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\Debug\OpenGL.exe

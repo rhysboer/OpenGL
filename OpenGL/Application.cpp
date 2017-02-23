@@ -21,9 +21,12 @@ const bool Application::Startup() {
 		return false;
 	}
 
+	// Mouse
+	UpdateMousePosition();
+
 	// Camera
-	camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
-	camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
+	m_camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
+	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
 
 	// QUANTERNIONS TEST
 	m_position[0] = vec3(10, 5, 10);
@@ -57,9 +60,13 @@ const bool Application::Update() {
 
 	currentTime = (float)glfwGetTime();
 
+	// Quit is ESC is pressed or window is closed
 	if(glfwWindowShouldClose(window) == (int)true || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		return false;
 	}
+
+	// Update Mouse
+	UpdateMousePosition();
 
 	// Rotate Planets
 	m_sunMat = glm::rotate(m_sunMat, -0.01f, vec3(0, 1, 0));
@@ -103,9 +110,9 @@ const bool Application::Update() {
 }
 
 void Application::Draw() {
-	Gizmos::draw(camera.GetProjectionView());
+	Gizmos::draw(m_camera.GetProjectionView());
 
-	terrain.Draw(camera);
+	terrain.Draw(m_camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -118,37 +125,68 @@ void Application::Shutdown() {
 }
 
 void Application::Input() {
+	float speedModifier = 1;
+
+	if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
+		speedModifier = 3;
+	}
+
 	// FORWARD
 	if(glfwGetKey(window, GLFW_KEY_W)) {
-		camera.Move(vec3(0, 0, -3) * deltaTime);
+		m_camera.Move(vec3(0, 0, -3) * speedModifier * deltaTime);
 	}
 	
 	// BACKWARDS
 	if(glfwGetKey(window, GLFW_KEY_S)) {
-		camera.Move(vec3(0, 0, 3) * deltaTime);
+		m_camera.Move(vec3(0, 0, 3) * speedModifier * deltaTime);
 	}
 	
 	// LEFT
 	if(glfwGetKey(window, GLFW_KEY_A)) {
-		camera.Move(vec3(-3, 0, 0) * deltaTime);
+		m_camera.Move(vec3(-3, 0, 0) * speedModifier * deltaTime);
 	}
 	
 	// RIGHT
 	if(glfwGetKey(window, GLFW_KEY_D)) {
-		camera.Move(vec3(3, 0, 0) * deltaTime);
+		m_camera.Move(vec3(3, 0, 0) * speedModifier * deltaTime);
 	}
 	
 	// UP
 	if(glfwGetKey(window, GLFW_KEY_E)) {
-		camera.Move(vec3(0, 3, 0) * deltaTime);
+		m_camera.Move(vec3(0, 3, 0) * speedModifier * deltaTime);
 	}
 	
 	// DOWN
 	if(glfwGetKey(window, GLFW_KEY_Q)) {
-		camera.Move(vec3(0, -3, 0) * deltaTime);
+		m_camera.Move(vec3(0, -3, 0) * speedModifier * deltaTime);
 	}
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) {
-		camera.Rotate(1.5f * deltaTime, vec3(1,0,0));
+		vec3 mousePosition = GetMouseCameraMovement();
+		if(mousePosition != vec3(0)) {
+			m_camera.Rotate(3.0f * deltaTime, mousePosition);
+		}
 	}
+}
+
+void Application::UpdateMousePosition() {
+	double mouseX, mouseY;
+	glfwGetCursorPos(window, &mouseX, &mouseY);
+
+	oldPos = currPos;
+	currPos = vec3((float)mouseX, (float)mouseY, 0);
+}
+
+vec3 Application::GetMouseCameraMovement() {
+	vec3 pos = currPos - oldPos;
+
+	if(pos == vec3(0)) {
+		return vec3(0);
+	}
+
+	vec3 temp = pos;
+	pos.y = temp.x;
+	pos.x = temp.y;
+
+	return pos;
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-//#define STB_IMAGE_IMPLEMENTATION
 #include "STB\stb_image.h"
 
 #include "gl_core_4_4.h"
@@ -23,7 +22,6 @@ public:
 	~Terrain();
 
 	void init(unsigned int rows, unsigned int cols);
-
 	void Draw(Camera& camera);
 
 private:

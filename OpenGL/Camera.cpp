@@ -69,16 +69,16 @@ void Camera::Move(vec3 translate) {
 }
 
 void Camera::Rotate(float angle, vec3 axis) {
-	vec3 axisNorm = glm::normalize(axis);
-	mat4 rotation = mat4(1);
+	if(axis != vec3(0)) {
+		vec3 axisNorm = glm::normalize(axis);
+		mat4 rotation = mat4(1);
 
-	rotation = glm::rotate(rotation, angle, axis);
+		rotation = glm::rotate(rotation, angle, axis);
 
-	InverseWorldTransform();
-	m_worldMat *= rotation;
-	InverseWorldTransform();
+		m_worldMat *= glm::inverse(rotation);
 
-	UpdateProjectionViewTransform();
+		UpdateProjectionViewTransform();
+	}
 }
 
 const mat4 Camera::GetWorldTransform() const {
