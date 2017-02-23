@@ -43,5 +43,6 @@ private:
 	int imageFormat = 0;
 
 	unsigned int m_texture = 0;
+	unsigned int m_blackTexture = 0;
 };
 

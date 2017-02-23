@@ -10,14 +10,25 @@ Terrain::~Terrain() {
 void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	// TEXTURE loading
-	unsigned char* data = stbi_load("../bin/textures/wood.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
+	unsigned char* data = stbi_load("..//bin//textures//wy.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
 
 	glGenTextures(1, &m_texture);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	stbi_image_free(data);
+	// END
+	// TEXTURE
+	data = stbi_load("..//bin//textures//bnw.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
+
+	glGenTextures(1, &m_blackTexture);
+	glBindTexture(GL_TEXTURE_2D, m_blackTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_image_free(data);
 	// END
 
@@ -27,16 +38,16 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 							out vec2 vTexCoord; \
 							uniform mat4 projectionViewWorldMatrix; \
 							void main() { \
-							vTexCoord = texCoord; \
+							vTexCoord = vec2(texCoord.x, -texCoord.y); \
 							gl_Position= projectionViewWorldMatrix * position; }";
-
 
 	const char* fsSource = "#version 410\n \
 							in vec2 vTexCoord; \
 							out vec4 fragColor; \
 							uniform sampler2D diffuse; \
+							uniform sampler2D blacky; \
 							void main() { \
-							fragColor = texture(diffuse,vTexCoord); }";
+							fragColor = texture(diffuse,vTexCoord) * texture(blacky, vTexCoord); }";
 
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, (const char**)&vsSource, 0);
@@ -128,9 +139,16 @@ void Terrain::Draw(Camera & camera) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_blackTexture);
+
 	// tell the shader where it is
 	loc = glGetUniformLocation(m_programID, "diffuse");
 	glUniform1i(loc, 0);
+
+
+	loc = glGetUniformLocation(m_programID, "blacky");
+	glUniform1i(loc, 1);
 
 	// draw
 	glBindVertexArray(m_VAO);
