@@ -25,12 +25,17 @@ const bool Application::Startup() {
 	camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
 	camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
 
-	//camera.Rotate(1.5f, vec3(1, 0, 1));
+	// QUANTERNIONS TEST
+	m_position[0] = vec3(10, 5, 10);
+	m_position[1] = vec3(-10, 0, -10);
+	m_rotation[0] = quat(vec3(0, -1, 0));
+	m_rotation[1] = quat(vec3(0, 1, 0));
 
 	// Background color
 	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
+	// Terrain 
 	terrain.init(10, 10);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
@@ -61,13 +66,23 @@ const bool Application::Update() {
 	m_earthLocal = glm::rotate(m_earthLocal, -0.01f, vec3(0, 1, 0));
 	m_moonLocal = glm::rotate(m_moonLocal, 1.0f, vec3(0, 1, 0));
 
-		
+
 	m_earthMat = m_sunMat * m_earthLocal;
 	m_moonMat = m_earthMat * m_moonLocal;
 
-	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::red, &m_sunMat);
+	//Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::red, &m_sunMat);
 	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colors::green, &m_earthMat);
 	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colors::purple, &m_moonMat);
+
+	// CUBE & QUANTERNIONS
+	float s = cos((float)glfwGetTime()) * 0.5f + 0.5f;
+
+	vec3 p = (1.0f - s) * m_position[0] + s * m_position[1];
+	quat r = glm::slerp(m_rotation[0], m_rotation[1], s);
+	mat4 m = glm::translate(p) * glm::toMat4(r);
+
+	Gizmos::addTransform(m);
+	Gizmos::addAABBFilled(p, vec3(.5f), Colors::red, &m);
 
 	// Grid
 	for(int i = 0; i < 21; ++i) {
@@ -90,7 +105,7 @@ const bool Application::Update() {
 void Application::Draw() {
 	Gizmos::draw(camera.GetProjectionView());
 
-	//terrain.Draw(camera);
+	terrain.Draw(camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
