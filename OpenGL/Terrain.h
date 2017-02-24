@@ -7,18 +7,15 @@
 
 #include "Texture.h"
 
-
-// DELET THIS
-#include <iostream>
-
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 
 struct Vertex {
 	vec4 position;
-	vec4 colour;
 };
+
+// vec4 color
 
 class Terrain {
 public:
@@ -36,8 +33,8 @@ private:
 	unsigned int m_cols;
 
 	unsigned int m_VAO = 0; // Vertex Array Object
-	unsigned int m_VBO = 0;	// Vertex Buffer Object
-	unsigned int m_IBO = 0; // Index Buffer Object
+	unsigned int m_VBO = 0;	// Vertex Buffer Object (Holds data of each point ect position, colour, normal)
+	unsigned int m_IBO = 0; // Index Buffer Object (Which point connects to which)
 
 	unsigned int m_programID;
 

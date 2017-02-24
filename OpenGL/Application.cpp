@@ -41,7 +41,6 @@ const bool Application::Startup() {
 		return false;
 	}
 
-
 	// Enable the debug callback
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -49,8 +48,6 @@ const bool Application::Startup() {
 	glDebugMessageControl(
 		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
 	);
-
-
 
 	// Mouse
 	UpdateMousePosition();
@@ -70,23 +67,7 @@ const bool Application::Startup() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(5, 5);
-
-
-	// OBJECT LOADER
-
-	loader = new OBJLoader();
-
-	tinyobj::attrib_t attribs;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materals;
-	std::string error;
-
-	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/bunny.obj");
-
-	if(success == true) {
-		loader->LoadObject(attribs, shapes);
-	}
+	terrain.init(2, 2);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -160,7 +141,6 @@ void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
 
 	terrain.Draw(m_camera);
-	loader->Draw(m_camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -176,7 +156,7 @@ void Application::Input() {
 	float speedModifier = 1;
 
 	if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
-		speedModifier = 3;
+		speedModifier = 5;
 	}
 
 	// FORWARD

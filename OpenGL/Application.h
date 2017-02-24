@@ -7,15 +7,14 @@
 #include "Colors.h"
 #include "Camera.h"
 
+#include "tiny_obj_loader.h"
+#include "OBJLoader.h"
+
 // Quanternion
 #include <GLM\gtc\quaternion.hpp>
 #include <GLM\gtx\quaternion.hpp>
 
 #include "Terrain.h"
-
-// TEST
-#include "tiny_obj_loader.h"
-#include "OBJLoader.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -54,10 +53,8 @@ private:
 
 
 	mat4 m_sunMat = mat4(1);
-
 	mat4 m_earthMat = mat4(1);
 	mat4 m_earthLocal = mat4(1);
-
 	mat4 m_moonMat = mat4(1);
 	mat4 m_moonLocal = mat4(1);
 
@@ -71,8 +68,6 @@ private:
 	float currentTime = 0;
 	float deltaTime = 0;
 
-
-	// TEST
 	OBJLoader* loader;
 };
 

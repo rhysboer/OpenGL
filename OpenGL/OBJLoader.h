@@ -30,3 +30,19 @@ private:
 	std::vector<OpenGLInfo> m_glInfo;
 };
 
+/*
+// OBJECT LOADER
+
+loader = new OBJLoader();
+
+tinyobj::attrib_t attribs;
+std::vector<tinyobj::shape_t> shapes;
+std::vector<tinyobj::material_t> materals;
+std::string error;
+
+bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/bunny.obj");
+
+if(success == true) {
+loader->LoadObject(attribs, shapes);
+}
+*/

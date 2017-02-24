@@ -26,6 +26,7 @@ public:
 	const mat4 GetProjectionView();
 
 protected:	
+
 	void InverseWorldTransform();
 	mat4 UpdateProjectionViewTransform();
 

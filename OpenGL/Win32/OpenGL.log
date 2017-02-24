@@ -1,2 +1,6 @@
-﻿  OBJLoader.cpp
+﻿  main.cpp
+  Terrain.cpp
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(74): warning C4129: ' ': unrecognized character escape sequence
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(81): warning C4129: ' ': unrecognized character escape sequence
+  Generating Code...
   OpenGL.vcxproj -> C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\Debug\OpenGL.exe
