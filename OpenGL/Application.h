@@ -13,6 +13,10 @@
 
 #include "Terrain.h"
 
+// TEST
+#include "tiny_obj_loader.h"
+#include "OBJLoader.h"
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -66,5 +70,9 @@ private:
 	float previousTime = 0;
 	float currentTime = 0;
 	float deltaTime = 0;
+
+
+	// TEST
+	OBJLoader* loader;
 };
 

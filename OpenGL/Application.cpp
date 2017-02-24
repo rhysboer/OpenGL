@@ -1,3 +1,4 @@
+
 #include "Application.h"
 
 Application::Application(int width, int height, const char* name) : BaseApplication::BaseApplication(width, height, name) {
@@ -5,6 +6,25 @@ Application::Application(int width, int height, const char* name) : BaseApplicat
 
 Application::~Application() {
 }
+
+static void APIENTRY openglCallbackFunction(
+	GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam
+) {
+	(void)source; (void)type; (void)id;
+	(void)severity; (void)length; (void)userParam;
+	fprintf(stderr, "%s\n", message);
+	if(severity == GL_DEBUG_SEVERITY_HIGH) {
+		fprintf(stderr, "Aborting...\n");
+		abort();
+	}
+}
+
 
 // Start Up
 const bool Application::Startup() {
@@ -20,6 +40,17 @@ const bool Application::Startup() {
 		glfwTerminate();
 		return false;
 	}
+
+
+	// Enable the debug callback
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(openglCallbackFunction, nullptr);
+	glDebugMessageControl(
+		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+	);
+
+
 
 	// Mouse
 	UpdateMousePosition();
@@ -39,7 +70,23 @@ const bool Application::Startup() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(4, 4);
+	terrain.init(5, 5);
+
+
+	// OBJECT LOADER
+
+	loader = new OBJLoader();
+
+	tinyobj::attrib_t attribs;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materals;
+	std::string error;
+
+	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/bunny.obj");
+
+	if(success == true) {
+		loader->LoadObject(attribs, shapes);
+	}
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -113,6 +160,7 @@ void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
 
 	terrain.Draw(m_camera);
+	loader->Draw(m_camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

@@ -7,13 +7,17 @@
 
 #include "Texture.h"
 
+
+// DELET THIS
+#include <iostream>
+
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 
 struct Vertex {
 	vec4 position;
-	vec2 texturePos;
+	vec4 colour;
 };
 
 class Terrain {
