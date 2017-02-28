@@ -7,12 +7,17 @@
 
 #include "Texture.h"
 
+
+// delet
+#include <iostream>
+
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 
 struct Vertex {
 	vec4 position;
+	vec2 textPos;
 };
 
 // vec4 color

@@ -210,10 +210,13 @@ void Terrain::GenerateGrid() {
 	//};
 
 	Vertex* aoVertices = new Vertex[m_rows * m_cols];
-	for(unsigned int r = 0; r < m_rows; ++r) {
-		for(unsigned int c = 0; c < m_cols; ++c) {
-			aoVertices[r * m_cols + c].position = vec4((float)c, 0, (float)r, 1);
+	for (unsigned int r = 0; r < m_rows; ++r) {
+		for (unsigned int c = 0; c < m_cols; ++c) {
+			float coordX = (float)c / (m_rows - 1);
+			float coordY = (float)r / (m_cols - 1);
 
+			aoVertices[r * m_cols + c].position = vec4((float)c, 0, (float)r, 1);
+			aoVertices[r * m_cols + c].textPos = vec2(coordX, coordY);
 		} 
 	}
 
@@ -259,11 +262,11 @@ void Terrain::GenerateGrid() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (m_rows - 1) * (m_cols - 1) * 6 * sizeof(unsigned int), auiIndices, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex) * 2, 0);
+	glEnableVertexAttribArray(0); // Position
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, ((char*)0) + 16);
+	glEnableVertexAttribArray(1); // Texture Coord
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -284,8 +287,10 @@ void Terrain::Draw(Camera & camera) {
 	loc = glGetUniformLocation(m_programID, "diffuse");
 	glUniform1i(loc, 0);
 
+	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
+
 	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 
 	/////// TERRAIN
 	//glUseProgram(m_programID);
