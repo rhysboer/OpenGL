@@ -166,6 +166,7 @@
     <ClCompile Include="gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
+    <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="gl_core_4_4.h" />
     <ClInclude Include="OBJLoader.h" />
+    <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
