@@ -7,6 +7,7 @@ Application::Application(int width, int height, const char* name) : BaseApplicat
 Application::~Application() {
 }
 
+// ERROR CHECK
 static void APIENTRY openglCallbackFunction(
 	GLenum source,
 	GLenum type,
@@ -69,6 +70,22 @@ const bool Application::Startup() {
 	// Terrain 
 	terrain.init(10, 10);
 
+	
+	loader = new OBJLoader();
+
+	tinyobj::attrib_t attribs;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materals;
+	std::string error;
+
+	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/bunny.obj");
+
+	if(success == true) {
+		loader->LoadObject(attribs, shapes);
+	}
+
+
+
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
 	m_moonLocal = glm::translate(m_moonLocal, vec3(2, 0, 0));
@@ -106,8 +123,8 @@ const bool Application::Update() {
 	m_moonMat = m_earthMat * m_moonLocal;
 
 	//Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::red, &m_sunMat);
-	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colors::green, &m_earthMat);
-	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colors::purple, &m_moonMat);
+	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colors::Green, &m_earthMat);
+	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colors::Purple, &m_moonMat);
 
 	// CUBE & QUANTERNIONS
 	float s = cos((float)glfwGetTime()) * 0.5f + 0.5f;
@@ -117,12 +134,12 @@ const bool Application::Update() {
 	mat4 m = glm::translate(p) * glm::toMat4(r);
 
 	Gizmos::addTransform(m);
-	Gizmos::addAABBFilled(p, vec3(.5f), Colors::red, &m);
+	Gizmos::addAABBFilled(p, vec3(.5f), Colors::Red, &m);
 
 	// Grid
 	for(int i = 0; i < 21; ++i) {
-		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? Colors::white : Colors::black);
-		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colors::white : Colors::black);
+		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? Colors::White : Colors::Black);
+		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colors::White : Colors::Black);
 	}
 
 
@@ -141,6 +158,7 @@ void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
 
 	terrain.Draw(m_camera);
+	loader->Draw(m_camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

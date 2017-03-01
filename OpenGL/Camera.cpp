@@ -97,6 +97,10 @@ const mat4 Camera::GetProjectionView() {
 	return UpdateProjectionViewTransform();
 }
 
+const vec3 Camera::GetPosition() {
+	return vec3(m_worldMat[3]);
+}
+
 void Camera::InverseWorldTransform() {
 	m_worldMat = glm::inverse(m_worldMat);
 }

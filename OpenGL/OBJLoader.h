@@ -3,6 +3,7 @@
 #include "GLFW\glfw3.h"
 #include "Camera.h"
 #include "tiny_obj_loader.h"
+#include "Colors.h"
 
 struct OpenGLInfo {
 	unsigned int m_VAO;
@@ -11,9 +12,9 @@ struct OpenGLInfo {
 };
 
 struct OBJVertex {
-	float x, y, z;
-	float nx, ny, nz;
-	float u, v;
+	float x, y, z; // Position
+	float nx, ny, nz; // Normal
+	float u, v; // Texture Coordinates
 };
 
 class OBJLoader {

@@ -6,12 +6,13 @@ typedef vec4 v4;
 
 class Colors {
 public:
-	static const v4 blue;
-	static const v4 green;
-	static const v4 red;
-	static const v4 purple;
-	static const v4 yellow;
-	static const v4 white;
-	static const v4 black;
+	static const v4 Blue;
+	static const v4 Green;
+	static const v4 Red;
+	static const v4 Purple;
+	static const v4 Yellow;
+	static const v4 White;
+	static const v4 Black;
+	static const v4 Orange;
 };
 

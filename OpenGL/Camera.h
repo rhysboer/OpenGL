@@ -24,6 +24,7 @@ public:
 	const mat4 GetView() const;
 	const mat4 GetProjection() const;
 	const mat4 GetProjectionView();
+	const vec3 GetPosition();
 
 protected:	
 
