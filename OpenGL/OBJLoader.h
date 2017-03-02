@@ -1,6 +1,5 @@
 #pragma once
-#include "gl_core_4_4.h"
-#include "GLFW\glfw3.h"
+#include "ShaderLoader.h"
 #include "Camera.h"
 #include "tiny_obj_loader.h"
 #include "Colors.h"
@@ -26,6 +25,8 @@ public:
 	void LoadObject(tinyobj::attrib_t& attribs, std::vector<tinyobj::shape_t>& shapes);
 
 private:
+
+	ShaderLoader shader = ShaderLoader();
 
 	unsigned int m_programID;
 	std::vector<OpenGLInfo> m_glInfo;

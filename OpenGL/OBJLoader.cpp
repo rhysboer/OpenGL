@@ -2,100 +2,20 @@
 #include "OBJLoader.h"
 
 OBJLoader::OBJLoader() {
-	// Vertex Shader
-	const char* vsSource = "#version 410\n \
-							layout(location=0) in vec4 position; \
-							layout(location=1) in vec4 normal; \
-							out vec4 vPosition; \
-							out vec4 vColour; \
-							out vec4 vNormal; \
-							uniform mat4 projectionViewWorldMatrix; \
-							void main() { \
-								vPosition = position; \
-								vNormal = normal; \
-								gl_Position = projectionViewWorldMatrix * position; \
-							}";
-
-	// Fragment Shader
-	const char* fsSource = "#version 410\n \
-							vec4 surfaceColor = vec4(0,0.25f, 0.25, 1); \
-							in vec4 vPosition; \
-							in vec4 vNormal; \
-							out vec4 fragColor; \
-							uniform vec3 lightDirection; \
-							uniform vec3 lightColor; \
-							uniform vec3 cameraPos; \
-							uniform float specPow; \
-							vec4 ambientLight = vec4(0.4f, 0.4f, 0.4f, 1) * vNormal; \
-							void main() { \
-								float d = max(0, dot(normalize(vNormal.xyz), lightDirection)); \
-								vec3 E = normalize(cameraPos - vPosition.xyz); \
-								vec3 R = reflect(-lightDirection, vNormal.xyz); \
-								float s = max(0, dot(E,R)); \
-								s = pow(s, specPow); \
-								fragColor = vec4(ambientLight.xyz + vNormal.xyz * d + lightColor * s, 1); \
-							}";
-
-	//vec4(vNormal.xyz * d + lightColor * s, 1); \
-
-	int success = GL_FALSE;
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(vertexShader, 1, (const char**)&vsSource, 0);
-	glCompileShader(vertexShader);
-
-	glShaderSource(fragmentShader, 1, (const char**)&fsSource, 0);
-	glCompileShader(fragmentShader);
-
-	m_programID = glCreateProgram();
-	glAttachShader(m_programID, vertexShader);
-	glAttachShader(m_programID, fragmentShader);
-	glLinkProgram(m_programID);
-
-	glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
-	if(success == GL_FALSE) {
-		int infoLogLength = 0;
-		glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &infoLogLength);
-		char* infolog = new char[infoLogLength];
-
-		glGetProgramInfoLog(m_programID, infoLogLength, 0, infolog);
-		printf("Error: Failed to link shader program!\n");
-		printf("%s\n", infolog);
-		delete[] infolog;
-	}
-
-	glDeleteShader(fragmentShader);
-	glDeleteShader(vertexShader);
+	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
 }
 
 OBJLoader::~OBJLoader() {
 }
 
 void OBJLoader::Draw(Camera camera) {
-
-	// Camera World View
-	glUseProgram(m_programID);
-	unsigned int projectionViewUniform = glGetUniformLocation(m_programID, "projectionViewWorldMatrix");
-	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(camera.GetProjectionView()));
-
-	// light Direction
-	vec3 lightDirection = vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0);
-	unsigned int light = glGetUniformLocation(m_programID, "lightDirection");
-	glUniform3f(light, lightDirection.x, lightDirection.y, lightDirection.z);
-
-	// Light Color
-	vec4 lightColor = Colors::White;
-	unsigned int color = glGetUniformLocation(m_programID, "lightColor");
-	glUniform3f(color, lightColor.x, lightColor.y, lightColor.z);
-
-	// Camera Position
-	vec3 pos = camera.GetPosition();
-	unsigned int cameraPos = glGetUniformLocation(m_programID, "cameraPos");
-	glUniform3f(cameraPos, pos.x, pos.y, pos.z);
-
-	// Specular Power
-	glUniform1f(glGetUniformLocation(m_programID, "specPow"), 128.0f);
+	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
+	shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
+	shader.SetVec3("lightColor", (vec3)Colors::White);
+	shader.SetVec3("cameraPos", camera.GetPosition());
+	shader.SetFloat("specPow", 128.0f);
+	
+	shader.UseProgram();
 
 	for(auto& gl : m_glInfo) { 
 		glBindVertexArray(gl.m_VAO);
