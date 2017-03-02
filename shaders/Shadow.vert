@@ -6,10 +6,11 @@ layout(location = 1) in vec4 Normal;
 
 out vec4 vNormal;
 
-uniform mat4 projectionView;
+uniform mat4 projectionViewWorldMatrix;
+uniform mat4 lightMatrix;
 
 void main() { 
 
 	vNormal = Normal;
-	gl_Position = projectionView * Position;
+	gl_Position = projectionViewWorldMatrix * Position;
 }

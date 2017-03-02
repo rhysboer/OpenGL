@@ -30,6 +30,12 @@ private:
 
 	unsigned int m_programID;
 	std::vector<OpenGLInfo> m_glInfo;
+
+	// For Shadow
+	unsigned int m_fbo;
+	unsigned int m_fboDepth;
+
+	glm::mat4 m_lightMatrix;
 };
 
 /*

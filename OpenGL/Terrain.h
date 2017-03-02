@@ -2,6 +2,7 @@
 #include "gl_core_4_4.h"
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
+#include "GLM\gtx\norm.hpp"
 #include "GLFW\glfw3.h"
 #include "Camera.h"
 
@@ -14,6 +15,7 @@ using glm::vec4;
 
 struct Vertex {
 	vec4 position;
+	vec4 normal;
 	vec2 textPos;
 };
 

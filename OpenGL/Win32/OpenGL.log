@@ -1,3 +1,2 @@
 ﻿  Terrain.cpp
-c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(78): warning C4244: 'argument': conversion from 'float' to 'const int', possible loss of data
   OpenGL.vcxproj -> C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\Debug\OpenGL.exe
