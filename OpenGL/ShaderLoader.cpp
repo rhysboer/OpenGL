@@ -54,6 +54,13 @@ void ShaderLoader::CreateShaderProgram(const char * vertexShaderPath, const char
 	glDeleteShader(fragmentShader);
 }
 
+void ShaderLoader::SetInt(const char * name, const int & value) {
+	if(m_programID != 0) {
+		glUseProgram(m_programID);
+		glUniform1i(glGetUniformLocation(m_programID, name), value);
+	}
+}
+
 void ShaderLoader::SetFloat(const char * name, const float& value) {
 	if(m_programID != 0) {
 		glUseProgram(m_programID);

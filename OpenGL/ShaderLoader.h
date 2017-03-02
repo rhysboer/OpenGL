@@ -23,6 +23,7 @@ public:
 	void UseProgram();
 	void CreateShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath);
 
+	void SetInt(const char* name, const int& value);
 	void SetFloat(const char* name, const float& value);
 	void SetVec2(const char* name, const vec2& value);
 	void SetVec3(const char* name, const vec3& value);

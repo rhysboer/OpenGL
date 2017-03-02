@@ -68,7 +68,7 @@ const bool Application::Startup() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(10, 10);
+	terrain.init(25, 25);
 
 	
 	loader = new OBJLoader();

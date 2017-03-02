@@ -5,11 +5,8 @@
 #include "GLFW\glfw3.h"
 #include "Camera.h"
 
+#include "ShaderLoader.h"
 #include "Texture.h"
-
-
-// delet
-#include <iostream>
 
 using glm::vec2;
 using glm::vec3;
@@ -42,6 +39,8 @@ private:
 	unsigned int m_IBO = 0; // Index Buffer Object (Which point connects to which)
 
 	unsigned int m_programID;
+
+	ShaderLoader shader = ShaderLoader();
 
 	// Texture
 	Texture* m_texture;
