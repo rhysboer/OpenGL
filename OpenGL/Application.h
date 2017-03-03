@@ -9,6 +9,7 @@
 
 #include "tiny_obj_loader.h"
 #include "OBJLoader.h"
+#include "OBJAnimation.h"
 
 // Quanternion
 #include <GLM\gtc\quaternion.hpp>
@@ -69,5 +70,6 @@ private:
 	float deltaTime = 0;
 
 	OBJLoader* loader;
+	OBJAnimation* animation;
 };
 

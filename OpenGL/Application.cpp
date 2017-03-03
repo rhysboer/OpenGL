@@ -1,4 +1,3 @@
-
 #include "Application.h"
 
 Application::Application(int width, int height, const char* name) : BaseApplication::BaseApplication(width, height, name) {
@@ -85,6 +84,9 @@ const bool Application::Startup() {
 	}
 
 
+	animation = new OBJAnimation();
+	animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
+
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -157,7 +159,8 @@ const bool Application::Update() {
 void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
 	
-	loader->Draw(m_camera);
+	//loader->Draw(m_camera);
+	animation->Draw(m_camera);
 	terrain.Draw(m_camera);
 
 	glfwSwapBuffers(window);
