@@ -27,7 +27,7 @@ public:
 	~Terrain();
 
 	void init(unsigned int rows, unsigned int cols);
-	void Draw(Camera& camera);
+	void Draw(Camera& camera); //void Draw(Camera& camera);
 
 private:
 

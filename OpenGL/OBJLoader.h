@@ -4,6 +4,8 @@
 #include "tiny_obj_loader.h"
 #include "Colors.h"
 
+#include "Terrain.h"
+
 struct OpenGLInfo {
 	unsigned int m_VAO;
 	unsigned int m_VBO;
@@ -21,12 +23,15 @@ public:
 	OBJLoader();
 	~OBJLoader();
 
-	void Draw(Camera camera);
+	void Draw(Camera camera); // void Draw(Camera camera);
 	void LoadObject(tinyobj::attrib_t& attribs, std::vector<tinyobj::shape_t>& shapes);
 
 private:
 
 	ShaderLoader shader = ShaderLoader();
+
+	// Generate Shadow
+	ShaderLoader shadow = ShaderLoader();
 
 	unsigned int m_programID;
 	std::vector<OpenGLInfo> m_glInfo;
@@ -36,6 +41,12 @@ private:
 	unsigned int m_fboDepth;
 
 	glm::mat4 m_lightMatrix;
+	glm::mat4 textureSpaceOffset = glm::mat4(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+	);
 };
 
 /*

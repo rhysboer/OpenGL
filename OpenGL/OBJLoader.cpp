@@ -2,61 +2,91 @@
 #include "OBJLoader.h"
 
 OBJLoader::OBJLoader() {
-	shader.CreateShaderProgram("../shaders/Shadow.vert", "../shaders/Shadow.frag");
+	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
+	//shadow.CreateShaderProgram("../shaders/GensShadow.vert", "../shaders/GensShadow.frag");
 
-	// Shadow Test
-	glGenFramebuffers(1, &m_fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	
-	glGenTextures(1, &m_fboDepth);
-	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_fboDepth, 0);
-
-	glDrawBuffer(GL_NONE);
-
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if(status != GL_FRAMEBUFFER_COMPLETE) {
-		printf("FRAMEBUFFER ERROE! you dun goofed\n");
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	
-
+	//shadow.UseProgram();
+	//// Shadow Test
+	//glGenFramebuffers(1, &m_fbo);
+	//glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	//
+	//glGenTextures(1, &m_fboDepth);
+	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
+	//
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//
+	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_fboDepth, 0);
+	//
+	//glDrawBuffer(GL_NONE);
+	//
+	//GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	//if(status != GL_FRAMEBUFFER_COMPLETE) {
+	//	printf("FRAMEBUFFER ERROR! you dun goofed\n");
+	//}
+	//
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 OBJLoader::~OBJLoader() {
 }
 
 void OBJLoader::Draw(Camera camera) {
-	vec3 lightDir = glm::normalize(vec3(1, 2.5f, 1)));
+
+	//glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	//glViewport(0, 0, 1024, 1024);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//
+	//shadow.UseProgram();
+	//
+	//vec3 lightDir = glm::normalize(vec3(1, 1, 0)); //sin(glfwGetTime()) * 2, cos(glfwGetTime()) + 2.5f, 1)
+	//mat4 lightProjection = glm::ortho<float>(-25, 25, -25, 25, -25, 25);
+	//mat4 lightView = glm::lookAt(lightDir, vec3(0), vec3(0, 1, 0));
+	//m_lightMatrix = lightProjection * lightView;
+	//
+	//mat4 lightMatrix = textureSpaceOffset * m_lightMatrix;
+	//
+	//shadow.SetMat4("lightMatrix", m_lightMatrix);
+	//
+	//// Draw Bunny
+	//a_terrain.Draw(camera, shadow);
+	//for(auto& gl : m_glInfo) {
+	//	glBindVertexArray(gl.m_VAO);
+	//	glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
+	//}
+	//
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glViewport(0, 0, 1280, 720);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//
+	//shader.UseProgram();
+	//shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
+	//shader.SetVec3("lightDir", lightDir);
+	//shader.SetMat4("lightMatrix", lightMatrix);
+	//shader.SetInt("shadowMap", 0);
 
 	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-	shader.SetVec3("lightDir", lightDir);
-	//shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
-	//shader.SetVec3("lightColor", (vec3)Colors::White);
-	//shader.SetVec3("cameraPos", camera.GetPosition());
-	//shader.SetFloat("specPow", 128.0f);
+	shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
+	shader.SetVec3("lightColor", (vec3)Colors::Red);
+	shader.SetVec3("cameraPos", camera.GetPosition());
+	shader.SetFloat("specPow", 128.0f);
 
-	mat4 lightProjection = glm::ortho(-10, 10, -10, 10, -10, 10);
-	mat4 lightView = glm::lookAt(lightDir, vec3(0), vec3(0, 1, 0));
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
 
-	m_lightMatrix = lightProjection * lightView;
-	
-	
+	//a_terrain.Draw(camera, shader);
+
+
 	shader.UseProgram();
 
 	for(auto& gl : m_glInfo) { 
 		glBindVertexArray(gl.m_VAO);
 		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
 	}
+
 }
 
 void OBJLoader::LoadObject(tinyobj::attrib_t & attribs, std::vector<tinyobj::shape_t>& shapes) {

@@ -68,7 +68,7 @@ const bool Application::Startup() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(50, 50);
+	terrain.init(25, 25);
 
 	
 	loader = new OBJLoader();
@@ -156,9 +156,9 @@ const bool Application::Update() {
 
 void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
-
-	terrain.Draw(m_camera);
+	
 	loader->Draw(m_camera);
+	terrain.Draw(m_camera);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
