@@ -18,5 +18,6 @@ void main() {
 	vec3 R = reflect(-lightDirection, vNormal.xyz);
 	float s = max(0, dot(E,R));
 	s = pow(s, specPow);
+	
 	fragColor = vec4(ambientLight.xyz + vNormal.xyz * d + lightColor * s, 1);
 };

@@ -77,15 +77,15 @@ const bool Application::Startup() {
 	std::vector<tinyobj::material_t> materals;
 	std::string error;
 
-	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/bunny.obj");
+	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Sphere.obj");
 
 	if(success == true) {
 		loader->LoadObject(attribs, shapes);
 	}
 
 
-	animation = new OBJAnimation();
-	animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
+	//animation = new OBJAnimation();
+	//animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
 
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
@@ -159,8 +159,8 @@ const bool Application::Update() {
 void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
 	
-	//loader->Draw(m_camera);
-	animation->Draw(m_camera);
+	loader->Draw(m_camera);
+	//animation->Draw(m_camera);
 	terrain.Draw(m_camera);
 
 	glfwSwapBuffers(window);

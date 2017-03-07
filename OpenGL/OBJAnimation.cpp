@@ -23,7 +23,7 @@ bool OBJAnimation::LoadOBJs(const char * path1, const char * path2) {
 		GLInfo gl;
 
 		gl.m_VBO1 = CreateVertexBuffer(attribs[0], shapes[0][i]);
-		gl.m_VBO2 = CreateVertexBuffer(attribs[0], shapes[0][i]);
+		gl.m_VBO2 = CreateVertexBuffer(attribs[1], shapes[1][i]);
 
 		gl.m_faceCount = shapes[0][i].mesh.num_face_vertices.size();
 
@@ -69,7 +69,8 @@ void OBJAnimation::Draw(Camera camera) {
 	shader.UseProgram();
 
 	shader.SetMat4("projectionViewModel", camera.GetProjectionView());
-	shader.SetFloat("keyTime", cosf(glfwGetTime() * 3) * 0.5f + 0.5f);
+	float time = cosf(glfwGetTime() * 3) * 0.5f + 0.5f;
+	shader.SetFloat("keyTime", time);
 
 	for(auto& gl : m_meshes) {
 		glBindVertexArray(gl.m_VAO);

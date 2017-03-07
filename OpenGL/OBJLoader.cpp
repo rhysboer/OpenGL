@@ -74,6 +74,8 @@ void OBJLoader::Draw(Camera camera) {
 	shader.SetVec3("cameraPos", camera.GetPosition());
 	shader.SetFloat("specPow", 128.0f);
 
+	shader.SetVec4("offsetPosition", vec4(0, 5, 0, 0));
+
 	//glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
 
