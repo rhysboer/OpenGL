@@ -2,7 +2,10 @@
 #include "OBJLoader.h"
 
 OBJLoader::OBJLoader() {
-	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
+	shader.CreateShaderProgram("../shaders/Outline.vert", "../shaders/Outline.frag");
+	// shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
+
+
 	//shadow.CreateShaderProgram("../shaders/GensShadow.vert", "../shaders/GensShadow.frag");
 
 	//shadow.UseProgram();
@@ -29,6 +32,33 @@ OBJLoader::OBJLoader() {
 	//}
 	//
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+	// OUTLINE CODE
+
+	glGenFramebuffers(1, &m_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	
+	glGenTextures(1, &m_fboDepth);
+	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 1280, 720, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_fboDepth, 0);
+	
+	glDrawBuffer(GL_NONE);
+	
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if(status != GL_FRAMEBUFFER_COMPLETE) {
+		printf("FRAMEBUFFER ERROR! you dun goofed\n");
+	}
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 OBJLoader::~OBJLoader() {
@@ -68,22 +98,55 @@ void OBJLoader::Draw(Camera camera) {
 	//shader.SetMat4("lightMatrix", lightMatrix);
 	//shader.SetInt("shadowMap", 0);
 
+
+
+	/*
 	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
 	shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
 	shader.SetVec3("lightColor", (vec3)Colors::Red);
 	shader.SetVec3("cameraPos", camera.GetPosition());
 	shader.SetFloat("specPow", 128.0f);
-
 	shader.SetVec4("offsetPosition", vec4(0, 5, 0, 0));
+	*/
 
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
-
-	//a_terrain.Draw(camera, shader);
-
+	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
 
 	shader.UseProgram();
 
+	/////////////////////////////
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glViewport(0, 0, 1280, 720);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	for(auto& gl : m_glInfo) {
+		glBindVertexArray(gl.m_VAO);
+		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
+	}
+
+	/////////////////////////////
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, 1280, 720);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	shader.SetInt("screenTexture", 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
+
+
+
+
+
+
+
+	// Normal Code
+
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
+	
+	//a_terrain.Draw(camera, shader);
+	
 	for(auto& gl : m_glInfo) { 
 		glBindVertexArray(gl.m_VAO);
 		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);

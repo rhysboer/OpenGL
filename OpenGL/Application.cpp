@@ -77,7 +77,7 @@ const bool Application::Startup() {
 	std::vector<tinyobj::material_t> materals;
 	std::string error;
 
-	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Sphere.obj");
+	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Bunny.obj");
 
 	if(success == true) {
 		loader->LoadObject(attribs, shapes);
@@ -157,9 +157,11 @@ const bool Application::Update() {
 }
 
 void Application::Draw() {
+
+	loader->Draw(m_camera);
+
 	Gizmos::draw(m_camera.GetProjectionView());
 	
-	loader->Draw(m_camera);
 	//animation->Draw(m_camera);
 	terrain.Draw(m_camera);
 
