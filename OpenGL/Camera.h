@@ -12,7 +12,7 @@ public:
 	Camera();
 	~Camera();
 
-	virtual void Update(float deltaTime);
+	virtual void Update();
 
 	void SetPerspective(float fov, float aspect, float _near, float _far);
 	void SetLookAt(vec3 towards, vec3 center, vec3 worldUp);

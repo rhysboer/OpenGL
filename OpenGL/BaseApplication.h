@@ -1,4 +1,6 @@
 #pragma once
+#include <stdlib.h>
+#include <time.h>
 #include "gl_core_4_4.h"
 #include "GLFW\glfw3.h"
 
@@ -12,6 +14,8 @@ public:
 
 	virtual const bool Startup() = 0;
 	virtual void Shutdown() = 0;
+
+	GLFWwindow* GetWindow() const;
 
 protected:
 

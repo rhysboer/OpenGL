@@ -11,7 +11,7 @@ Camera::Camera() {
 Camera::~Camera() {
 }
 
-void Camera::Update(float deltaTime) {
+void Camera::Update() {
 }
 
 void Camera::SetPerspective(float fov, float aspect, float _near, float _far) {

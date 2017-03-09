@@ -5,7 +5,8 @@
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
 #include "Colors.h"
-#include "Camera.h"
+#include "FlyCamera.h"
+#include "Time.h"
 
 #include "tiny_obj_loader.h"
 #include "OBJLoader.h"
@@ -16,6 +17,10 @@
 #include <GLM\gtx\quaternion.hpp>
 
 #include "Terrain.h"
+
+
+// DELET THIS
+#include "InputManager.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -33,25 +38,14 @@ public:
 	void Shutdown();
 
 private:
-	void Input();
-	void UpdateMousePosition();
-
-	// For Camera Movenebt
-	vec3 GetMouseCameraMovement();
-
-	// Mouse
-	vec3 oldPos = vec3(0);
-	vec3 currPos = vec3(0);
-
 	Terrain terrain = Terrain();
 
-	Camera m_camera;
+	FlyCamera m_camera;
 
 	// CUBE
 	mat4 m_cubeMat = mat4(1);
 	vec3 m_position[2];
 	quat m_rotation[2];
-
 
 	mat4 m_sunMat = mat4(1);
 	mat4 m_earthMat = mat4(1);
@@ -64,11 +58,7 @@ private:
 	mat4 earthRotation = mat4(1);
 	mat4 moonRotation = mat4(1);
 
-	// Delta Time (Move to own class)
-	float previousTime = 0;
-	float currentTime = 0;
-	float deltaTime = 0;
-
+	// Delete Pointers whend done
 	OBJLoader* loader;
 	OBJAnimation* animation;
 };

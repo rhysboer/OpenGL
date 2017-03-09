@@ -163,7 +163,9 @@
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Colors.cpp" />
+    <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="gl_core_4_4.c" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJAnimation.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
@@ -178,7 +180,9 @@
     <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="gl_core_4_4.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="OBJAnimation.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ShaderLoader.h" />

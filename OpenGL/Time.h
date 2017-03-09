@@ -7,6 +7,7 @@ public:
 	void Update(float time);
 
 	static float DeltaTime();
+	static double GetTime();
 
 	static Time* GetInstance();
 private:
@@ -14,6 +15,8 @@ private:
 	Time();
 
 	static Time* m_instance;
+
+	float m_time;
 
 	float m_deltaTime;
 	float m_prevTime;

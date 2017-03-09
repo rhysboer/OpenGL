@@ -22,6 +22,8 @@ void Time::Update(float time) {
 	if(m_instance == nullptr)
 		m_instance = new Time();
 
+	m_instance->m_time = time;
+
 	m_instance->m_currTime = time;
 
 	m_instance->m_deltaTime = m_instance->m_currTime - m_instance->m_prevTime;
@@ -29,7 +31,11 @@ void Time::Update(float time) {
 }
 
 float Time::DeltaTime() {
-	return GetInstance()->DeltaTime();
+	return GetInstance()->m_deltaTime;
+}
+
+double Time::GetTime() {
+	return GetInstance()->m_time;
 }
 
 Time * Time::GetInstance() {

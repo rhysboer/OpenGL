@@ -1,6 +1,4 @@
 #include "BaseApplication.h"
-#include <stdlib.h>
-#include <time.h>
 
 BaseApplication::BaseApplication(int width, int height, const char * name) {
 	if (glfwInit() == false)
@@ -14,4 +12,8 @@ BaseApplication::BaseApplication(int width, int height, const char * name) {
 BaseApplication::~BaseApplication() {
 	glfwDestroyWindow(window);
 	glfwTerminate();
+}
+
+GLFWwindow * BaseApplication::GetWindow() const {
+	return window;
 }
