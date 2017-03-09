@@ -4,21 +4,30 @@ Terrain::Terrain() {
 }
 
 Terrain::~Terrain() {
-	delete m_texture;
+	delete m_grass;
 }
 
 void Terrain::init(unsigned int rows, unsigned int cols) {
-	m_texture = new Texture("../bin/textures/wy.png");
 
+	// Create Texture
+	m_grass = new Texture("../bin/textures/grass.png");
+	m_stone = new Texture("../bin/textures/stone.png");
+	m_snow = new Texture("../bin/textures/snow.png");
+
+	// Load in shaders
 	shader.CreateShaderProgram("../shaders/TextureTerrain.vert", "../shaders/TextureTerrain.frag");
 
+	// Set terrain width and length
 	this->m_cols = cols;
 	this->m_rows = rows;
 
+	// Generate The Terrain
 	GenerateGrid();
 }
 
 void Terrain::GenerateGrid() {
+
+	// Generate Vertices
 	Vertex* aoVertices = new Vertex[m_rows * m_cols];
 	for (unsigned int r = 0; r < m_rows; ++r) {
 		for (unsigned int c = 0; c < m_cols; ++c) {
@@ -26,10 +35,33 @@ void Terrain::GenerateGrid() {
 			float coordY = (float)r / (m_cols - 1);
 
 			aoVertices[r * m_cols + c].position = vec4((float)c - 15, 0, (float)r -15, 1);
-			aoVertices[r * m_cols + c].textPos = vec2(coordX, coordY);
+			aoVertices[r * m_cols + c].texCoord = vec2(coordX, coordY);
 		} 
 	}
 
+	// Height Map
+	float* perlinData = new float[m_rows * m_cols];
+	float scale = (1.0f / m_cols) * 3;
+	int octaves = 6;
+
+	for(int x = 0; x < m_rows; ++x) {
+		for(int y = 0; y < m_cols; ++y) {
+
+			float amplitude = 1.0f;
+			float persistence = 0.3f;
+			perlinData[x * m_cols + y] = 0;
+
+			for(int i = 0; i < octaves; ++i) {
+				float freq = powf(2, (float)i);
+				float perlinSample = perlin(vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
+
+				perlinData[x * m_cols + y] += perlinSample * amplitude;
+				amplitude *= persistence;
+			}
+		}
+	}
+
+	// Add Normals
 	for(GLuint i = 1; i < m_rows - 1; ++i) {
 		for(GLuint j = 1; j < m_cols - 1; ++j) {
 			vec3 up =		(vec3)aoVertices[(i - 1) * m_cols + j].position; //up
@@ -55,6 +87,7 @@ void Terrain::GenerateGrid() {
 	unsigned int* auiIndices = new unsigned int[(m_rows - 1) * (m_cols - 1) * 6]; // DELETE
 	unsigned int index = 0;
 
+	// Create Index buffer
 	for (unsigned int r = 0; r < (m_rows - 1); ++r) {
 		for (unsigned int c = 0; c < (m_cols - 1); ++c) {
 	
@@ -69,6 +102,23 @@ void Terrain::GenerateGrid() {
 			auiIndices[index++] = r * m_cols + (c + 1);				
 		}
 	}
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Generate perlin texture
+	glGenTextures(1, &m_perlinTexture);
+	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_rows, m_cols, 0, GL_RED, GL_FLOAT, perlinData);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	// End
+
 
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
@@ -94,22 +144,49 @@ void Terrain::GenerateGrid() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	delete[] auiIndices;
+	delete[] aoVertices;
 }
 
 void Terrain::Draw(Camera & camera) {
 
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	shader.UseProgram();
 	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-	shader.SetInt("diffuse", 0);
+	shader.SetVec2("textureRepeat", m_textureRepeatAmount);
+	shader.SetInt("perlinTexture", 0);
 	
+	shader.SetInt("grass", 1);
+	shader.SetInt("stone", 2);
+	shader.SetInt("snow", 3);
+
 	// For Shadows
 	shader.SetVec3("lightDir", vec3(sin(glfwGetTime()), 1, 0));
 
+	// Set Perlin Texture in Vert Shader
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureData());
+	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
+
+	// Set Grass Texture
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_grass->GetTextureData());
+
+	// Set Stone Texture
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_stone->GetTextureData());
+
+	// Set Snow Texture
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, m_snow->GetTextureData());
+
 
 	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
 
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+}
+
+void Terrain::TotalTextureRepeat(uvec2 value) {
+	m_textureRepeatAmount = value;
 }

@@ -1,2 +1,23 @@
-﻿  OBJLoader.cpp
+﻿  Time.cpp
+  Texture.cpp
+  Terrain.cpp
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(47): warning C4018: '<': signed/unsigned mismatch
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\terrain.cpp(48): warning C4018: '<': signed/unsigned mismatch
+  ShaderLoader.cpp
+  OBJLoader.cpp
+  OBJAnimation.cpp
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\objanimation.cpp(21): warning C4018: '<': signed/unsigned mismatch
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\objanimation.cpp(72): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\main.cpp(13): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Colors.cpp
+  Camera.cpp
+  BaseApplication.cpp
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\baseapplication.cpp(11): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Application.cpp
+  Gizmos.cpp
+  Generating Code...
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\time.cpp(33): warning C4717: 'Time::DeltaTime': recursive on all control paths, function will cause runtime stack overflow
+  gl_core_4_4.c
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   OpenGL.vcxproj -> C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\Debug\OpenGL.exe

@@ -49,6 +49,7 @@ const bool Application::Startup() {
 		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
 	);
 
+
 	// Mouse
 	UpdateMousePosition();
 
@@ -63,25 +64,26 @@ const bool Application::Startup() {
 	m_rotation[1] = quat(vec3(0, 1, 0));
 
 	// Background color
-	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+	glClearColor(0.69f, 1.0f, 1.0f, 1.0f); //(0.25f, 0.25f, 0.25f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	// Terrain 
-	terrain.init(25, 25);
+	terrain.init(50, 50);
+	terrain.TotalTextureRepeat(uvec2(20, 20));
 
 	
-	loader = new OBJLoader();
-
-	tinyobj::attrib_t attribs;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materals;
-	std::string error;
-
-	bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Bunny.obj");
-
-	if(success == true) {
-		loader->LoadObject(attribs, shapes);
-	}
+	//loader = new OBJLoader();
+	//
+	//tinyobj::attrib_t attribs;
+	//std::vector<tinyobj::shape_t> shapes;
+	//std::vector<tinyobj::material_t> materals;
+	//std::string error;
+	//
+	//bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Bunny.obj");
+	//
+	//if(success == true) {
+	//	loader->LoadObject(attribs, shapes);
+	//}
 
 
 	//animation = new OBJAnimation();
@@ -158,7 +160,7 @@ const bool Application::Update() {
 
 void Application::Draw() {
 
-	loader->Draw(m_camera);
+	//loader->Draw(m_camera);
 
 	Gizmos::draw(m_camera.GetProjectionView());
 	

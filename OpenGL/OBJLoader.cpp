@@ -2,7 +2,7 @@
 #include "OBJLoader.h"
 
 OBJLoader::OBJLoader() {
-	shader.CreateShaderProgram("../shaders/Outline.vert", "../shaders/Outline.frag");
+	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
 	// shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
 
 
@@ -100,41 +100,39 @@ void OBJLoader::Draw(Camera camera) {
 
 
 
-	/*
+	
 	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
 	shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
 	shader.SetVec3("lightColor", (vec3)Colors::Red);
 	shader.SetVec3("cameraPos", camera.GetPosition());
 	shader.SetFloat("specPow", 128.0f);
 	shader.SetVec4("offsetPosition", vec4(0, 5, 0, 0));
-	*/
+	
 
-	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-
-	shader.UseProgram();
-
-	/////////////////////////////
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glViewport(0, 0, 1280, 720);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	for(auto& gl : m_glInfo) {
-		glBindVertexArray(gl.m_VAO);
-		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
-	}
-
-	/////////////////////////////
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, 1280, 720);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	shader.SetInt("screenTexture", 0);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
-
-
+	//shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
+	//
+	//shader.UseProgram();
+	//
+	///////////////////////////////
+	//glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	//glViewport(0, 0, 1280, 720);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//
+	//for(auto& gl : m_glInfo) {
+	//	glBindVertexArray(gl.m_VAO);
+	//	glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
+	//}
+	//
+	///////////////////////////////
+	//
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glViewport(0, 0, 1280, 720);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//
+	//shader.SetInt("depthTexture", 0);
+	//
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, m_fboDepth);
 
 
 

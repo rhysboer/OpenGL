@@ -16,7 +16,7 @@ using glm::vec4;
 struct Vertex {
 	vec4 position;
 	vec4 normal;
-	vec2 textPos;
+	vec2 texCoord;
 };
 
 // vec4 color
@@ -27,11 +27,17 @@ public:
 	~Terrain();
 
 	void init(unsigned int rows, unsigned int cols);
-	void Draw(Camera& camera); //void Draw(Camera& camera);
+	void Draw(Camera& camera);
+
+	void TotalTextureRepeat(uvec2 value);
 
 private:
 
 	void GenerateGrid();
+
+	// Total amount of times to repeat texture
+	uvec2 m_textureRepeatAmount = vec2(1,1);
+	unsigned int m_perlinTexture;
 
 	unsigned int m_rows;
 	unsigned int m_cols;
@@ -40,11 +46,11 @@ private:
 	unsigned int m_VBO = 0;	// Vertex Buffer Object (Holds data of each point ect position, colour, normal)
 	unsigned int m_IBO = 0; // Index Buffer Object (Which point connects to which)
 
-	unsigned int m_programID;
-
 	ShaderLoader shader = ShaderLoader();
 
 	// Texture
-	Texture* m_texture;
+	Texture* m_grass;
+	Texture* m_stone;
+	Texture* m_snow;
 };
 

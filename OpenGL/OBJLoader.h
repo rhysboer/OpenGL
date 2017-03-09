@@ -4,6 +4,8 @@
 #include "tiny_obj_loader.h"
 #include "Colors.h"
 
+
+#include "Texture.h"
 #include "Terrain.h"
 
 struct OpenGLInfo {
