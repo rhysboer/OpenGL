@@ -14,7 +14,6 @@ uniform float waveSpeed;	// Speed of the waves
 out vec4 vPosition;
 out vec4 vNormal;
 out vec2 vTexCoord;
-out float timer;
 
 void main(){
 
@@ -23,9 +22,8 @@ void main(){
 	vTexCoord = texCoord;
 	
 	vec4 pos = position;
-	pos.y = position.y + sin((time + position.x) * waveSpeed) * waveHeight;
+	pos.y = position.y + (sin((time + position.x) * waveSpeed) * waveHeight) + (cos((time + position.z) * waveSpeed) * waveHeight);   //position.y + sin((time + position.x) * waveSpeed) * waveHeight;
 	
-	timer = time;
 	
 	gl_Position = projectionViewWorldMatrix * pos;
 }

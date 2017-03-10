@@ -32,7 +32,7 @@ const bool Application::Startup() {
 	}
 
 	// Background color
-	glClearColor(0.69f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	// Enable the debug callback
