@@ -45,7 +45,7 @@ const bool Application::Startup() {
 
 	// Camera Settings
 	m_camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
-	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
+	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.01f, 1000.0f);
 
 	// QUANTERNIONS TEST
 	m_position[0] = vec3(10, 5, 10);
@@ -57,6 +57,8 @@ const bool Application::Startup() {
 	terrain.init(50, 50);
 	terrain.TotalTextureRepeat(uvec2(20, 20));
 
+	// Water Test
+	water.Init(uvec2(10, 10));
 	
 	//loader = new OBJLoader();
 	//
@@ -104,7 +106,7 @@ const bool Application::Update() {
 	m_earthMat = m_sunMat * m_earthLocal;
 	m_moonMat = m_earthMat * m_moonLocal;
 
-	//Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::red, &m_sunMat);
+	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::Red, &m_sunMat);
 	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colors::Green, &m_earthMat);
 	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colors::Purple, &m_moonMat);
 
@@ -136,6 +138,8 @@ void Application::Draw() {
 	//loader->Draw(m_camera);
 	//animation->Draw(m_camera);
 	terrain.Draw(m_camera);
+
+	water.Draw(m_camera);
 }
 
 void Application::Shutdown() {

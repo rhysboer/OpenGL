@@ -13,6 +13,7 @@ uniform sampler2D perlinTexture;
 uniform sampler2D grass;
 uniform sampler2D stone;
 uniform sampler2D snow;
+uniform sampler2D sand;
 
 void main() {
 	
@@ -22,12 +23,15 @@ void main() {
 	vec4 snowVec = texture(snow, vTexCoord * textureRepeat);
 	vec4 grassVec = texture(grass, vTexCoord * textureRepeat);
 	vec4 stoneVec = texture(stone, vTexCoord * textureRepeat);
+	vec4 sandVec = texture(sand, vTexCoord * textureRepeat);
 	
 	if(perlin.y > 0.9f){
 		fragColor = mix(stoneVec, snowVec, smoothstep(0.9f, 1.0f, perlin.y));
 	} else if (perlin.y > 0.6 && perlin.y < 0.9f) {
 		fragColor = mix(grassVec, stoneVec, smoothstep(0.5f, 1.0f, perlin.y));
-	} else {
-		fragColor = texture(grass, vTexCoord * textureRepeat);
+	} else if (perlin.y > 0.35 && perlin.y < 0.6) {
+		fragColor = mix(sandVec, grassVec, smoothstep(0.4f, 0.5f, perlin.y));
+	} else{
+		fragColor = sandVec;
 	}
 };

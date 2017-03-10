@@ -17,9 +17,8 @@
 #include <GLM\gtx\quaternion.hpp>
 
 #include "Terrain.h"
+#include "Water.h"
 
-
-// DELET THIS
 #include "InputManager.h"
 
 using glm::vec3;
@@ -39,6 +38,7 @@ public:
 
 private:
 	Terrain terrain = Terrain();
+	Water water = Water();
 
 	FlyCamera m_camera;
 
@@ -58,7 +58,7 @@ private:
 	mat4 earthRotation = mat4(1);
 	mat4 moonRotation = mat4(1);
 
-	// Delete Pointers whend done
+	// Delete Pointers when done
 	OBJLoader* loader;
 	OBJAnimation* animation;
 };

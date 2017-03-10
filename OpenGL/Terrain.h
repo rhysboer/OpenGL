@@ -19,8 +19,6 @@ struct Vertex {
 	vec2 texCoord;
 };
 
-// vec4 color
-
 class Terrain {
 public:
 	Terrain();
@@ -52,5 +50,6 @@ private:
 	Texture* m_grass;
 	Texture* m_stone;
 	Texture* m_snow;
+	Texture* m_sand;
 };
 

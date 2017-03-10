@@ -13,6 +13,7 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 	m_grass = new Texture("../bin/textures/grass.png");
 	m_stone = new Texture("../bin/textures/stone.png");
 	m_snow = new Texture("../bin/textures/snow.png");
+	m_sand = new Texture("../bin/textures/sand.png");
 
 	// Load in shaders
 	shader.CreateShaderProgram("../shaders/TextureTerrain.vert", "../shaders/TextureTerrain.frag");
@@ -160,6 +161,7 @@ void Terrain::Draw(Camera & camera) {
 	shader.SetInt("grass", 1);
 	shader.SetInt("stone", 2);
 	shader.SetInt("snow", 3);
+	shader.SetInt("sand", 4);
 
 	// For Shadows
 	shader.SetVec3("lightDir", vec3(sin(glfwGetTime()), 1, 0));
@@ -180,6 +182,9 @@ void Terrain::Draw(Camera & camera) {
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, m_snow->GetTextureData());
 
+	// Set Sand Texture
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, m_sand->GetTextureData());
 
 	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
 
