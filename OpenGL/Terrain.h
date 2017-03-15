@@ -9,6 +9,9 @@
 #include "ShaderLoader.h"
 #include "Texture.h"
 
+// Test
+#include "Light.h"
+
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
@@ -29,6 +32,10 @@ public:
 
 	void TotalTextureRepeat(uvec2 value);
 
+	// Shadows
+	void GenerateDepthBuffer();
+	void GenerateShadowMap();
+
 private:
 
 	void GenerateGrid();
@@ -44,12 +51,20 @@ private:
 	unsigned int m_VBO = 0;	// Vertex Buffer Object (Holds data of each point ect position, colour, normal)
 	unsigned int m_IBO = 0; // Index Buffer Object (Which point connects to which)
 
-	ShaderLoader shader = ShaderLoader();
+	ShaderLoader m_shader = ShaderLoader();			// Regular shader for terrain
+	ShaderLoader m_shadowShader = ShaderLoader();	// Shader for the shadow map 
 
 	// Texture
 	Texture* m_grass;
 	Texture* m_stone;
 	Texture* m_snow;
 	Texture* m_sand;
+
+	// Light
+	Light* m_sun;
+
+	unsigned int m_fbo;			// Frame Buffer Object
+	unsigned int m_fboDepth;	// Texture Handler
+	unsigned int m_shadowMap; 
 };
 
