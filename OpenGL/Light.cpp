@@ -1,12 +1,10 @@
 #include "Light.h"
 
 
+Light::Light() {	
+	LightManager::AddLight(*this);
 
-Light::Light() {
 	m_color = Colors::White;
-}
-
-Light::Light(vec4 position) {
 }
 
 Light::~Light() {
@@ -18,20 +16,20 @@ Light::~Light() {
 	worldUp	= Worlds Upwards Vector
 */
 void Light::LookAt(vec3 eye, vec3 center, vec3 worldUp) {
-
-	m_lightView = glm::lookAt(eye, center, worldUp);
+	m_direction = glm::normalize(eye);
+	m_lightView = glm::lookAt(m_direction, center, worldUp);
 }
 
-void Light::SetOrtho(vec2 left, vec2 bottom, vec2 top) {
-	m_lightProjection = glm::ortho(left.x, left.y, bottom.x, bottom.y, top.x, top.y);
+void Light::SetOrtho(const float left, const float right, const float down, const float up, const float zNear, const float zFar) {
+	m_lightProjection = glm::ortho<float>(left, right, down, up, zNear, zFar);
 }
 
-void Light::SetDirection(vec3 direction) {
-	m_direction = glm::normalize(direction);
-}
-
-mat4 Light::GetViewMatrix() {
+mat4 Light::GetLightMatrix() {
 	m_lightMatrix = m_lightProjection * m_lightView;
+	return m_lightMatrix;
+}
 
-	return mat4();
+mat4 Light::GetTextureSpaceLightMatrix() {
+	m_lightMatrix = m_lightProjection * m_lightView;
+	return textureSpaceOffset * m_lightMatrix;
 }

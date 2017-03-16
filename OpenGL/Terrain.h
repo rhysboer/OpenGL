@@ -62,9 +62,16 @@ private:
 
 	// Light
 	Light* m_sun;
+	vec3 lightDir;
+
+	glm::mat4 textureSpaceOffset = glm::mat4(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+	);
 
 	unsigned int m_fbo;			// Frame Buffer Object
 	unsigned int m_fboDepth;	// Texture Handler
-	unsigned int m_shadowMap; 
 };
 

@@ -11,9 +11,9 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	// Lights
 	m_sun = new Light();
-	m_sun->LookAt(vec3(1, 0, 0), vec3(0), vec3(0, 1, 0));
-	m_sun->SetOrtho(vec2(-10, 10), vec2(-10, 10), vec2(-10, 10));
-	m_sun->SetDirection(vec3(1, 2.5f, 1));
+	////m_sun->SetDirection(vec3(2, 2.5f, 0));
+	//m_sun->LookAt(m_sun->GetDirection(), vec3(0), vec3(0, 1, 0));
+	//m_sun->SetOrtho(vec2(-10, 10), vec2(-10, 10), vec2(-10, 10));
 
 	// Create Texture
 	m_grass = new Texture("../bin/textures/grass.png");
@@ -23,6 +23,9 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	// Load in shaders
 	m_shader.CreateShaderProgram("../shaders/TextureTerrain.vert", "../shaders/TextureTerrain.frag");
+
+	// Load in shadow gen shaders
+	m_shadowShader.CreateShaderProgram("../shaders/GenTerrainShadow.vert", "../shaders/GenTerrainShadow.frag");
 
 	// Set terrain width and length
 	this->m_cols = cols;
@@ -93,27 +96,51 @@ void Terrain::GenerateGrid() {
 	//}
 
 	// Add Normals
-	for(GLuint i = 1; i < m_rows - 1; ++i) {
-		for(GLuint j = 1; j < m_cols - 1; ++j) {
-			vec3 up =		(vec3)aoVertices[(i - 1) * m_cols + j].position; //up
-			vec3 upRight =	(vec3)aoVertices[(i - 1) * m_cols + (j + 1)].position; //upRight
-			vec3 down =		(vec3)aoVertices[(i + 1) * m_cols + j].position; //down
-			vec3 downLeft =	(vec3)aoVertices[(i + 1) * m_cols + (j - 1)].position; //downLeft
-			vec3 left =		(vec3)aoVertices[i * m_cols + (j - 1)].position; //left
-			vec3 right =	(vec3)aoVertices[i * m_cols + (j + 1)].position; //right
+	for(GLuint i = 0; i < m_rows - 1; i++) {
+		for(GLuint j = 0; j < m_cols - 1; j++) {
+			//vec3 up =		(vec3)aoVertices[(i - 1) * m_cols + j].position; //up
+			//vec3 upRight =	(vec3)aoVertices[(i - 1) * m_cols + (j + 1)].position; //upRight
+			//vec3 down =		(vec3)aoVertices[(i + 1) * m_cols + j].position; //down
+			//vec3 downLeft =	(vec3)aoVertices[(i + 1) * m_cols + (j - 1)].position; //downLeft
+			//vec3 left =		(vec3)aoVertices[i * m_cols + (j - 1)].position; //left
+			//vec3 right =	(vec3)aoVertices[i * m_cols + (j + 1)].position; //right
+			//
+			//vec3 normal1 = glm::cross(up, left);
+			//vec3 normal2 = glm::cross(upRight, up);
+			//vec3 normal3 = glm::cross(right, upRight);
+			//vec3 normal4 = glm::cross(down, right);
+			//vec3 normal5 = glm::cross(downLeft, down);
+			//vec3 normal6 = glm::cross(left, downLeft);
+			//
+			//vec3 sum = normal1 + normal2 + normal3 + normal4 + normal5 + normal6;
+			//
+			//aoVertices[i * m_cols + j].normal = (glm::length2(sum) == 0) ? vec4(sum, 0) : vec4(glm::normalize(sum), 0);
+
+			int posUp = (j - m_cols < 0) ? j - m_cols : - 1;
+			int posDown = (j + m_cols > m_cols) ? -1 : j + m_cols;
+			int posLeft = (j - 1 < 0) ? j + 1 : - 1;
+			int posRight = (j + 1 > m_cols) ? -1 : j + 1;
+
+			vec3 zero = vec3(0);
+
+			vec3 up = (posUp == -1) ? zero : (vec3)aoVertices[posUp].position;
+			vec3 down = (posDown == -1) ? zero : (vec3)aoVertices[posDown].position;
+			vec3 left = (posLeft == -1) ? zero : (vec3)aoVertices[posLeft].position;
+			vec3 right = (posRight == -1) ? zero : (vec3)aoVertices[posRight].position;
+
+			vec3 normal1 = glm::cross(up, down);
+			vec3 normal2 = glm::cross(down, left);
+			vec3 normal3 = glm::cross(left, right);
+			vec3 normal4 = glm::cross(right, up);
+
+			vec3 total = normal1 + normal2 + normal3 + normal4;
+
+			aoVertices[i * m_cols + j].normal = vec4(total, 1);
 			
-			vec3 normal1 = glm::cross(up, left);
-			vec3 normal2 = glm::cross(upRight, up);
-			vec3 normal3 = glm::cross(right, upRight);
-			vec3 normal4 = glm::cross(down, right);
-			vec3 normal5 = glm::cross(downLeft, down);
-			vec3 normal6 = glm::cross(left, downLeft);
-			
-			vec3 sum = normal1 + normal2 + normal3 + normal4 + normal5 + normal6;
-			
-			aoVertices[i * m_cols + j].normal = (glm::length2(sum) == 0) ? vec4(sum, 0) : vec4(glm::normalize(sum), 0);
 		}
 	}
+
+
 
 	unsigned int* auiIndices = new unsigned int[(m_rows - 1) * (m_cols - 1) * 6]; // DELETE
 	unsigned int index = 0;
@@ -182,9 +209,28 @@ void Terrain::GenerateGrid() {
 void Terrain::Draw(Camera & camera) {
 
 	// Wire Frame
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
+	
+	glCullFace(GL_FRONT);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glViewport(0, 0, 1024, 1024);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
-	GenerateShadowMap();
+	m_shadowShader.UseProgram();
+	
+	m_sun->LookAt(vec3(20, 30, sin(glfwGetTime() * 0.5f) * 50), vec3(0), vec3(0, 1, 0));
+	m_sun->SetOrtho(-25, 25, -25, 25, -25, 25);
+
+	// mat4 lightMatrix = lightProjectionl * lightView;
+
+	m_shadowShader.SetMat4("lightMatrix", m_sun->GetLightMatrix());
+	 
+	// Draw Terrain
+	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
+	glBindVertexArray(m_VAO);
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, 1280, 720);
@@ -192,49 +238,74 @@ void Terrain::Draw(Camera & camera) {
 
 	m_shader.UseProgram();
 	m_shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
+
 	m_shader.SetVec2("textureRepeat", m_textureRepeatAmount);
-	m_shader.SetInt("perlinTexture", 0);
-	
+	// m_shader.SetInt("perlinTexture", 0);
+	// 
 	m_shader.SetInt("grass", 1);
 	m_shader.SetInt("stone", 2);
 	m_shader.SetInt("snow", 3);
 	m_shader.SetInt("sand", 4);
 
 	// For Shadows
-	m_shader.SetVec3("lightDir", vec3(2, 0, 0));
-	m_shader.SetInt("shadowMap", 5);
-	m_shader.SetMat4("lightMatrix", m_sun->GetTextureSpaceOffset() * m_sun->GetViewMatrix());
+	m_shader.SetVec3("lightDir", m_sun->GetDirection());
+	m_shader.SetInt("shadowMap", 0);
+	m_shader.SetMat4("lightMatrix", m_sun->GetTextureSpaceLightMatrix());
 
-	glActiveTexture(GL_TEXTURE5);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
 
 
 
-	// Set Perlin Texture in Vert Shader
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
-
+	//// Set Perlin Texture in Vert Shader
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
+	
 	// Set Grass Texture
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_grass->GetTextureData());
-
+	
 	// Set Stone Texture
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, m_stone->GetTextureData());
-
+	
 	// Set Snow Texture
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, m_snow->GetTextureData());
-
+	
 	// Set Sand Texture
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, m_sand->GetTextureData());
 
-	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
-
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+
+	glCullFace(GL_BACK);
 }
+
+// Generate Shadow Map ( In Draw )
+void Terrain::GenerateShadowMap() {
+
+	// lightDir = normalize(vec3(sin(glfwGetTime()) * 2, 0, 1));
+	// m_sun->LookAt(lightDir, vec3(0, 0, 0), vec3(0, 1, 0));
+	// m_sun->SetOrtho(vec2(-10, 10), vec2(-10, 10), vec2(-10, 10));
+	// 
+	// 
+	// glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	// glViewport(0, 0, 1024, 1024);
+	// glClear(GL_DEPTH_BUFFER_BIT);
+	// 
+	// // Set Shadow variables
+	// m_shadowShader.SetMat4("lightMatrix", m_sun->GetViewMatrix());
+	// m_shadowShader.UseProgram();
+	// 
+	// // Draw Terrain
+	// unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
+	// 
+	// glBindVertexArray(m_VAO);
+	// glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+}
+
 
 void Terrain::TotalTextureRepeat(uvec2 value) {
 	m_textureRepeatAmount = value;
@@ -242,9 +313,6 @@ void Terrain::TotalTextureRepeat(uvec2 value) {
 
 // Generate Texture & stuff
 void Terrain::GenerateDepthBuffer() {
-
-	// Load in shaders
-	m_shadowShader.CreateShaderProgram("../shaders/GenTerrainShadow.vert", "../shaders/GenTerrainShadow.frag");
 
 	// Frame Buffer
 	glGenFramebuffers(1, &m_fbo);
@@ -254,7 +322,7 @@ void Terrain::GenerateDepthBuffer() {
 	glGenTextures(1, &m_fboDepth);
 	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -267,22 +335,6 @@ void Terrain::GenerateDepthBuffer() {
 	// Error Check
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		return;
-}
 
-// Generate Shadow Map ( In Draw )
-void Terrain::GenerateShadowMap() {
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glViewport(0, 0, 1024, 1024);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	// Set Shadow variables
-	m_shadowShader.SetMat4("lightMatrix", m_sun->GetViewMatrix());
-	m_shadowShader.UseProgram();
-
-	// Draw Terrain
-	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
-
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

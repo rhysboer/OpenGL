@@ -20,6 +20,7 @@
 #include "Water.h"
 
 #include "InputManager.h"
+#include "LightManager.h"
 
 using glm::vec3;
 using glm::vec4;

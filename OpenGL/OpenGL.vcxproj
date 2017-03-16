@@ -167,6 +167,7 @@
     <ClCompile Include="gl_core_4_4.c" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJAnimation.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="gl_core_4_4.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightManager.h" />
     <ClInclude Include="OBJAnimation.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ShaderLoader.h" />

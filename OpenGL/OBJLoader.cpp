@@ -3,8 +3,6 @@
 
 OBJLoader::OBJLoader() {
 	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
-	// shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
-
 
 	//shadow.CreateShaderProgram("../shaders/GensShadow.vert", "../shaders/GensShadow.frag");
 

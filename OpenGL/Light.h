@@ -1,4 +1,7 @@
 #pragma once
+#include "LightManager.h"
+#include "gl_core_4_4.h"
+#include "GLFW\glfw3.h"
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
 #include "GLM\gtx\norm.hpp"
@@ -13,21 +16,23 @@ using glm::mat4;
 class Light {
 public:
 	Light();
-	Light(vec4 position);
 	~Light();
 
-	void LookAt(vec3 eye, vec3 center, vec3 worldUp = vec3(0, 1, 0));
-	void SetOrtho(vec2 left, vec2 up, vec2 down);
+	//virtual void Draw(mat4 cameraView);
 
-	void SetDirection(vec3 direction);
+	void LookAt(vec3 eye, vec3 center, vec3 worldUp = vec3(0, 1, 0));
+	void SetOrtho(const float left, const float right, const float bottom, const float top, const float zNear, const float zFar);
+
 	void SetPosition(const vec4 position);
 	void SetColor(const vec4 color);
 
-	mat4 GetViewMatrix();
+	mat4 GetLightMatrix();
+	mat4 GetTextureSpaceLightMatrix();
 
 
 	// temp
-	const mat4 GetTextureSpaceOffset() { return TEXTURE_SPACE_OFFSET; }
+	const mat4 GetTextureSpaceOffset() { return textureSpaceOffset; }
+	vec3 GetDirection() { return m_direction; }
 
 private:
 
@@ -39,11 +44,11 @@ private:
 	mat4 m_lightMatrix;
 
 	// Put into direction Light class
-	const mat4 TEXTURE_SPACE_OFFSET = mat4(
-		0.5f,	0,		0,		0,
-		0,		0.5f,	0,		0,
-		0,		0,		0.5f,	0,
-		0.5f,	0.5f,	0.5f,	1.0f
+	glm::mat4 textureSpaceOffset = glm::mat4(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
 	);
 };
 

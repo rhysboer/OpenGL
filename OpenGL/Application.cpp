@@ -45,7 +45,7 @@ const bool Application::Startup() {
 
 	// Camera Settings
 	m_camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
-	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.01f, 1000.0f);
+	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
 
 	// QUANTERNIONS TEST
 	m_position[0] = vec3(10, 5, 10);
@@ -134,6 +134,7 @@ const bool Application::Update() {
 
 void Application::Draw() {
 	Gizmos::draw(m_camera.GetProjectionView());
+	LightManager::Draw(m_camera);
 
 	//loader->Draw(m_camera);
 	//animation->Draw(m_camera);
@@ -144,6 +145,8 @@ void Application::Draw() {
 
 void Application::Shutdown() {
 	Gizmos::destroy();
+	LightManager::Destroy();
+
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }
