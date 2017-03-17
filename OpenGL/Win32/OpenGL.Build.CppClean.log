@@ -7,7 +7,7 @@ c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\camer
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\colors.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\flycamera.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\inputmanager.obj
-c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\main.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\light.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\objanimation.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\objloader.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\shaderloader.obj
@@ -15,7 +15,9 @@ c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\terra
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\texture.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\time.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\water.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\main.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\gl_core_4_4.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\lightmanager.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.ilk
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.exe
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.pdb

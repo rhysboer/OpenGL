@@ -11,6 +11,7 @@
 
 // Test
 #include "Light.h"
+#include "AIE\Gizmos.h"
 
 using glm::vec2;
 using glm::vec3;
@@ -73,5 +74,8 @@ private:
 
 	unsigned int m_fbo;			// Frame Buffer Object
 	unsigned int m_fboDepth;	// Texture Handler
+
+
+	Vertex* aoVertices;
 };
 

@@ -63,13 +63,14 @@ void main() {
 		d = 0.2f;
 	}
 	
-	//fragColor = vec4(d, d, d, 1);
+	fragColor = vNormal;
+	fragColor.a = 1;
 	
-	d = clamp(1.0, 0.2, d);
-	vec4 shadow = vec4(d, d, d, 0.2f);
-	
-	placeTexture *= shadow;
-	placeTexture.a = 1;
-	fragColor = placeTexture;
+	//d = clamp(1.0, 0.2, d);
+	//vec4 shadow = vec4(d, d, d, 0.2f);
+	//
+	//placeTexture *= shadow;
+	//placeTexture.a = 1;
+	//fragColor = placeTexture;
 	
 };
