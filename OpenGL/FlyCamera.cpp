@@ -49,6 +49,8 @@ void FlyCamera::Update() {
 	if(InputManager::IsMouseButtonDown(GLFW_MOUSE_BUTTON_1)) {
 		vec3 mousePosition = GetMouseCameraMovement();
 		if(mousePosition != vec3(0)) {
+			// TODO:
+			// Fix Mouse Rotation
 			Rotate(3.0f * Time::DeltaTime(), mousePosition);
 		}
 	}
@@ -72,6 +74,10 @@ vec3 FlyCamera::GetMouseCameraMovement() {
 	vec3 temp = pos;
 	pos.y = temp.x;
 	pos.x = temp.y;
+	
+	if (pos.z > 0.1f) {
+		int i = 1;
+	}
 
 	return pos;
 }

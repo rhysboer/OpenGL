@@ -65,8 +65,8 @@ void Terrain::GenerateGrid() {
 				amplitude *= persistence;
 			}
 
-			aoVertices[r * m_cols + c].position = vec4((float)c, /*perlinData*/ 10, (float)r, 1);
-		} 
+			aoVertices[r * m_cols + c].position = vec4((float)c, perlinData * 10, (float)r, 1);
+		}
 	}
 
 	// Height Map
@@ -94,44 +94,69 @@ void Terrain::GenerateGrid() {
 	// Add Normals onto terrain
 	for(GLuint i = 0; i < m_rows; ++i) {
 		for(GLuint j = 0; j < m_cols; ++j) {
-			//vec3 up =			(vec3)aoVertices[(i - 1) * m_cols + j].position;		//up
-			//vec3 upRight =	(vec3)aoVertices[(i - 1) * m_cols + (j + 1)].position;	//upRight
-			//vec3 down =		(vec3)aoVertices[(i + 1) * m_cols + j].position;		//down
-			//vec3 downLeft =	(vec3)aoVertices[(i + 1) * m_cols + (j - 1)].position;	//downLeft
-			//vec3 left =		(vec3)aoVertices[i * m_cols + (j - 1)].position;		//left
-			//vec3 right =		(vec3)aoVertices[i * m_cols + (j + 1)].position;		//right
-			//
-			//vec3 normal1 = glm::cross(up, left);
-			//vec3 normal2 = glm::cross(upRight, up);
-			//vec3 normal3 = glm::cross(right, upRight);
-			//vec3 normal4 = glm::cross(down, right);
-			//vec3 normal5 = glm::cross(downLeft, down);
-			//vec3 normal6 = glm::cross(left, downLeft);
-			//
-			//vec3 sum = normal1 + normal2 + normal3 + normal4 + normal5 + normal6;
-			//
-			//aoVertices[i * m_cols + j].normal = (glm::length2(sum) == 0) ? vec4(sum, 0) : vec4(glm::normalize(sum), 0);
 
-			int posUp = (i - 1) * m_cols + j;
-			int posDown = (i + 1) * m_cols + j;
-			int posDownR = (i + 1)* m_cols + (j + 1);
-			int posLeft = i * m_cols + (j - 1);
-			int posRight = i * m_cols + (j + 1);
-			
-			vec3 zero = vec3(0);
-			
-			vec3 up = (posUp < 0) ? zero : (vec3)aoVertices[posUp].position;
-			vec3 down = (posDown >= m_rows * m_cols) ? zero : (vec3)aoVertices[posDown].position;
-			vec3 left = (posLeft < 0) ? zero : (vec3)aoVertices[posLeft].position;
-			vec3 right = (posRight >= m_rows * m_cols) ? zero : (vec3)aoVertices[posRight].position;
-			
-			vec3 normal1 = glm::cross(up, left);
-			vec3 normal2 = glm::cross(right, up);
-			vec3 normal3 = glm::cross(down, right);
-			vec3 normal4 = glm::cross(left, down);
+			int posCurr =	i * m_cols + j;
+			int posUp =		i * m_cols + (j - 1);
+			int posDown =	i * m_cols + (j + 1);
+			int posLeft =	(i + 1) * m_cols + j;
+			int posRight =	(i - 1) * m_cols + j;
 
-			vec3 total = normal1 + normal2 + normal3 + normal4;
-			aoVertices[i * m_cols + j].normal = vec4(normalize(vec4(total, 0)));
+			if ((i == 0 && j == 0) || (i == m_rows-1 && j == 0) || (i == 0 && j == m_cols-1) || (i == m_rows-1 && j == m_cols-1)) {
+				// Corners
+
+				vec3 neighbourY = (posCurr % m_cols == 0) ? (vec3)aoVertices[posDown].position : (vec3)aoVertices[posUp].position;
+				vec3 neighbourX = (posRight > 0) ? (vec3)aoVertices[posRight].position : (vec3)aoVertices[posLeft].position;
+				vec3 a = (vec3)aoVertices[posCurr].position - neighbourY;
+				vec3 b = (vec3)aoVertices[posCurr].position - neighbourX;
+
+				vec4 normal = normalize(vec4(cross(a, b), 0));
+
+				if (i == 0 && j == 0 || i == m_rows - 1 && j == m_cols - 1) {
+					aoVertices[posCurr].normal = -normal;
+				} else {
+					aoVertices[posCurr].normal = normal;
+				}
+			}else if ((i == 0 && j > 0 && j < m_cols - 1) || (i > 0 && i < m_rows-1 && j == m_cols-1)) {
+				// Right & bottom border 
+
+				vec3 neighbourY = (vec3)aoVertices[posUp].position;
+				vec3 neighbourX = (vec3)aoVertices[posLeft].position;
+
+				vec3 a = (vec3)aoVertices[posCurr].position - neighbourY;
+				vec3 b = (vec3)aoVertices[posCurr].position - neighbourX;
+
+				vec4 normal = normalize(vec4(cross(a,b), 0));
+
+				aoVertices[posCurr].normal = normal;
+			} else if ((i > 0 && i < m_rows - 1 && j == 0) || (i == m_rows -1 && j > 0 && j < m_cols-1)) {
+				// Left & top border
+
+				vec3 neighbourY = (vec3)aoVertices[posDown].position;
+				vec3 neighbourX = (vec3)aoVertices[posRight].position;
+
+				vec3 a = (vec3)aoVertices[posCurr].position - neighbourY;
+				vec3 b = (vec3)aoVertices[posCurr].position - neighbourX;
+
+				vec4 normal = normalize(vec4(cross(a, b), 0));
+
+				aoVertices[posCurr].normal = normal;
+			} else {
+				// If vertex is inside
+				vec3 zero = vec3(0);
+
+				vec3 up = (posCurr % m_cols == 0) ? zero : (vec3)aoVertices[posUp].position;
+				vec3 down = (posDown % m_cols == 0) ? zero : (vec3)aoVertices[posDown].position;
+				vec3 left = (posLeft >= m_rows * m_cols) ? zero : (vec3)aoVertices[posLeft].position;
+				vec3 right = (posRight < 0) ? zero : (vec3)aoVertices[posRight].position;
+
+				vec3 normal1 = glm::cross(up, left);
+				vec3 normal2 = glm::cross(right, up);
+				vec3 normal3 = glm::cross(down, right);
+				vec3 normal4 = glm::cross(left, down);
+
+				vec3 total = normal1 + normal2 + normal3 + normal4;
+				aoVertices[i * m_cols + j].normal = vec4(normalize(vec4(total, 0)));
+			}
 		}
 	}
 
@@ -160,16 +185,16 @@ void Terrain::GenerateGrid() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Generate perlin texture
-	 glGenTextures(1, &m_perlinTexture);
-	 glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
-	 
-	 glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_rows, m_cols, 0, GL_RED, GL_FLOAT, perlinData);
-	 
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	 
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glGenTextures(1, &m_perlinTexture);
+	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_rows, m_cols, 0, GL_RED, GL_FLOAT, perlinData);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	// End
 
 	// Terrain Arrays

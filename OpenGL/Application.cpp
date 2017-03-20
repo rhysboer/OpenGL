@@ -54,7 +54,7 @@ const bool Application::Startup() {
 	m_rotation[1] = quat(vec3(0, 1, 0));
 
 	// Terrain 
-	terrain.init(3, 3);
+	terrain.init(50, 50);
 	terrain.TotalTextureRepeat(uvec2(10, 10));
 
 	// Water Test
