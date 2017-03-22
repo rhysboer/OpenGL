@@ -59,19 +59,9 @@ const bool Application::Startup() {
 
 	// Water Test
 	water.Init(uvec2(10, 10));
-	
-	//loader = new OBJLoader();
-	//
-	//tinyobj::attrib_t attribs;
-	//std::vector<tinyobj::shape_t> shapes;
-	//std::vector<tinyobj::material_t> materals;
-	//std::string error;
-	//
-	//bool success = tinyobj::LoadObj(&attribs, &shapes, &materals, &error, "../bin/objs/Bunny.obj");
-	//
-	//if(success == true) {
-	//	loader->LoadObject(attribs, shapes);
-	//}
+
+	loader = new OBJLoader();
+	loader->LoadObject("../bin/objs/Bunny.obj");
 
 
 	//animation = new OBJAnimation();
@@ -133,14 +123,14 @@ const bool Application::Update() {
 }
 
 void Application::Draw() {
-	Gizmos::draw(m_camera.GetProjectionView());
-	LightManager::Draw(m_camera);
+	//Gizmos::draw(m_camera.GetProjectionView());
+	//LightManager::Draw(m_camera);
 
-	//loader->Draw(m_camera);
+	loader->Draw(m_camera);
 	//animation->Draw(m_camera);
-	terrain.Draw(m_camera);
+	//terrain.Draw(m_camera);
 
-	water.Draw(m_camera);
+	//water.Draw(m_camera);
 }
 
 void Application::Shutdown() {
