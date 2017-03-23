@@ -172,6 +172,7 @@
     <ClCompile Include="OBJAnimation.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="PostProcessing.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="OBJAnimation.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="PostProcessing.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />

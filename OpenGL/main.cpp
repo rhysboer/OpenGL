@@ -25,8 +25,9 @@ int main() {
 
 			glfwSwapBuffers(app->GetWindow());
 		}
-		app->Shutdown();
 	}
+
+	app->Shutdown();
 
 	delete app;
 	delete time;

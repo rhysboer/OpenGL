@@ -1,21 +1,16 @@
 #include "Terrain.h"
 
-
-
 Terrain::Terrain() {
 }
 
 Terrain::~Terrain() {
 	delete m_grass;
+	delete m_stone;
+	delete m_snow;
+	delete m_sand;
 }
 
 void Terrain::init(unsigned int rows, unsigned int cols) {
-
-	// Lights
-	m_sun = new Light();
-	////m_sun->SetDirection(vec3(2, 2.5f, 0));
-	//m_sun->LookAt(m_sun->GetDirection(), vec3(0), vec3(0, 1, 0));
-	//m_sun->SetOrtho(vec2(-10, 10), vec2(-10, 10), vec2(-10, 10));
 
 	// Create Texture
 	m_grass = new Texture("../bin/textures/grass.png");
@@ -26,9 +21,6 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 	// Load in shaders
 	m_shader.CreateShaderProgram("../shaders/TextureTerrain.vert", "../shaders/TextureTerrain.frag");
 
-	// Load in shadow gen shaders
-	m_shadowShader.CreateShaderProgram("../shaders/GenTerrainShadow.vert", "../shaders/GenTerrainShadow.frag");
-
 	// Set terrain width and length
 	this->m_cols = cols + 1;
 	this->m_rows = rows + 1;
@@ -37,59 +29,38 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 
 	// Generate The Terrain
 	GenerateGrid();
-
-	// Generate Depth Buffer
-	GenerateDepthBuffer();
 }
 
 void Terrain::GenerateGrid() {
-	for (unsigned int r = 0; r < m_rows; ++r) {
-		for (unsigned int c = 0; c < m_cols; ++c) {
+	
+	int randNum = rand() % RAND_MAX;
+
+	float* perlinData = new float[m_rows * m_cols];
+	for(unsigned int r = 0; r < m_rows; ++r) {
+		for(unsigned int c = 0; c < m_cols; ++c) {
 			float coordX = (float)c / (m_rows - 1);
 			float coordY = (float)r / (m_cols - 1);
 
 			aoVertices[r * m_cols + c].texCoord = vec2(coordX, coordY);
-
-			float perlinData = 0;
+			
 			float scale = (1.0f / m_cols) * 3;
 			int octaves = 6;
 
 			float amplitude = 1.0f;
 			float persistence = 0.3f;
+			perlinData[r * m_cols + c] = 0;
 
-			for (int i = 0; i < octaves; ++i) {
+			for(int i = 0; i < octaves; ++i) {
 				float freq = powf(2, (float)i);
-				float perlinSample = perlin(vec2((float)r, (float)c) * scale * freq) * 0.5f + 0.5f;
+				float perlinSample = perlin(vec2((float)r + randNum, (float)c + randNum) * scale * freq) * 0.5f + 0.5f;
 
-				perlinData += perlinSample * amplitude;
+				perlinData[r * m_cols + c] += perlinSample * amplitude;
 				amplitude *= persistence;
 			}
 
-			aoVertices[r * m_cols + c].position = vec4((float)c, perlinData * 10, (float)r, 1);
+			aoVertices[r * m_cols + c].position = vec4((float)c, perlinData[r * m_cols + c] * 10, (float)r, 1);
 		}
 	}
-
-	// Height Map
-	float* perlinData = new float[m_rows * m_cols];
-	float scale = (1.0f / m_cols) * 3;
-	int octaves = 6;
-
-	//for(int x = 0; x < m_rows; ++x) {
-	//	for(int y = 0; y < m_cols; ++y) {
-	//
-	//		float amplitude = 1.0f;
-	//		float persistence = 0.3f;
-	//		perlinData[x * m_cols + y] = 0;
-	//
-	//		for(int i = 0; i < octaves; ++i) {
-	//			float freq = powf(2, (float)i);
-	//			float perlinSample = perlin(vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
-	//
-	//			perlinData[x * m_cols + y] += perlinSample * amplitude;
-	//			amplitude *= persistence;
-	//		}
-	//	}
-	//}
 
 	// Add Normals onto terrain
 	for(GLuint i = 0; i < m_rows; ++i) {
@@ -223,65 +194,29 @@ void Terrain::GenerateGrid() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	delete[] auiIndices;
-	// delete[] aoVertices;
-
+	delete[] aoVertices;
 }
 
 void Terrain::Draw(Camera & camera) {
 
 	// Wire Frame
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-	
-	
-	glCullFace(GL_FRONT);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glViewport(0, 0, 1024, 1024);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	
-	m_shadowShader.UseProgram();
-	
-	m_sun->LookAt(vec3(20, 30, sin(glfwGetTime() * 0.5f) * 50), vec3(0), vec3(0, 1, 0));
-	m_sun->SetOrtho(-25, 25, -25, 25, -25, 25);
-	
-	// mat4 lightMatrix = lightProjectionl * lightView;
-	
-	m_shadowShader.SetMat4("lightMatrix", m_sun->GetLightMatrix());
-	 
-	// Draw Terrain
+
 	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
-	
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, 1280, 720);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	m_shader.UseProgram();
 	m_shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
 	
 	m_shader.SetVec2("textureRepeat", m_textureRepeatAmount);
-	// m_shader.SetInt("perlinTexture", 0);
-	// 
+
+	m_shader.SetInt("perlinTexture", 0);
 	m_shader.SetInt("grass", 1);
 	m_shader.SetInt("stone", 2);
 	m_shader.SetInt("snow", 3);
 	m_shader.SetInt("sand", 4);
 	
-	// For Shadows
-	m_shader.SetVec3("lightDir", m_sun->GetDirection());
-	m_shader.SetInt("shadowMap", 0);
-	m_shader.SetMat4("lightMatrix", m_sun->GetTextureSpaceLightMatrix());
-	
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
-	
-	
-	
-	//// Set Perlin Texture in Vert Shader
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
+	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
 	
 	// Set Grass Texture
 	glActiveTexture(GL_TEXTURE1);
@@ -301,69 +236,8 @@ void Terrain::Draw(Camera & camera) {
 	
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
-	
-	glCullFace(GL_BACK);
-
-	for(int x = 0; x < m_rows; x++) {
-		for(int y = 0; y < m_cols; y++) {
-			Gizmos::addLine((vec3)aoVertices[x * m_cols + y].position, (vec3)(aoVertices[x * m_cols + y].position + aoVertices[x * m_cols + y].normal), vec4(1));
-		}
-	}
-	Gizmos::draw(camera.GetProjectionView());
 }
-
-// Generate Shadow Map ( In Draw )
-void Terrain::GenerateShadowMap() {
-
-	// lightDir = normalize(vec3(sin(glfwGetTime()) * 2, 0, 1));
-	// m_sun->LookAt(lightDir, vec3(0, 0, 0), vec3(0, 1, 0));
-	// m_sun->SetOrtho(vec2(-10, 10), vec2(-10, 10), vec2(-10, 10));
-	// 
-	// 
-	// glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	// glViewport(0, 0, 1024, 1024);
-	// glClear(GL_DEPTH_BUFFER_BIT);
-	// 
-	// // Set Shadow variables
-	// m_shadowShader.SetMat4("lightMatrix", m_sun->GetViewMatrix());
-	// m_shadowShader.UseProgram();
-	// 
-	// // Draw Terrain
-	// unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
-	// 
-	// glBindVertexArray(m_VAO);
-	// glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
-}
-
 
 void Terrain::TotalTextureRepeat(uvec2 value) {
 	m_textureRepeatAmount = value;
-}
-
-// Generate Texture & stuff
-void Terrain::GenerateDepthBuffer() {
-
-	// Frame Buffer
-	glGenFramebuffers(1, &m_fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-
-	// Depth Texture
-	glGenTextures(1, &m_fboDepth);
-	glBindTexture(GL_TEXTURE_2D, m_fboDepth);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_fboDepth, 0);
-
-	glDrawBuffer(GL_NONE);
-
-	// Error Check
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		return;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

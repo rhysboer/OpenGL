@@ -4,9 +4,7 @@
 #include "tiny_obj_loader.h"
 #include "Colors.h"
 
-
 #include "Texture.h"
-#include "Terrain.h"
 
 struct OpenGLInfo {
 	unsigned int m_VAO;
@@ -31,7 +29,6 @@ public:
 private:
 
 	ShaderLoader shader = ShaderLoader();
-	ShaderLoader postShader = ShaderLoader();
 
 	unsigned int m_programID;
 	std::vector<OpenGLInfo> m_glInfo;

@@ -61,11 +61,13 @@ const bool Application::Startup() {
 	water.Init(uvec2(10, 10));
 
 	loader = new OBJLoader();
-	//loader->LoadObject("../bin/objs/Bunny.obj");
+	loader->LoadObject("../bin/objs/Bunny.obj");
 
 
 	//animation = new OBJAnimation();
 	//animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
+
+	m_effects = new PostProcessing();
 
 
 	// Particle Emitter
@@ -131,20 +133,21 @@ const bool Application::Update() {
 }
 
 void Application::Draw() {
+	m_effects->BeginRender();
+
 	Gizmos::draw(m_camera.GetProjectionView());
-	//LightManager::Draw(m_camera);
-
-	//loader->Draw(m_camera);
 	m_particleEmitter->Draw(m_camera);
-	//animation->Draw(m_camera);
-	//terrain.Draw(m_camera);
-
-	//water.Draw(m_camera);
+	terrain.Draw(m_camera);
+	loader->Draw(m_camera);
+	
+	m_effects->EndRender();
 }
 
 void Application::Shutdown() {
 	Gizmos::destroy();
 	LightManager::Destroy();
+
+	delete m_effects;
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

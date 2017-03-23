@@ -11,10 +11,10 @@ void FlyCamera::Update() {
 
 	float speedModifier = 1;
 
+	// Faster
 	if(InputManager::IsKeyDown(GLFW_KEY_LEFT_SHIFT)) {
 		speedModifier = 5;
 	}
-
 
 	// FORWARD
 	if(InputManager::IsKeyDown(GLFW_KEY_W)) {

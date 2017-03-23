@@ -4,7 +4,6 @@
 OBJLoader::OBJLoader() {
 	// Load in shader
 	shader.CreateShaderProgram("../shaders/PhongLight.vert", "../shaders/PhongLight.frag");
-	postShader.CreateShaderProgram("../shaders/PostProcess.vert", "../shaders/PostProcess.frag");
 
 
 	//shadow.UseProgram();
@@ -31,68 +30,12 @@ OBJLoader::OBJLoader() {
 	//}
 	//
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-	glGenFramebuffers(1, &m_fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-
-	glGenTextures(1, &m_fboTexture);
-	glBindTexture(GL_TEXTURE_2D, m_fboTexture);
-
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1280, 720);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_fboTexture, 0);
-
-	glGenRenderbuffers(1, &m_fboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_fboDepth);
-
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1280, 720);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_fboDepth);
-
-	GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, drawBuffers);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// Fullscreen quad
-	vec2 halfTexel = 1.0f / vec2(1280, 720) * 0.5f;
-
-	float vertexData[] = {
-		-1, -1, 0, 1, halfTexel.x, halfTexel.y,
-		1, 1, 0, 1, 1 - halfTexel.x, 1 - halfTexel.y,
-		-1, 1, 0, 1, halfTexel.x, 1 - halfTexel.y,
-
-		-1, -1, 0, 1, halfTexel.x, halfTexel.y,
-		1, -1, 0, 1, 1 - halfTexel.x, halfTexel.y,
-		1, 1, 0, 1, 1 - halfTexel.x, 1 - halfTexel.y
-	};
-
-	glGenVertexArrays(1, &m_VAO);
-	glBindVertexArray(m_VAO);
-
-	glGenBuffers(1, &m_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 6, vertexData, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, ((char*)0) + 16);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 OBJLoader::~OBJLoader() {
 }
 
 void OBJLoader::Draw(Camera camera) {
-
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glViewport(0, 0, 1280, 720);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
 	shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
 	shader.SetVec3("lightColor", (vec3)Colors::Red);
@@ -104,22 +47,6 @@ void OBJLoader::Draw(Camera camera) {
 		glBindVertexArray(gl.m_VAO);
 		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
 	}
-
-
-
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, 1280, 720);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	postShader.UseProgram();
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_fboTexture);
-	postShader.SetInt("target", 0);
-
-	glBindVertexArray(m_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void OBJLoader::LoadObject(const char* path) {

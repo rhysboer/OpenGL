@@ -6,6 +6,7 @@ in vec2 fTexCoord;
 out vec4 fragColor;
 
 uniform sampler2D target;
+uniform float time;
 
 
 // another frame buffer for each
@@ -42,11 +43,14 @@ vec4 BoxBlur() {
 	return colour / 9;
 }
 
-vec4 Wave() {
-	// Wave code
-	return vec4(0);
+vec4 Pixel() {
+    float x = 3.0 * (1.0 / 1280);
+    float y = 3.0 * (1.0 / 720);
+	
+    vec2 newCoord = vec2(x * floor(fTexCoord.x / x), y * floor(fTexCoord.y / y));
+	return texture(target, newCoord);
 }
 
 void main() {
-	fragColor = Simple();
+	fragColor = Pixel();
 }

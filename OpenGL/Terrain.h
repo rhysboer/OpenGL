@@ -33,10 +33,6 @@ public:
 
 	void TotalTextureRepeat(uvec2 value);
 
-	// Shadows
-	void GenerateDepthBuffer();
-	void GenerateShadowMap();
-
 private:
 
 	void GenerateGrid();
@@ -53,28 +49,12 @@ private:
 	unsigned int m_IBO = 0; // Index Buffer Object (Which point connects to which)
 
 	ShaderLoader m_shader = ShaderLoader();			// Regular shader for terrain
-	ShaderLoader m_shadowShader = ShaderLoader();	// Shader for the shadow map 
 
 	// Texture
 	Texture* m_grass;
 	Texture* m_stone;
 	Texture* m_snow;
 	Texture* m_sand;
-
-	// Light
-	Light* m_sun;
-	vec3 lightDir;
-
-	glm::mat4 textureSpaceOffset = glm::mat4(
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f
-	);
-
-	unsigned int m_fbo;			// Frame Buffer Object
-	unsigned int m_fboDepth;	// Texture Handler
-
 
 	Vertex* aoVertices;
 };

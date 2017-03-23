@@ -24,6 +24,7 @@
 
 
 #include "ParticleEmitter.h"
+#include "PostProcessing.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -67,5 +68,7 @@ private:
 	OBJAnimation* animation;
 
 	ParticleEmitter* m_particleEmitter;
+
+	PostProcessing* m_effects;
 };
 
