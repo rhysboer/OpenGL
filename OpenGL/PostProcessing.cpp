@@ -69,8 +69,14 @@ void PostProcessing::EndRender() {
 	glViewport(0, 0, 1280, 720);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	ImGui::Begin("Post Processing");
+	ImGui::Checkbox("Enable Pixelation Effect", &m_enabled);
+	ImGui::InputFloat2("Pixel Size", &m_pixelSize[0]);
+	ImGui::End();
+
 	postShader.UseProgram();
-	postShader.SetFloat("time", Time::DeltaTime());
+	postShader.SetInt("enabled", m_enabled);
+	postShader.SetVec2("pixelSize", m_pixelSize);
 	postShader.SetInt("target", 0);
 
 	glActiveTexture(GL_TEXTURE0);

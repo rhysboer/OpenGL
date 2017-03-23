@@ -5,8 +5,8 @@
 #include "GLM\gtx\norm.hpp"
 #include "GLFW\glfw3.h"
 #include "ShaderLoader.h"
-
 #include "Time.h"
+#include "imgui.h"
 
 using glm::vec2;
 using glm::vec3;
@@ -30,5 +30,9 @@ private:
 
 	unsigned int m_VAO;
 	unsigned int m_VBO;
+
+	// GUI Settings
+	bool m_enabled = false;
+	vec2 m_pixelSize = vec2(5, 5);
 };
 

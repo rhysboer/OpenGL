@@ -6,7 +6,8 @@ in vec2 fTexCoord;
 out vec4 fragColor;
 
 uniform sampler2D target;
-uniform float time;
+uniform int enabled;
+uniform vec2 pixelSize;
 
 
 // another frame buffer for each
@@ -44,13 +45,17 @@ vec4 BoxBlur() {
 }
 
 vec4 Pixel() {
-    float x = 5.0 * (1.0 / 1280);
-    float y = 5.0 * (1.0 / 720);
+    float x = pixelSize.x * (1.0 / 1280);
+    float y = pixelSize.y * (1.0 / 720);
 	
     vec2 newCoord = vec2(x * floor(fTexCoord.x / x), y * floor(fTexCoord.y / y));
 	return texture(target, newCoord);
 }
 
 void main() {
-	fragColor = Simple();
+	if(enabled == 1){
+		fragColor = Pixel();
+	}else{	
+		fragColor = Simple();
+	}
 }

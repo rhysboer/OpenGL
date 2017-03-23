@@ -35,7 +35,7 @@ const bool Application::Startup() {
 
 	// Background color
 	
-	glClearColor(m_clearColour.x, m_clearColour.y, m_clearColour.z, m_clearColour.w);
+	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 
@@ -92,8 +92,6 @@ const bool Application::Update() {
 	Gizmos::clear();
 	Gizmos::addTransform(glm::mat4(1));
 
-	ImGui::ColorEdit3("Clear Colour", glm::value_ptr(m_clearColour));
-
 	// Quit is ESC is pressed or window is closed
 	if(glfwWindowShouldClose(window) == (int)true || InputManager::IsKeyDown(GLFW_KEY_ESCAPE)) {
 		return false;
@@ -135,7 +133,6 @@ const bool Application::Update() {
 	// Camera Movement
 	m_camera.Update();
 
-	glClearColor(m_clearColour.x, m_clearColour.y, m_clearColour.z, m_clearColour.w);
 	return true;
 }
 
