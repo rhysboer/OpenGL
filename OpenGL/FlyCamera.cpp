@@ -46,7 +46,7 @@ void FlyCamera::Update() {
 		Move(vec3(0, -3, 0) * speedModifier * Time::DeltaTime());
 	}
 
-	if(InputManager::IsMouseButtonDown(GLFW_MOUSE_BUTTON_1)) {
+	if(InputManager::IsMouseButtonDown(GLFW_MOUSE_BUTTON_2)) {
 		vec3 mousePosition = GetMouseCameraMovement();
 		if(mousePosition != vec3(0)) {
 			// TODO:

@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+
+// Base
 #include "BaseApplication.h"
 #include "AIE\Gizmos.h"
 #include "GLM\glm.hpp"
@@ -7,7 +9,10 @@
 #include "Colors.h"
 #include "FlyCamera.h"
 #include "Time.h"
+#include "ParticleEmitter.h"
+#include "PostProcessing.h"
 
+// Object Loading / Animation
 #include "tiny_obj_loader.h"
 #include "OBJLoader.h"
 #include "OBJAnimation.h"
@@ -16,15 +21,17 @@
 #include <GLM\gtc\quaternion.hpp>
 #include <GLM\gtx\quaternion.hpp>
 
+// Terrain Mesh
 #include "Terrain.h"
 #include "Water.h"
 
+// Managers
 #include "InputManager.h"
 #include "LightManager.h"
 
-
-#include "ParticleEmitter.h"
-#include "PostProcessing.h"
+// GUI
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -70,5 +77,9 @@ private:
 	ParticleEmitter* m_particleEmitter;
 
 	PostProcessing* m_effects;
+
+
+	// GUI
+	vec4 m_clearColour = vec4(1);
 };
 

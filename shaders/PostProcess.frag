@@ -44,13 +44,13 @@ vec4 BoxBlur() {
 }
 
 vec4 Pixel() {
-    float x = 3.0 * (1.0 / 1280);
-    float y = 3.0 * (1.0 / 720);
+    float x = 5.0 * (1.0 / 1280);
+    float y = 5.0 * (1.0 / 720);
 	
     vec2 newCoord = vec2(x * floor(fTexCoord.x / x), y * floor(fTexCoord.y / y));
 	return texture(target, newCoord);
 }
 
 void main() {
-	fragColor = Pixel();
+	fragColor = Simple();
 }

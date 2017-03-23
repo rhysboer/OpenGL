@@ -2,23 +2,39 @@
 #include "Time.h"
 #include "InputManager.h"
 
+//Imgui
+#include "imgui_impl_glfw_gl3.h"
+#include "imgui.h"
+
+void SetUpImgui(GLFWwindow* window);
+
 int main() {
 	BaseApplication* app = new Application(1280, 720, "OpenGL");
+
+	// Setup GUI
+	SetUpImgui(app->GetWindow());
 
 	bool run = true;
 	Time* time = Time::GetInstance();
 
 	if(app->Startup() == true) {
-
+		// Setup input manager
 		InputManager::Init(app->GetWindow());
 
+		// Main Game Loop
 		while(run == true) {
-			// Delta Time
+			ImGui_ImplGlfwGL3_NewFrame();
+
+			// Update Delta Time
 			time->Update(glfwGetTime());
+
 			// Update Loop
 			run = app->Update();
 			// Draw Loop
 			app->Draw();
+
+			// GUI Draw
+			ImGui::Render();
 
 			// Update Inputs
 			InputManager::PollEvents();
@@ -27,9 +43,15 @@ int main() {
 		}
 	}
 
+
+
 	app->Shutdown();
 
 	delete app;
 	delete time;
 	return 0;
+}
+
+void SetUpImgui(GLFWwindow* window) {
+	ImGui_ImplGlfwGL3_Init(window, true);
 }

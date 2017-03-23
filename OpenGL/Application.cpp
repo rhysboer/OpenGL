@@ -23,6 +23,8 @@ const bool Application::Startup() {
 		return false;
 	}
 
+	ImGui_ImplGlfwGL3_Init(window, true);
+
 	glfwMakeContextCurrent(window);
 
 	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
@@ -32,8 +34,10 @@ const bool Application::Startup() {
 	}
 
 	// Background color
-	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+	
+	glClearColor(m_clearColour.x, m_clearColour.y, m_clearColour.z, m_clearColour.w);
 	glEnable(GL_DEPTH_TEST);
+
 
 	// Enable the debug callback
 	glEnable(GL_DEBUG_OUTPUT);
@@ -72,7 +76,7 @@ const bool Application::Startup() {
 
 	// Particle Emitter
 	m_particleEmitter = new ParticleEmitter();
-	m_particleEmitter->Initialise(1000, 500, 0.1f, 2.0f, 1, 5, 1, 0.1f, Colors::Red, Colors::Yellow);
+	m_particleEmitter->Initialise(1000, 500, 0.1f, 2.0f, 1, 5, 1, 0.1f, Colors::Black, Colors::Purple);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -87,6 +91,8 @@ const bool Application::Update() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Gizmos::clear();
 	Gizmos::addTransform(glm::mat4(1));
+
+	ImGui::ColorEdit3("Clear Colour", glm::value_ptr(m_clearColour));
 
 	// Quit is ESC is pressed or window is closed
 	if(glfwWindowShouldClose(window) == (int)true || InputManager::IsKeyDown(GLFW_KEY_ESCAPE)) {
@@ -129,6 +135,7 @@ const bool Application::Update() {
 	// Camera Movement
 	m_camera.Update();
 
+	glClearColor(m_clearColour.x, m_clearColour.y, m_clearColour.z, m_clearColour.w);
 	return true;
 }
 

@@ -9,6 +9,9 @@
 #include "Camera.h"
 #include "Time.h"
 
+// GUI
+#include "imgui.h"
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -44,6 +47,8 @@ private:
 	// Shader
 	ShaderLoader m_shader = ShaderLoader();
 
+	bool m_isEnabled = true;
+	bool m_isPaused = false;
 
 	Particle* m_particles;
 

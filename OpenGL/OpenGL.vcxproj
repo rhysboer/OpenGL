@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;GLM_FORCE_PURE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\;$(SolutionDir)include\;$(SolutionDir)include\GLM;$(SolutionDir)include\GLFW;$(SolutionDir)include\STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\;$(SolutionDir)include\;$(SolutionDir)include\GLM;$(SolutionDir)include\GLFW;$(SolutionDir)include\STB;$(SolutionDir)include\Imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,7 +125,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;GLM_FORCE_PURE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\;$(SolutionDir)include\;$(SolutionDir)include\GLM;$(SolutionDir)include\GLFW;$(SolutionDir)include\STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\;$(SolutionDir)include\;$(SolutionDir)include\GLM;$(SolutionDir)include\GLFW;$(SolutionDir)include\STB;$(SolutionDir)include\Imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,6 +165,10 @@
     <ClCompile Include="Colors.cpp" />
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="gl_core_4_4.c" />
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -187,6 +191,10 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="gl_core_4_4.h" />
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />

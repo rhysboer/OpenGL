@@ -4,9 +4,9 @@ BaseApplication::BaseApplication(int width, int height, const char * name) {
 	if (glfwInit() == false)
 		return;
 
-	this->window = glfwCreateWindow(width, height, name, nullptr, nullptr);
-
 	srand(time(NULL));
+
+	this->window = glfwCreateWindow(width, height, name, nullptr, nullptr);
 }
 
 BaseApplication::~BaseApplication() {

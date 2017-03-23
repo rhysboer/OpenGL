@@ -79,16 +79,16 @@ void ParticleEmitter::Initialise(unsigned int a_maxParticles, unsigned int a_emi
 }
 
 void ParticleEmitter::Draw(Camera camera) {
+	if(m_isEnabled) {
+		m_shader.SetMat4("projectionView", camera.GetProjectionView());
 
-	m_shader.SetMat4("projectionView", camera.GetProjectionView());
-	
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_firstDead * 4 * sizeof(ParticleVertex), m_vertexData);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, m_firstDead * 4 * sizeof(ParticleVertex), m_vertexData);
 
-	// draw particles 
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, m_firstDead * 6,GL_UNSIGNED_INT, 0);
-
+		// draw particles 
+		glBindVertexArray(m_VAO);
+		glDrawElements(GL_TRIANGLES, m_firstDead * 6, GL_UNSIGNED_INT, 0);
+	}
 }
 
 // Emit Particles
@@ -120,58 +120,75 @@ void ParticleEmitter::Emit() {
 
 void ParticleEmitter::Update(mat4 cameraView) {
 
-	m_emitTimer += Time::DeltaTime();
-	while(m_emitTimer > m_emitRate) {
-		Emit();
+	// GUI
+	ImGui::Begin("Particle Options");
+	ImGui::Checkbox("Enabled", &m_isEnabled);
+	ImGui::Checkbox("Pause", &m_isPaused);
 
-		m_emitTimer -= m_emitRate;
-	}
+	ImGui::ColorEdit3("Start Colour", glm::value_ptr(m_startColour));
+	ImGui::ColorEdit3("End Colour", glm::value_ptr(m_endColour));
 
-	unsigned int quad = 0;
+	ImGui::InputFloat("Max Life Span", &m_lifespanMax);
+	ImGui::InputFloat("Min Life Span", &m_lifespanMin);
 
-	for(unsigned int i = 0; i < m_firstDead; i++) {
-		Particle* particle = &m_particles[i];
+	ImGui::InputFloat3("Position", &m_position[0]);
+	ImGui::End();
 
-		particle->lifetime += Time::DeltaTime();
-		if(particle->lifetime >= particle->lifespan) {
+	if(!m_isPaused) {
 
-			// Swap last alive with this one
-			*particle = m_particles[m_firstDead - 1];
-			m_firstDead--;
-		} else {
-			// Update Particle Variables
-			particle->position += particle->velocity * Time::DeltaTime();
-			particle->size = glm::mix(m_startSize, m_endSize, particle->lifetime / particle->lifespan);
-			particle->colour = glm::mix(m_startColour, m_endColour, particle->lifetime / particle->lifespan);
-			
-			// Create Quad
-			float halfSize = particle->size * 0.5f;
-			
-			m_vertexData[quad * 4 + 0].position	= vec4(halfSize, halfSize, 0, 1);
-			m_vertexData[quad * 4 + 0].colour	= particle->colour;
-			
-			m_vertexData[quad * 4 + 1].position = vec4(-halfSize, halfSize, 0, 1);
-			m_vertexData[quad * 4 + 1].colour = particle->colour;
-			
-			m_vertexData[quad * 4 + 2].position = vec4(-halfSize, -halfSize, 0, 1);
-			m_vertexData[quad * 4 + 2].colour = particle->colour;
-			
-			m_vertexData[quad * 4 + 3].position = vec4(halfSize, -halfSize, 0, 1);
-			m_vertexData[quad * 4 + 3].colour = particle->colour;
-			
-			// Create Billboard
-			vec3 zAxis = glm::normalize(vec3(cameraView[3]) - particle->position);
-			vec3 xAxis = glm::cross(vec3(cameraView[1]), zAxis);
-			vec3 yAxis = glm::cross(zAxis, xAxis);
-			
-			mat4 billboard(vec4(xAxis, 0), vec4(yAxis, 0), vec4(zAxis, 0), vec4(0, 0, 0, 1));
-			
-			m_vertexData[quad * 4 + 0].position = billboard * m_vertexData[quad * 4 + 0].position + vec4(particle->position, 0);
-			m_vertexData[quad * 4 + 1].position = billboard * m_vertexData[quad * 4 + 1].position + vec4(particle->position, 0);
-			m_vertexData[quad * 4 + 2].position = billboard * m_vertexData[quad * 4 + 2].position + vec4(particle->position, 0);
-			m_vertexData[quad * 4 + 3].position = billboard * m_vertexData[quad * 4 + 3].position + vec4(particle->position, 0);
-			
-			++quad;
+		m_emitTimer += Time::DeltaTime();
+		while(m_emitTimer > m_emitRate) {
+			Emit();
+
+			m_emitTimer -= m_emitRate;
+		}
+
+		unsigned int quad = 0;
+
+		for(unsigned int i = 0; i < m_firstDead; i++) {
+			Particle* particle = &m_particles[i];
+
+			particle->lifetime += Time::DeltaTime();
+			if(particle->lifetime >= particle->lifespan) {
+
+				// Swap last alive with this one
+				*particle = m_particles[m_firstDead - 1];
+				m_firstDead--;
+			} else {
+				// Update Particle Variables
+				particle->position += particle->velocity * Time::DeltaTime();
+				particle->size = glm::mix(m_startSize, m_endSize, particle->lifetime / particle->lifespan);
+				particle->colour = glm::mix(m_startColour, m_endColour, particle->lifetime / particle->lifespan);
+
+				// Create Quad
+				float halfSize = particle->size * 0.5f;
+
+				m_vertexData[quad * 4 + 0].position = vec4(halfSize, halfSize, 0, 1);
+				m_vertexData[quad * 4 + 0].colour = particle->colour;
+
+				m_vertexData[quad * 4 + 1].position = vec4(-halfSize, halfSize, 0, 1);
+				m_vertexData[quad * 4 + 1].colour = particle->colour;
+
+				m_vertexData[quad * 4 + 2].position = vec4(-halfSize, -halfSize, 0, 1);
+				m_vertexData[quad * 4 + 2].colour = particle->colour;
+
+				m_vertexData[quad * 4 + 3].position = vec4(halfSize, -halfSize, 0, 1);
+				m_vertexData[quad * 4 + 3].colour = particle->colour;
+
+				// Create Billboard
+				vec3 zAxis = glm::normalize(vec3(cameraView[3]) - particle->position);
+				vec3 xAxis = glm::cross(vec3(cameraView[1]), zAxis);
+				vec3 yAxis = glm::cross(zAxis, xAxis);
+
+				mat4 billboard(vec4(xAxis, 0), vec4(yAxis, 0), vec4(zAxis, 0), vec4(0, 0, 0, 1));
+
+				m_vertexData[quad * 4 + 0].position = billboard * m_vertexData[quad * 4 + 0].position + vec4(particle->position, 0);
+				m_vertexData[quad * 4 + 1].position = billboard * m_vertexData[quad * 4 + 1].position + vec4(particle->position, 0);
+				m_vertexData[quad * 4 + 2].position = billboard * m_vertexData[quad * 4 + 2].position + vec4(particle->position, 0);
+				m_vertexData[quad * 4 + 3].position = billboard * m_vertexData[quad * 4 + 3].position + vec4(particle->position, 0);
+
+				++quad;
+			}
 		}
 	}
 }
