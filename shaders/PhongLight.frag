@@ -19,16 +19,5 @@ void main() {
 	float s = max(0, dot(E,R));
 	s = pow(s, specPow);
 	
-	// Toon Shading
-	if(d > 0.95f){
-		d = 1.0f;
-	}else if(d > 0.5f){
-		d = 0.6f;
-	}else if(d > 0.25){
-		d = 0.4f;
-	}else{
-		d = 0.2f;
-	}
-	
 	fragColor = vec4(ambientLight.xyz + vNormal.xyz * d + lightColor * s, 1);
 };

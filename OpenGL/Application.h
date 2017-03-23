@@ -22,6 +22,9 @@
 #include "InputManager.h"
 #include "LightManager.h"
 
+
+#include "ParticleEmitter.h"
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -62,5 +65,7 @@ private:
 	// Delete Pointers when done
 	OBJLoader* loader;
 	OBJAnimation* animation;
+
+	ParticleEmitter* m_particleEmitter;
 };
 

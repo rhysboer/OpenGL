@@ -105,6 +105,9 @@ void OBJLoader::Draw(Camera camera) {
 		glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
 	}
 
+
+
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, 1280, 720);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -117,22 +120,6 @@ void OBJLoader::Draw(Camera camera) {
 
 	glBindVertexArray(m_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glViewport(0, 0, 1280, 720);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//
-	//shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-	//shader.SetVec3("lightDirection", vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
-	//shader.SetVec3("lightColor", (vec3)Colors::Red);
-	//shader.SetVec3("cameraPos", camera.GetPosition());
-	//shader.SetFloat("specPow", 128.0f);
-	//shader.SetVec4("offsetPosition", vec4(0, 5, 0, 0));
-	//
-	//for(auto& gl : m_glInfo) { 
-	//	glBindVertexArray(gl.m_VAO);
-	//	glDrawArrays(GL_TRIANGLES, 0, gl.m_faceCount * 3);
-	//}
 }
 
 void OBJLoader::LoadObject(const char* path) {

@@ -61,12 +61,16 @@ const bool Application::Startup() {
 	water.Init(uvec2(10, 10));
 
 	loader = new OBJLoader();
-	loader->LoadObject("../bin/objs/Bunny.obj");
+	//loader->LoadObject("../bin/objs/Bunny.obj");
 
 
 	//animation = new OBJAnimation();
 	//animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
 
+
+	// Particle Emitter
+	m_particleEmitter = new ParticleEmitter();
+	m_particleEmitter->Initialise(1000, 500, 0.1f, 2.0f, 1, 5, 1, 0.1f, Colors::Red, Colors::Yellow);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -116,6 +120,10 @@ const bool Application::Update() {
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colors::White : Colors::Black);
 	}
 
+	// Update Particles
+	m_particleEmitter->Update(m_camera.GetWorldTransform());
+
+
 	// Camera Movement
 	m_camera.Update();
 
@@ -123,10 +131,11 @@ const bool Application::Update() {
 }
 
 void Application::Draw() {
-	//Gizmos::draw(m_camera.GetProjectionView());
+	Gizmos::draw(m_camera.GetProjectionView());
 	//LightManager::Draw(m_camera);
 
-	loader->Draw(m_camera);
+	//loader->Draw(m_camera);
+	m_particleEmitter->Draw(m_camera);
 	//animation->Draw(m_camera);
 	//terrain.Draw(m_camera);
 
