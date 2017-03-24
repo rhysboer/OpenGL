@@ -18,7 +18,7 @@ bool OBJAnimation::LoadOBJs(const char * path1, const char * path2) {
 	tinyobj::LoadObj(&attribs[0], &shapes[0], &materials[0], &error, path1);
 	tinyobj::LoadObj(&attribs[1], &shapes[1], &materials[1], &error, path2);
 
-	for(int i = 0; i < shapes[0].size(); ++i) {
+	for(unsigned int i = 0; i < shapes[0].size(); ++i) {
 
 		GLInfo gl;
 
@@ -69,7 +69,7 @@ void OBJAnimation::Draw(Camera camera) {
 	shader.UseProgram();
 
 	shader.SetMat4("projectionViewModel", camera.GetProjectionView());
-	float time = cosf(glfwGetTime() * 3) * 0.5f + 0.5f;
+	float time = cosf((float)glfwGetTime() * 3) * 0.5f + 0.5f;
 	shader.SetFloat("keyTime", time);
 
 	for(auto& gl : m_meshes) {

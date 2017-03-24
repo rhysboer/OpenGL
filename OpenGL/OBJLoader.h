@@ -13,9 +13,9 @@ struct OpenGLInfo {
 };
 
 struct OBJVertex {
-	float x, y, z; // Position
-	float nx, ny, nz; // Normal
-	float u, v; // Texture Coordinates
+	float x, y, z;		// Position
+	float nx, ny, nz;	// Normal
+	float u, v;			// Texture Coordinates
 };
 
 class OBJLoader {
@@ -39,4 +39,6 @@ private:
 
 	unsigned int m_VAO;
 	unsigned int m_VBO;
+
+	Texture* m_texture;
 };

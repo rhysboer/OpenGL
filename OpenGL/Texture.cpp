@@ -24,7 +24,8 @@ void Texture::LoadTexture(const char * path) {
 	else
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	
-
+	
+	// Texture settings
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -34,6 +35,7 @@ void Texture::LoadTexture(const char * path) {
 	stbi_image_free(data);
 }
 
+// Return texture data
 unsigned int Texture::GetTextureData() const {
 	return m_texture;
 }

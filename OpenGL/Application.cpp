@@ -23,8 +23,6 @@ const bool Application::Startup() {
 		return false;
 	}
 
-	ImGui_ImplGlfwGL3_Init(window, true);
-
 	glfwMakeContextCurrent(window);
 
 	if(ogl_LoadFunctions() == ogl_LOAD_FAILED) {
@@ -34,7 +32,6 @@ const bool Application::Startup() {
 	}
 
 	// Background color
-	
 	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
@@ -58,21 +55,13 @@ const bool Application::Startup() {
 	m_rotation[1] = quat(vec3(0, 1, 0));
 
 	// Terrain 
-	terrain.init(50, 50);
-	terrain.TotalTextureRepeat(uvec2(10, 10));
+	m_terrain.init(50, 50);
+	m_terrain.TotalTextureRepeat(uvec2(10, 10));
 
-	// Water Test
-	water.Init(uvec2(10, 10));
-
-	loader = new OBJLoader();
-	loader->LoadObject("../bin/objs/Bunny.obj");
-
-
-	//animation = new OBJAnimation();
-	//animation->LoadOBJs("../bin/objs/hand/hand_00.obj", "../bin/objs/hand/hand_37.obj");
+	m_objLoader = new OBJLoader();
+	m_objLoader->LoadObject("../bin/objs/soulspear.obj");
 
 	m_effects = new PostProcessing();
-
 
 	// Particle Emitter
 	m_particleEmitter = new ParticleEmitter();
@@ -102,7 +91,6 @@ const bool Application::Update() {
 	m_earthLocal = glm::rotate(m_earthLocal, -0.01f, vec3(0, 1, 0));
 	m_moonLocal = glm::rotate(m_moonLocal, 1.0f, vec3(0, 1, 0));
 
-
 	m_earthMat = m_sunMat * m_earthLocal;
 	m_moonMat = m_earthMat * m_moonLocal;
 
@@ -129,21 +117,29 @@ const bool Application::Update() {
 	// Update Particles
 	m_particleEmitter->Update(m_camera.GetWorldTransform());
 
-
 	// Camera Movement
 	m_camera.Update();
+
+	// Terrain GUI
+	ImGui::Begin("Terrain Settings");
+	if(ImGui::Button("Generate New Terrain")) {
+		m_terrain.GenerateGrid();
+	}
+	ImGui::End();
 
 	return true;
 }
 
 void Application::Draw() {
+	// Start Post Processing
 	m_effects->BeginRender();
 
 	Gizmos::draw(m_camera.GetProjectionView());
 	m_particleEmitter->Draw(m_camera);
-	terrain.Draw(m_camera);
-	loader->Draw(m_camera);
-	
+	m_terrain.Draw(m_camera);
+	m_objLoader->Draw(m_camera);
+
+	// Render Post Processing
 	m_effects->EndRender();
 }
 
@@ -151,7 +147,23 @@ void Application::Shutdown() {
 	Gizmos::destroy();
 	LightManager::Destroy();
 
-	delete m_effects;
+	// Delete 
+	if(m_effects != nullptr) {
+		delete m_effects;
+		m_effects = nullptr;
+	}
+	if(m_particleEmitter != nullptr) {
+		delete m_particleEmitter;
+		m_particleEmitter = nullptr;
+	}
+	if(m_objLoader != nullptr) {
+		delete m_objLoader;
+		m_objLoader = nullptr;
+	}
+	if(m_animation != nullptr) {
+		delete m_animation;
+		m_animation = nullptr;
+	}
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

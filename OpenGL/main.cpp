@@ -9,13 +9,16 @@
 void SetUpImgui(GLFWwindow* window);
 
 int main() {
-	BaseApplication* app = new Application(1280, 720, "OpenGL");
+	BaseApplication* app = new Application(1280, 720, "OpenGL 3D Engine");
 
 	// Setup GUI
 	SetUpImgui(app->GetWindow());
 
 	bool run = true;
 	Time* time = Time::GetInstance();
+
+	// Hide Console
+	FreeConsole();
 
 	if(app->Startup() == true) {
 		// Setup input manager
@@ -26,7 +29,7 @@ int main() {
 			ImGui_ImplGlfwGL3_NewFrame();
 
 			// Update Delta Time
-			time->Update(glfwGetTime());
+			time->Update((float)glfwGetTime());
 
 			// Update Loop
 			run = app->Update();
@@ -42,8 +45,6 @@ int main() {
 			glfwSwapBuffers(app->GetWindow());
 		}
 	}
-
-
 
 	app->Shutdown();
 

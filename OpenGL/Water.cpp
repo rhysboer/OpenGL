@@ -38,8 +38,8 @@ void Water::BuildMesh() {
 	float scale = (1.0f / m_size.y) * 3;
 	int octaves = 6;
 
-	for(int x = 0; x < m_size.x; ++x) {
-		for(int y = 0; y < m_size.y; ++y) {
+	for(unsigned int x = 0; x < m_size.x; ++x) {
+		for(unsigned int y = 0; y < m_size.y; ++y) {
 
 			float amplitude = 1.0f;
 			float persistence = 0.3f;
@@ -133,7 +133,7 @@ void Water::BuildMesh() {
 void Water::Draw(Camera & camera) {
 	m_shader.UseProgram();
 	m_shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-	m_shader.SetFloat("time", glfwGetTime());
+	m_shader.SetFloat("time", (float)glfwGetTime());
 
 	// Wave Settings
 	m_shader.SetFloat("waveHeight", m_waveHeight);

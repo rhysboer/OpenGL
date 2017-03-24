@@ -25,16 +25,23 @@ void Terrain::init(unsigned int rows, unsigned int cols) {
 	this->m_cols = cols + 1;
 	this->m_rows = rows + 1;
 
-	aoVertices = new Vertex[m_rows * m_cols];
-
 	// Generate The Terrain
 	GenerateGrid();
 }
 
 void Terrain::GenerateGrid() {
+	if(m_VBO > 0 || m_VAO > 0 || m_IBO > 0) {
+		m_VAO = 0;
+		m_VBO = 0;
+		m_IBO = 0;
+	}
+
+	Vertex* aoVertices = new Vertex[m_rows * m_cols];
 	
+	// Random Terrain Seed
 	int randNum = rand() % RAND_MAX;
 
+	// Create terrains Texcoords & Position
 	float* perlinData = new float[m_rows * m_cols];
 	for(unsigned int r = 0; r < m_rows; ++r) {
 		for(unsigned int c = 0; c < m_cols; ++c) {
@@ -62,7 +69,7 @@ void Terrain::GenerateGrid() {
 		}
 	}
 
-	// Add Normals onto terrain
+	// Calculate Terrain Normals
 	for(GLuint i = 0; i < m_rows; ++i) {
 		for(GLuint j = 0; j < m_cols; ++j) {
 
@@ -117,7 +124,7 @@ void Terrain::GenerateGrid() {
 
 				vec3 up = (posCurr % m_cols == 0) ? zero : (vec3)aoVertices[posUp].position;
 				vec3 down = (posDown % m_cols == 0) ? zero : (vec3)aoVertices[posDown].position;
-				vec3 left = (posLeft >= m_rows * m_cols) ? zero : (vec3)aoVertices[posLeft].position;
+				vec3 left = ((unsigned)posLeft >= m_rows * m_cols) ? zero : (vec3)aoVertices[posLeft].position;
 				vec3 right = (posRight < 0) ? zero : (vec3)aoVertices[posRight].position;
 
 				vec3 normal1 = glm::cross(up, left);
@@ -131,10 +138,9 @@ void Terrain::GenerateGrid() {
 		}
 	}
 
+	// Create Index buffer
 	unsigned int* auiIndices = new unsigned int[(m_rows - 1) * (m_cols - 1) * 6]; // DELETE
 	unsigned int index = 0;
-
-	// Create Index buffer
 	for (unsigned int r = 0; r < (m_rows - 1); ++r) {
 		for (unsigned int c = 0; c < (m_cols - 1); ++c) {
 	
@@ -150,8 +156,7 @@ void Terrain::GenerateGrid() {
 		}
 	}
 
-
-
+	// Enable Transparent
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -166,6 +171,8 @@ void Terrain::GenerateGrid() {
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	//delete[] perlinData;
 	// End
 
 	// Terrain Arrays
@@ -204,17 +211,17 @@ void Terrain::Draw(Camera & camera) {
 
 	unsigned int indexCount = (m_rows - 1) * (m_cols - 1) * 6;
 	
+	// Set Shader Settings
 	m_shader.UseProgram();
 	m_shader.SetMat4("projectionViewWorldMatrix", camera.GetProjectionView());
-	
 	m_shader.SetVec2("textureRepeat", m_textureRepeatAmount);
-
 	m_shader.SetInt("perlinTexture", 0);
 	m_shader.SetInt("grass", 1);
 	m_shader.SetInt("stone", 2);
 	m_shader.SetInt("snow", 3);
 	m_shader.SetInt("sand", 4);
 	
+	// Perlin Texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_perlinTexture);
 	
@@ -234,10 +241,12 @@ void Terrain::Draw(Camera & camera) {
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, m_sand->GetTextureData());
 	
+	// Draw Terrain
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
+// Number of times texture repeats itself
 void Terrain::TotalTextureRepeat(uvec2 value) {
 	m_textureRepeatAmount = value;
 }

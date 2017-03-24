@@ -124,13 +124,13 @@ void ParticleEmitter::Update(mat4 cameraView) {
 	ImGui::Begin("Particle Options");
 	ImGui::Checkbox("Enabled", &m_isEnabled);
 	ImGui::Checkbox("Pause", &m_isPaused);
-
+	
 	ImGui::ColorEdit3("Start Colour", glm::value_ptr(m_startColour));
 	ImGui::ColorEdit3("End Colour", glm::value_ptr(m_endColour));
-
+	
 	ImGui::InputFloat("Max Life Span", &m_lifespanMax);
 	ImGui::InputFloat("Min Life Span", &m_lifespanMin);
-
+	
 	ImGui::InputFloat3("Position", &m_position[0]);
 	ImGui::End();
 

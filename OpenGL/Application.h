@@ -49,9 +49,10 @@ public:
 	void Shutdown();
 
 private:
-	Terrain terrain = Terrain();
-	Water water = Water();
+	// New Terrain
+	Terrain m_terrain = Terrain();
 
+	// Camera
 	FlyCamera m_camera;
 
 	// CUBE
@@ -66,20 +67,17 @@ private:
 	mat4 m_moonLocal = mat4(1);
 
 	// Rotation Matrices
-	mat4 sunRotation = mat4(1);
-	mat4 earthRotation = mat4(1);
-	mat4 moonRotation = mat4(1);
+	mat4 m_sunRotation = mat4(1);
+	mat4 m_earthRotation = mat4(1);
+	mat4 m_moonRotation = mat4(1);
 
-	// Delete Pointers when done
-	OBJLoader* loader;
-	OBJAnimation* animation;
-
-	ParticleEmitter* m_particleEmitter;
-
-	PostProcessing* m_effects;
-
-
-	// GUI
-	vec4 m_clearColour = vec4(1);
+	// Obj loader
+	OBJLoader* m_objLoader = nullptr;
+	// Animation
+	OBJAnimation* m_animation = nullptr;
+	// Particle Effect Emitter
+	ParticleEmitter* m_particleEmitter = nullptr;
+	// Post Processing Effect
+	PostProcessing* m_effects = nullptr;
 };
 

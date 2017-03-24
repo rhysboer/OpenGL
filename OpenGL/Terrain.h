@@ -33,9 +33,8 @@ public:
 
 	void TotalTextureRepeat(uvec2 value);
 
-private:
-
 	void GenerateGrid();
+private:
 
 	// Total amount of times to repeat texture
 	uvec2 m_textureRepeatAmount = vec2(1,1);
@@ -55,7 +54,5 @@ private:
 	Texture* m_stone;
 	Texture* m_snow;
 	Texture* m_sand;
-
-	Vertex* aoVertices;
 };
 
