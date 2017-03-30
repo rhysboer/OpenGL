@@ -1,7 +1,6 @@
 #include "Camera.h"
 
 Camera::Camera() {
-	m_rotationMat		= mat4(1);
 	m_worldMat			= mat4(1);
 	m_viewMat			= mat4(1);
 	m_projectionMat		= mat4(1);
@@ -71,11 +70,17 @@ void Camera::Move(vec3 translate) {
 void Camera::Rotate(float angle, vec3 axis) {
 	if(axis != vec3(0)) {
 		vec3 axisNorm = glm::normalize(axis);
-		mat4 rotation = mat4(1);
 
-		rotation = glm::rotate(rotation, angle, axis);
+		auto ToQuat = [](float angle, vec3 axis) -> quat{
+			quat q;
+			q.x = axis.x * sin(angle / 2);
+			q.y = axis.y * sin(angle / 2);
+			q.z = axis.z * sin(angle / 2);
+			q.w = cos(angle / 2);
+			return glm::normalize(q);
+		};
 
-		m_worldMat *= glm::inverse(rotation);
+		m_worldMat = m_worldMat * glm::inverse(glm::rotate(angle, axis));
 
 		UpdateProjectionViewTransform();
 	}

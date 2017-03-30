@@ -15,6 +15,13 @@ void InputManager::MousePosition(double & x, double & y) {
 	}
 }
 
+vec2 InputManager::MousePosition() {
+	double x, y;
+	glfwGetCursorPos(m_window, &x, &y);
+
+	return vec2(x, y);
+}
+
 InputManager::InputManager(GLFWwindow* window) {
 	m_window = window;
 }

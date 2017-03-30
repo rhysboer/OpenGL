@@ -54,6 +54,11 @@ void FlyCamera::Update() {
 			Rotate(3.0f * Time::DeltaTime(), mousePosition);
 		}
 	}
+	
+
+	ImGui::Begin("Camera Settings");
+	ImGui::InputFloat3("Position", &m_worldMat[3][0]);
+	ImGui::End();
 }
 
 void FlyCamera::UpdateMousePosition() {
@@ -74,10 +79,7 @@ vec3 FlyCamera::GetMouseCameraMovement() {
 	vec3 temp = pos;
 	pos.y = temp.x;
 	pos.x = temp.y;
-	
-	if (pos.z > 0.1f) {
-		int i = 1;
-	}
+	pos.z = 0;
 
 	return pos;
 }

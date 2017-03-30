@@ -2,9 +2,18 @@
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
 
+// Quanternion
+#include <GLM\gtc\quaternion.hpp>
+#include <GLM\gtx\quaternion.hpp>
+
+#include "Time.h"
+#include "InputManager.h"
+
+using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
+using glm::quat;
 
 class Camera
 {
@@ -27,11 +36,9 @@ public:
 	const vec3 GetPosition();
 
 protected:	
-
 	void InverseWorldTransform();
 	mat4 UpdateProjectionViewTransform();
 
-	mat4 m_rotationMat;			// rotation
 	mat4 m_worldMat;			// global / model position
 	mat4 m_viewMat;				// view
 	mat4 m_projectionMat;		// projection
