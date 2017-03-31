@@ -23,6 +23,7 @@ void Client::Update() {
 	// CONSOLE
 	ImGui::ListBoxHeader("Console");
 	{
+		// Get Server messages
 		for(int i = 0; i < 5; i++) {
 			ImGui::Text(std::string("Hello %i").c_str());
 		}

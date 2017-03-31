@@ -21,6 +21,8 @@ public:
 	static void StopServer();
 	static void Destroy();
 
+	static void AddMessage(const char* message);
+
 private:
 	Server();
 
