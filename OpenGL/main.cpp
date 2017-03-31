@@ -1,24 +1,22 @@
 #include "Application.h"
 #include "Time.h"
 #include "InputManager.h"
-
-//Imgui
 #include "imgui_impl_glfw_gl3.h"
-#include "imgui.h"
+
+#include "Client.h"
 
 void SetUpImgui(GLFWwindow* window);
 
 int main() {
-	BaseApplication* app = new Application(1280, 720, "OpenGL 3D Engine");
+	BaseApplication* app = new Application(1280, 720, "OpenGL Engine");
+	Time* time = Time::GetInstance();
+
+	bool run = true;
+
+	Client client = Client();
 
 	// Setup GUI
 	SetUpImgui(app->GetWindow());
-
-	bool run = true;
-	Time* time = Time::GetInstance();
-
-	// Hide Console
-	FreeConsole();
 
 	if(app->Startup() == true) {
 		// Setup input manager
@@ -35,6 +33,8 @@ int main() {
 			run = app->Update();
 			// Draw Loop
 			app->Draw();
+
+			client.Update();
 
 			// GUI Draw
 			ImGui::Render();

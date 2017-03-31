@@ -3,6 +3,7 @@
 #include "GLFW\glfw3.h"
 #include "GLM\glm.hpp"
 
+
 using glm::vec2;
 
 class InputManager {

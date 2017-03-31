@@ -1,3 +1,0 @@
-﻿  main.cpp
-c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\main.cpp : fatal error C1041: cannot open program database 'C:\Users\s171372\Documents\Visual Studio 2015\Projects\OpenGL\OpenGL\Debug\vc140.idb'; if multiple CL.EXE write to the same .PDB file, please use /FS
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
