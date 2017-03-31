@@ -6,30 +6,29 @@
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
 
-/*
-	Enables the use of multiple consoles.
-	Source: https://www.codeproject.com/articles/13368/multiple-consoles-for-a-single-application
-*/
-#include "CConsole\ConsoleLogger.h"
-
 class Server {
 public:
 	~Server();
 	
 	static Server* GetInstance();
 
-	static void Create();
+	static void CreateServer(const char* serverName, unsigned short port);
+	static void JoinServer(const char* ip, int port, const char* name);
+
+	static void HandleNetworkMessages();
+
+	static bool IsServerRunning();
+	static void StopServer();
 	static void Destroy();
-
-	static void Print(const char* message);
-
-	static bool IsOpen();
 
 private:
 	Server();
-	static Server* m_instance;
 
-	bool m_isOpen = false;
-	CConsoleLogger m_console = CConsoleLogger();
+	static Server* m_instance;
+	RakNet::RakPeerInterface* m_pPeerInterface;
+
+	unsigned short m_port;
+	bool m_running;
+	char* m_serverName;
 };
 

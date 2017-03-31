@@ -4,6 +4,7 @@
 #include "imgui_impl_glfw_gl3.h"
 
 #include "Client.h"
+#include "Server.h"
 
 void SetUpImgui(GLFWwindow* window);
 
@@ -39,9 +40,11 @@ int main() {
 			// GUI Draw
 			ImGui::Render();
 
+			// Update Server if running
+			Server::HandleNetworkMessages();
+
 			// Update Inputs
 			InputManager::PollEvents();
-
 			glfwSwapBuffers(app->GetWindow());
 		}
 	}
@@ -55,4 +58,5 @@ int main() {
 
 void SetUpImgui(GLFWwindow* window) {
 	ImGui_ImplGlfwGL3_Init(window, true);
+	
 }
