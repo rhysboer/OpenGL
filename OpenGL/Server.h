@@ -13,7 +13,6 @@ public:
 	static Server* GetInstance();
 
 	static void CreateServer(const char* serverName, unsigned short port);
-	static void JoinServer(const char* ip, int port, const char* name);
 
 	static void HandleNetworkMessages();
 

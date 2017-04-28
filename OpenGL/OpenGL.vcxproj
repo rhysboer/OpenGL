@@ -162,7 +162,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Colors.cpp" />
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="gl_core_4_4.c" />
@@ -178,7 +177,6 @@
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PostProcessing.cpp" />
-    <ClCompile Include="Server.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -190,7 +188,6 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Client.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="gl_core_4_4.h" />
@@ -205,7 +202,6 @@
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="PostProcessing.h" />
-    <ClInclude Include="Server.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />

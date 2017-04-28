@@ -3,9 +3,6 @@
 #include "InputManager.h"
 #include "imgui_impl_glfw_gl3.h"
 
-#include "Client.h"
-#include "Server.h"
-
 void SetUpImgui(GLFWwindow* window);
 
 int main() {
@@ -14,7 +11,6 @@ int main() {
 
 	bool run = true;
 
-	Client client = Client();
 
 	// Setup GUI
 	SetUpImgui(app->GetWindow());
@@ -35,13 +31,8 @@ int main() {
 			// Draw Loop
 			app->Draw();
 
-			client.Update();
-
 			// GUI Draw
 			ImGui::Render();
-
-			// Update Server if running
-			Server::HandleNetworkMessages();
 
 			// Update Inputs
 			InputManager::PollEvents();

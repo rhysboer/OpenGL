@@ -19,12 +19,6 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{69c04ccb-7075-4d33-998b-6763f3d0f39f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Raknet">
-      <UniqueIdentifier>{56e6afc2-0df5-4c63-92a2-dcaa686ce20d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Raknet">
-      <UniqueIdentifier>{54a95903-bc5d-4588-ba30-b1c81069ecbd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -99,12 +93,6 @@
     <ClCompile Include="imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>Source Files\Raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="Client.cpp">
-      <Filter>Source Files\Raknet</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AIE\Gizmos.h">
@@ -175,12 +163,6 @@
     </ClInclude>
     <ClInclude Include="imgui_internal.h">
       <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>Header Files\Raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="Client.h">
-      <Filter>Header Files\Raknet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
