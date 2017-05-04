@@ -26,6 +26,8 @@ c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\basea
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\camera.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\client.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\gl_core_4_4.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\aabb.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\frustum.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.ilk
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.exe
 c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.pdb

@@ -1,5 +1,10 @@
 #include "Application.h"
 
+// remove
+#include "BoudingSphere.h"
+#include "Frustum.h"
+
+
 Application::Application(int width, int height, const char* name) : BaseApplication::BaseApplication(width, height, name) {
 }
 
@@ -114,18 +119,46 @@ const bool Application::Update() {
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colors::White : Colors::Black);
 	}
 
+
+	/* Frustum Culling */
+	//////////////////////////////////////////
+	vec4 planes[6];
+	Frustum::GetFrustumPlanes(m_camera.GetProjectionView(), planes);
+
+	vec4 plane(0, 1, 0, -1);
+	vec4 planeColour = Colors::Green;
+
+	BoudingSphere sphere;
+	sphere.centre = vec3(5, cosf((float)glfwGetTime()) + 1, 0);
+	sphere.radius = 0.5f;
+
+	for(int i = 0; i < 6; i++) {
+		float d = glm::dot(vec3(planes[i]), sphere.centre) + planes[i].w;
+
+		if(d < -sphere.radius) {
+			printf("Behind, dont render it! \n");
+			break;
+		}
+
+		if(i == 5) {
+			Gizmos::addSphere(sphere.centre, sphere.radius, 8, 8, Colors::Purple);
+		}
+	}
+	//////////////////////////////////////////
+
+
 	// Update Particles
-	m_particleEmitter->Update(m_camera.GetWorldTransform());
+	//m_particleEmitter->Update(m_camera.GetWorldTransform());
 
 	// Camera Movement
 	m_camera.Update();
 
 	// Terrain GUI
-	ImGui::Begin("Terrain Settings");
-	if(ImGui::Button("Generate New Terrain")) {
-		m_terrain.GenerateGrid();
-	}
-	ImGui::End();
+	//ImGui::Begin("Terrain Settings");
+	//if(ImGui::Button("Generate New Terrain")) {
+	//	m_terrain.GenerateGrid();
+	//}
+	//ImGui::End();
 
 	return true;
 }
