@@ -148,7 +148,7 @@ const bool Application::Update() {
 
 
 	// Update Particles
-	//m_particleEmitter->Update(m_camera.GetWorldTransform());
+	m_particleEmitter->Update(m_camera.GetWorldTransform());
 
 	// Camera Movement
 	m_camera.Update();
