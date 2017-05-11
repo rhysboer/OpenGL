@@ -19,6 +19,18 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{69c04ccb-7075-4d33-998b-6763f3d0f39f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{68a8919b-8501-4fff-840e-0c9b3c0d8211}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{da3b6b0f-bd45-41b3-b987-ba46384cde02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{55b2fe7c-7ee7-438e-9b23-0ce7c566505f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{4638a702-10cb-4dce-8c6b-d2c7379dd00c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -28,9 +40,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gl_core_4_4.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BaseApplication.cpp">
@@ -58,9 +67,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlyCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
@@ -99,15 +105,30 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AIE\Gizmos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gl_core_4_4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BaseApplication.h">
@@ -135,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlyCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
@@ -178,6 +196,24 @@
     </ClInclude>
     <ClInclude Include="BoudingSphere.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

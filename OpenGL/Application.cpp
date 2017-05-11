@@ -167,10 +167,12 @@ void Application::Draw() {
 	// Start Post Processing
 	m_effects->BeginRender();
 
-	Gizmos::draw(m_camera.GetProjectionView());
 	m_particleEmitter->Draw(m_camera);
 	m_terrain.Draw(m_camera);
 	m_objLoader->Draw(m_camera);
+
+	Gizmos::draw(m_camera.GetProjectionView());
+	Gizmos::draw2D(m_camera.GetProjectionView());
 
 	// Render Post Processing
 	m_effects->EndRender();
