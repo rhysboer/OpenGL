@@ -76,6 +76,17 @@ const bool Application::Startup() {
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
 	m_moonLocal = glm::translate(m_moonLocal, vec3(2, 0, 0));
 
+
+	// Physics Manager
+	physicsManager = new PhysicsManager();
+	
+	Sphere* actor = new Sphere(vec2(10, 10), vec2(0, 0), 1, 5, Colors::Green);
+	physicsManager->AddActor(actor);
+	physicsManager->SetGravity(vec2(0, -9.8f));
+
+	actor->ApplyForce(vec2(0, 0.05f));
+
+
 	Gizmos::create();
 	return true;
 }
@@ -146,6 +157,16 @@ const bool Application::Update() {
 	}
 	//////////////////////////////////////////
 
+	
+
+	physicsManager->Update();
+	physicsManager->UpdateGizmos();
+
+
+
+
+
+
 
 	// Update Particles
 	m_particleEmitter->Update(m_camera.GetWorldTransform());
@@ -172,7 +193,7 @@ void Application::Draw() {
 	m_objLoader->Draw(m_camera);
 
 	Gizmos::draw(m_camera.GetProjectionView());
-	Gizmos::draw2D(m_camera.GetProjectionView());
+	physicsManager->Draw(m_camera.GetProjectionView());
 
 	// Render Post Processing
 	m_effects->EndRender();

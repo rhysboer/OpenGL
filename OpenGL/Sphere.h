@@ -1,5 +1,6 @@
 #pragma once
 #include "Rigidbody.h"
+#include "AIE\Gizmos.h"
 
 class Sphere : public Rigidbody {
 public:
@@ -16,3 +17,8 @@ protected:
 	glm::vec4 m_colour;
 };
 
+/*
+
+Momentum = Mass * velocity
+
+*/

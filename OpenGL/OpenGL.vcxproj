@@ -179,7 +179,6 @@
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
-    <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="PostProcessing.cpp" />
     <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />

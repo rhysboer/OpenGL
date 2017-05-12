@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "PhysicsObject.h"
+#include "AIE\Gizmos.h"
 
 class PhysicsManager {
 public:
@@ -10,6 +11,8 @@ public:
 	void Update();
 	void UpdateGizmos();
 	void DebugScene();
+
+	void Draw(glm::mat4 m_projection); // ???
 
 	void AddActor(PhysicsObject* actor);
 	void RemoveActor(PhysicsObject* actor);

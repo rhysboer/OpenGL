@@ -33,6 +33,11 @@
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 
+// Physics
+#include "PhysicsManager.h"
+#include "Sphere.h"
+
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -79,5 +84,9 @@ private:
 	ParticleEmitter* m_particleEmitter = nullptr;
 	// Post Processing Effect
 	PostProcessing* m_effects = nullptr;
+
+
+	// Physics
+	PhysicsManager* physicsManager = nullptr;
 };
 

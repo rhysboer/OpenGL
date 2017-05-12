@@ -24,14 +24,16 @@ void PhysicsManager::DebugScene() {
 	}
 }
 
+void PhysicsManager::Draw(glm::mat4 m_projection) {
+	Gizmos::draw2D(m_projection);
+}
+
 void PhysicsManager::AddActor(PhysicsObject * actor) {
 	m_actors.push_back(actor);
 }
 
 void PhysicsManager::RemoveActor(PhysicsObject * actor) {
-	// REMOVE ACTOR
-	auto iter = std::find(m_actors.begin, m_actors.end, actor);
+	auto iter = std::find(m_actors.begin(), m_actors.end(), actor);
 	if(iter != m_actors.end())
 		m_actors.erase(iter);
-
 }
