@@ -8,14 +8,16 @@ public:
 	PhysicsManager();
 	~PhysicsManager();
 
-	void Update();
+	void Update(float dt);
 	void UpdateGizmos();
 	void DebugScene();
 
 	void Draw(glm::mat4 m_projection); // ???
 
+	// Actor Management
 	void AddActor(PhysicsObject* actor);
 	void RemoveActor(PhysicsObject* actor);
+	void DestroyActors();
 
 	void SetGravity(const glm::vec2 gravity) { m_gravity = gravity; }
 	void SetTimeStep(const float timeStep) { m_timeStep = timeStep; }
@@ -26,7 +28,7 @@ public:
 private:
 
 	glm::vec2 m_gravity = glm::vec2(0, -9.81f);
-	float m_timeStep;
+	float m_timeStep = 0;
 
 	std::vector<PhysicsObject*> m_actors;
 };

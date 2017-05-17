@@ -80,11 +80,14 @@ const bool Application::Startup() {
 	// Physics Manager
 	physicsManager = new PhysicsManager();
 	
-	Sphere* actor = new Sphere(vec2(10, 10), vec2(0, 0), 1, 5, Colors::Green);
-	physicsManager->AddActor(actor);
-	physicsManager->SetGravity(vec2(0, -9.8f));
+	for(int i = 0; i < 2; i++) {
+		Sphere* actor = new Sphere(vec2(10, 10), vec2(0, 0), 1, 5, Colors::Green);
+		physicsManager->AddActor(actor);
+		physicsManager->SetGravity(vec2(0, -0.08f));
 
-	actor->ApplyForce(vec2(0, 0.05f));
+		//actor->ApplyForce(vec2(0.2f, 0.5f));
+	}
+
 
 
 	Gizmos::create();
@@ -158,8 +161,7 @@ const bool Application::Update() {
 	//////////////////////////////////////////
 
 	
-
-	physicsManager->Update();
+	physicsManager->Update(Time::DeltaTime());
 	physicsManager->UpdateGizmos();
 
 

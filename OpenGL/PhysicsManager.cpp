@@ -6,9 +6,9 @@ PhysicsManager::PhysicsManager() {
 PhysicsManager::~PhysicsManager() {
 }
 
-void PhysicsManager::Update() {
+void PhysicsManager::Update(float dt) {
 	for(auto iter = m_actors.begin(); iter != m_actors.end(); ++iter) {
-		(*iter)->FixedUpdate(m_gravity, m_timeStep);
+		(*iter)->FixedUpdate(m_gravity, dt);
 	}
 }
 

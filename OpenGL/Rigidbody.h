@@ -1,6 +1,9 @@
 #pragma once
 #include "PhysicsObject.h"
 
+// DELETE
+#include "imgui.h"
+
 class Rigidbody : public PhysicsObject {
 public:
 	Rigidbody() {};
