@@ -1,6 +1,8 @@
 #include "Sphere.h"
 
 Sphere::Sphere(glm::vec2 position, glm::vec2 velocity, float mass, float radius, glm::vec4 colour) {
+	m_shape = ShapeType::SPHERE;
+
 	m_position	= position;
 	m_velocity	= velocity;
 	m_mass		= mass;

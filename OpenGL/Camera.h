@@ -29,6 +29,8 @@ public:
 	void Move(vec3 translate);
 	void Rotate(float angle, vec3 axis);
 
+	void SetRotationSpeed(float speed);
+
 	const mat4 GetWorldTransform() const;
 	const mat4 GetView() const;
 	const mat4 GetProjection() const;
@@ -43,5 +45,8 @@ protected:
 	mat4 m_viewMat;				// view
 	mat4 m_projectionMat;		// projection
 	mat4 m_projectionViewMat;	// projection * view
+
+
+	float m_rotationSpeed;		// Camera Rotation Speed
 };
 

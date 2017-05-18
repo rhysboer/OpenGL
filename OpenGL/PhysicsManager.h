@@ -2,6 +2,12 @@
 #include <vector>
 #include "PhysicsObject.h"
 #include "AIE\Gizmos.h"
+#include "glm.hpp"
+
+typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
+
+class Sphere;
+class Plane;
 
 class PhysicsManager {
 public:
@@ -17,13 +23,27 @@ public:
 	// Actor Management
 	void AddActor(PhysicsObject* actor);
 	void RemoveActor(PhysicsObject* actor);
-	void DestroyActors();
 
 	void SetGravity(const glm::vec2 gravity) { m_gravity = gravity; }
 	void SetTimeStep(const float timeStep) { m_timeStep = timeStep; }
 	
 	float GetTimeStep() const { return m_timeStep; }
 	glm::vec2 GetGravity() const { return m_gravity; }
+
+	// Collision Functions
+	void CheckForCollisions();
+
+	static bool Plane2Plane(PhysicsObject*, PhysicsObject*)	 {return false;};
+	static bool Plane2Sphere(PhysicsObject*, PhysicsObject*) {return false;};
+	static bool Plane2Box(PhysicsObject*, PhysicsObject*) { return false; }
+
+	static bool Sphere2Plane(PhysicsObject*, PhysicsObject*);
+	static bool Sphere2Sphere(PhysicsObject*, PhysicsObject*);
+	static bool Sphere2Box(PhysicsObject*, PhysicsObject*) { return false; }
+
+	static bool Box2Plane(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Box2Sphere(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Box2Box(PhysicsObject*, PhysicsObject*) { return false; }
 
 private:
 

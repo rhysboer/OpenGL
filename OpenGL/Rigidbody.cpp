@@ -12,20 +12,20 @@ Rigidbody::~Rigidbody() {
 }
 
 void Rigidbody::FixedUpdate(glm::vec2 gravity, float timeStep) {
-	// GUI
-	{
-		glm::vec2 grav = gravity * timeStep;
-		ImGui::Begin("Physics Object");
-		ImGui::DragFloat("Delta Time", &timeStep);
-		ImGui::DragFloat2("Gravity", &grav[0]);
-		ImGui::DragFloat3("Position", &m_position[0]);
-		ImGui::DragFloat3("Velocity", &m_velocity[0]);
-		ImGui::End();
-	}
-	// END GUI
+	{ // GUI
+		std::string name = "Physics Object " + std::to_string((int)timeStep) + "##" + std::to_string((int)timeStep);
 
-	m_velocity += gravity * timeStep;
-	m_velocity = GetMomentum();
+		glm::vec2 grav = gravity * Time::DeltaTime();
+		ImGui::Begin(name.c_str());
+		ImGui::Text("Object");
+		ImGui::DragFloat2("Gravity", &grav[0]);
+		ImGui::DragFloat2("Position", &m_position[0]);
+		ImGui::DragFloat2("Velocity", &m_velocity[0]);
+		ImGui::DragFloat("Mass", &m_mass);
+		ImGui::End();
+	} // END GUI
+
+	m_velocity += gravity * Time::DeltaTime();
 
 	m_position += m_velocity;
 }

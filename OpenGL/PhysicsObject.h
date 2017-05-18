@@ -2,9 +2,11 @@
 #include "glm.hpp"
 
 enum class ShapeType {
-	PLANE,
+	PLANE = 0,
 	SPHERE,
-	BOX
+	BOX,
+
+	SHAPE_COUNT // Always last
 };
 
 class PhysicsObject {
@@ -15,6 +17,8 @@ public:
 	virtual void Debug() = 0;
 	virtual void MakeGizmo() = 0;
 	virtual void ResetPosition() {};
+
+	ShapeType GetShapeID() { return m_shape; }
 
 protected:
 	PhysicsObject(ShapeType a_shape) : m_shape(a_shape) {}

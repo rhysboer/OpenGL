@@ -76,17 +76,22 @@ const bool Application::Startup() {
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
 	m_moonLocal = glm::translate(m_moonLocal, vec3(2, 0, 0));
 
-
-	// Physics Manager
+	// --------------------------------------
+	//			 Physics Manager
+	// --------------------------------------
 	physicsManager = new PhysicsManager();
 	
 	for(int i = 0; i < 2; i++) {
-		Sphere* actor = new Sphere(vec2(10, 10), vec2(0, 0), 1, 5, Colors::Green);
-		physicsManager->AddActor(actor);
-		physicsManager->SetGravity(vec2(0, -0.08f));
-
-		//actor->ApplyForce(vec2(0.2f, 0.5f));
+		m_sphere[i] = new Sphere(vec2(i * 10, 10), vec2(0, 0), 10, 5, Colors::Green);
+		physicsManager->AddActor(m_sphere[i]);
+		physicsManager->SetGravity(vec2(0, 0)); // -0.08f
 	}
+
+	Box* box = new Box(vec2(-10, 20), 2, 2, 5, Colors::Blue);
+	physicsManager->AddActor(box);
+
+	Plane* plane = new Plane(vec2(0, 1), 0);
+	physicsManager->AddActor(plane);
 
 
 
@@ -160,14 +165,12 @@ const bool Application::Update() {
 	}
 	//////////////////////////////////////////
 
+	if(InputManager::IsKeyDown(GLFW_KEY_T))
+		m_sphere[0]->ApplyForceToActor(m_sphere[1], vec2(0.1f, 0));
 	
 	physicsManager->Update(Time::DeltaTime());
 	physicsManager->UpdateGizmos();
-
-
-
-
-
+	
 
 
 	// Update Particles

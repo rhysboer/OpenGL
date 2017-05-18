@@ -36,7 +36,8 @@
 // Physics
 #include "PhysicsManager.h"
 #include "Sphere.h"
-
+#include "Plane.h"
+#include "Box.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -88,5 +89,7 @@ private:
 
 	// Physics
 	PhysicsManager* physicsManager = nullptr;
+
+	Sphere* m_sphere[2];
 };
 

@@ -1,8 +1,10 @@
 #pragma once
 #include "PhysicsObject.h"
+#include "Time.h"
 
 // DELETE
 #include "imgui.h"
+#include <string>
 
 class Rigidbody : public PhysicsObject {
 public:
@@ -21,6 +23,9 @@ public:
 	glm::vec2 GetVelocity() { return m_velocity; }
 	float GetRotation() { return m_rotation; }
 	float GetMass() { return m_mass; }
+
+	// Set Functions
+	void SetVelocity(const glm::vec2 velocity) { m_velocity = velocity; }
 
 protected:
 	glm::vec2 GetMomentum();
