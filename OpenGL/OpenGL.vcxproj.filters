@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Physics\Shapes">
       <UniqueIdentifier>{992c7ee5-77b5-4a00-8343-decdfe503864}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics\Bounding">
+      <UniqueIdentifier>{86589124-9fac-4b7f-9fb3-b3e4298c6359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\Bounding">
+      <UniqueIdentifier>{445eec03-a21a-4af2-87e5-4e086bab44b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,9 +58,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Colors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
@@ -105,9 +108,6 @@
     <ClCompile Include="imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -132,6 +132,12 @@
     <ClCompile Include="Box.cpp">
       <Filter>Source Files\Physics\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Colours.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Physics\Bounding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AIE\Gizmos.h">
@@ -144,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Colors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
@@ -197,12 +200,6 @@
     <ClInclude Include="imgui_internal.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BoudingSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
@@ -229,6 +226,15 @@
     </ClInclude>
     <ClInclude Include="Frustum.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Colours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoudingSphere.h">
+      <Filter>Header Files\Physics\Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Physics\Bounding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

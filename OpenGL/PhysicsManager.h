@@ -8,6 +8,7 @@ typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 
 class Sphere;
 class Plane;
+class Box;
 
 class PhysicsManager {
 public:
@@ -34,20 +35,20 @@ public:
 	void CheckForCollisions();
 
 	static bool Plane2Plane(PhysicsObject*, PhysicsObject*)	 {return false;};
-	static bool Plane2Sphere(PhysicsObject*, PhysicsObject*) {return false;};
-	static bool Plane2Box(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Plane2Sphere(PhysicsObject*, PhysicsObject*);
+	static bool Plane2Box(PhysicsObject*, PhysicsObject*);
 
 	static bool Sphere2Plane(PhysicsObject*, PhysicsObject*);
 	static bool Sphere2Sphere(PhysicsObject*, PhysicsObject*);
 	static bool Sphere2Box(PhysicsObject*, PhysicsObject*) { return false; }
 
-	static bool Box2Plane(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Box2Plane(PhysicsObject*, PhysicsObject*);
 	static bool Box2Sphere(PhysicsObject*, PhysicsObject*) { return false; }
-	static bool Box2Box(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Box2Box(PhysicsObject*, PhysicsObject*);
 
 private:
 
-	glm::vec2 m_gravity = glm::vec2(0, -9.81f);
+	glm::vec2 m_gravity = glm::vec2(0, 0); // -9.81f
 	float m_timeStep = 0;
 
 	std::vector<PhysicsObject*> m_actors;

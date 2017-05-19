@@ -3,8 +3,8 @@
 
 enum class ShapeType {
 	PLANE = 0,
-	SPHERE,
-	BOX,
+	SPHERE = 1,
+	AABB = 2,
 
 	SHAPE_COUNT // Always last
 };

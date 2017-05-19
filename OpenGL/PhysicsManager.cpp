@@ -1,6 +1,7 @@
 #include "PhysicsManager.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Box.h"
 
 PhysicsManager::PhysicsManager() {
 }
@@ -51,6 +52,7 @@ static fn CollisionFunctionArray[] =
 	PhysicsManager::Box2Plane,		PhysicsManager::Box2Sphere,		PhysicsManager::Box2Box,
 };
 
+
 // -------------------- //
 //		Collisons		//
 // -------------------- //
@@ -65,7 +67,7 @@ void PhysicsManager::CheckForCollisions() {
 			int shape1 = (int)obj1->GetShapeID();
 			int shape2 = (int)obj2->GetShapeID();
 
-			int index = (shape1 * (int)ShapeType::SHAPE_COUNT) + shape2 - 1;
+			int index = (shape1 * (int)ShapeType::SHAPE_COUNT) + shape2;
 
 			fn functionPtr = CollisionFunctionArray[index];
 
@@ -74,6 +76,14 @@ void PhysicsManager::CheckForCollisions() {
 			}
 		}
 	}
+}
+
+bool PhysicsManager::Plane2Sphere(PhysicsObject *obj1, PhysicsObject *obj2) {
+	return Sphere2Plane(obj2, obj1);
+}
+
+bool PhysicsManager::Plane2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
+	return Box2Plane(obj2, obj1);
 }
 
 bool PhysicsManager::Sphere2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
@@ -112,6 +122,52 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 
 			sphere1->SetVelocity(glm::vec2(0));
 			sphere2->SetVelocity(glm::vec2(0));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool PhysicsManager::Box2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
+	Box* box = dynamic_cast<Box*>(obj1);
+	Plane* plane = dynamic_cast<Plane*>(obj2);
+
+	if(box != nullptr && plane != nullptr) {
+		vec2 points[4] = { box->GetAABB().GetPoints2D().topRight, box->GetAABB().GetPoints2D().topLeft,
+			box->GetAABB().GetPoints2D().botLeft, box->GetAABB().GetPoints2D().botRight }; // Set Points
+
+		for(int i = 0; i < 4; i++) {
+			// Source: https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html
+
+			vec2 extents = (vec2)box->GetAABB().GetMax() - box->GetPosition();
+
+			float radius = extents.x * glm::abs(plane->GetNormal().x) + extents.y * glm::abs(plane->GetNormal().y);
+			float distance = glm::dot(plane->GetNormal(), box->GetPosition()) - plane->GetDistance();
+
+			if(abs(distance) <= radius) {
+				/* Collision */
+				box->SetVelocity(vec2(0));
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool PhysicsManager::Box2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
+	Box* box1 = dynamic_cast<Box*>(obj1);
+	Box* box2 = dynamic_cast<Box*>(obj2);
+	
+	if(box1 != nullptr && box2 != nullptr) {
+		if(AABB::IsOverlapping(box1->GetAABB(), box2->GetAABB())) {
+			/* COLLISION */
+
+			box1->SetVelocity(glm::vec2(0));
+			box2->SetVelocity(glm::vec2(0));
 
 			return true;
 		}

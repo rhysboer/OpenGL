@@ -6,7 +6,7 @@
 #include "AIE\Gizmos.h"
 #include "GLM\glm.hpp"
 #include "GLM\ext.hpp"
-#include "Colors.h"
+#include "Colours.h"
 #include "FlyCamera.h"
 #include "Time.h"
 #include "ParticleEmitter.h"

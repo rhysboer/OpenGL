@@ -2,7 +2,7 @@
 #include "ShaderLoader.h"
 #include "Camera.h"
 #include "tiny_obj_loader.h"
-#include "Colors.h"
+#include "Colours.h"
 
 #include "Texture.h"
 

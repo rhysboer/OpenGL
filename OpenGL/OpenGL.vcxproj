@@ -164,7 +164,7 @@
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Colors.cpp" />
+    <ClCompile Include="Colours.cpp" />
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="gl_core_4_4.c" />
@@ -198,7 +198,7 @@
     <ClInclude Include="BoudingSphere.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Colors.h" />
+    <ClInclude Include="Colours.h" />
     <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="gl_core_4_4.h" />

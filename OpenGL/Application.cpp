@@ -70,7 +70,7 @@ const bool Application::Startup() {
 
 	// Particle Emitter
 	m_particleEmitter = new ParticleEmitter();
-	m_particleEmitter->Initialise(1000, 500, 0.1f, 2.0f, 1, 5, 1, 0.1f, Colors::Black, Colors::Purple);
+	m_particleEmitter->Initialise(1000, 500, 0.1f, 2.0f, 1, 5, 1, 0.1f, Colours::Black, Colours::Purple);
 
 	m_sunMat = glm::translate(m_sunMat, vec3(0));
 	m_earthLocal = glm::translate(m_earthLocal, vec3(5, 0, 0));
@@ -82,13 +82,16 @@ const bool Application::Startup() {
 	physicsManager = new PhysicsManager();
 	
 	for(int i = 0; i < 2; i++) {
-		m_sphere[i] = new Sphere(vec2(i * 10, 10), vec2(0, 0), 10, 5, Colors::Green);
+		m_sphere[i] = new Sphere(vec2(i * 10, 10), vec2(0, 0), 10, 5, Colours::Green);
 		physicsManager->AddActor(m_sphere[i]);
-		physicsManager->SetGravity(vec2(0, 0)); // -0.08f
+		//physicsManager->SetGravity(vec2(0, 0)); // -0.08f
+
+		Box* box = new Box(vec2(-10 * i, 20), 2, 2, 5, Colours::Blue);
+		physicsManager->AddActor(box);
+
 	}
 
-	Box* box = new Box(vec2(-10, 20), 2, 2, 5, Colors::Blue);
-	physicsManager->AddActor(box);
+
 
 	Plane* plane = new Plane(vec2(0, 1), 0);
 	physicsManager->AddActor(plane);
@@ -118,9 +121,9 @@ const bool Application::Update() {
 	m_earthMat = m_sunMat * m_earthLocal;
 	m_moonMat = m_earthMat * m_moonLocal;
 
-	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colors::Red, &m_sunMat);
-	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colors::Green, &m_earthMat);
-	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colors::Purple, &m_moonMat);
+	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colours::Red, &m_sunMat);
+	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colours::Green, &m_earthMat);
+	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colours::Purple, &m_moonMat);
 
 	// CUBE & QUANTERNIONS
 	float s = cos((float)glfwGetTime()) * 0.5f + 0.5f;
@@ -130,12 +133,12 @@ const bool Application::Update() {
 	mat4 m = glm::translate(p) * glm::toMat4(r);
 
 	Gizmos::addTransform(m);
-	Gizmos::addAABBFilled(p, vec3(.5f), Colors::Red, &m);
+	Gizmos::addAABBFilled(p, vec3(.5f), Colours::Red, &m);
 
 	// Grid
 	for(int i = 0; i < 21; ++i) {
-		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? Colors::White : Colors::Black);
-		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colors::White : Colors::Black);
+		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? Colours::White : Colours::Black);
+		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? Colours::White : Colours::Black);
 	}
 
 
@@ -145,7 +148,7 @@ const bool Application::Update() {
 	Frustum::GetFrustumPlanes(m_camera.GetProjectionView(), planes);
 
 	vec4 plane(0, 1, 0, -1);
-	vec4 planeColour = Colors::Green;
+	vec4 planeColour = Colours::Green;
 
 	BoudingSphere sphere;
 	sphere.centre = vec3(5, cosf((float)glfwGetTime()) + 1, 0);
@@ -160,7 +163,7 @@ const bool Application::Update() {
 		}
 
 		if(i == 5) {
-			Gizmos::addSphere(sphere.centre, sphere.radius, 8, 8, Colors::Purple);
+			Gizmos::addSphere(sphere.centre, sphere.radius, 8, 8, Colours::Purple);
 		}
 	}
 	//////////////////////////////////////////

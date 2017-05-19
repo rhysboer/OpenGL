@@ -21,7 +21,7 @@ void Plane::MakeGizmo() {
 	
 	glm::vec2 centerPoint = m_normal * m_distanceToOrigin;
 	glm::vec2 parallel(m_normal.y, -m_normal.x);
-	glm::vec4 colour = Colors::White;
+	glm::vec4 colour = Colours::White;
 	glm::vec2 start = centerPoint + (parallel * lineSegmentLength);
 	glm::vec2 end = centerPoint - (parallel * lineSegmentLength);
 

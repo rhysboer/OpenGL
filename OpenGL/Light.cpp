@@ -4,7 +4,7 @@
 Light::Light() {	
 	LightManager::AddLight(*this);
 
-	m_color = Colors::White;
+	m_color = Colours::White;
 }
 
 Light::~Light() {

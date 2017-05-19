@@ -6,7 +6,7 @@
 #include "GLM\ext.hpp"
 #include "GLM\gtx\norm.hpp"
 
-#include "Colors.h"
+#include "Colours.h"
 
 using glm::vec2;
 using glm::vec3;
