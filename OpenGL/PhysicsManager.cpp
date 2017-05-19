@@ -130,6 +130,11 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 	return false;
 }
 
+bool PhysicsManager::Sphere2Box(PhysicsObject *, PhysicsObject *) {
+
+	return false;
+}
+
 bool PhysicsManager::Box2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
 	Box* box = dynamic_cast<Box*>(obj1);
 	Plane* plane = dynamic_cast<Plane*>(obj2);
