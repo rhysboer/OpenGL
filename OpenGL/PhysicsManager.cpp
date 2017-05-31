@@ -131,24 +131,12 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 }
 
 bool PhysicsManager::Sphere2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
-	// CREATE COLLISION
-
-	/* Create 4 spheres around the 4 corners of the cube
-		Set the radius to the radius of the sphere
-
-	Create 2 AABB boxs (Height & Width Box)
-		Height Box = Same width as the original box but + sphere radius on the height
-		Width Box = Same height as the original box but + sphere radius on the width
-
-	Check if sphere center is inside any of them
-
-	if so collision has happened
-	*/
-
-	Sphere* sphere = dynamic_cast<Sphere*>(obj2);
+	Sphere* sphere = dynamic_cast<Sphere*>(obj1);
 	Box* box = dynamic_cast<Box*>(obj2);
 
 	if(sphere != nullptr && box != nullptr) {
+		// Source: https://gamedev.stackexchange.com/questions/96337/collision-between-aabb-and-circle
+
 		// Top Left | Top Right | Bot Left | Bot Right
 		BoundingSphere cornerSphere[4];
 		// Height Box | Width Box
@@ -172,6 +160,8 @@ bool PhysicsManager::Sphere2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
 		for(int i = 0; i < 4; i++) {
 			if(cornerSphere[i].IsPointInside(sphere->GetPosition())) {
 				/* COLLISION */
+				box->SetVelocity(vec2(0));
+				sphere->SetVelocity(vec2(0));
 				return true;
 			}
 		}
@@ -180,6 +170,8 @@ bool PhysicsManager::Sphere2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
 		for(int i = 0; i < 2; i++) {
 			if(boxes[i].IsPointInside(sphere->GetPosition())) {
 				/* COLLISION */
+				box->SetVelocity(vec2(0));
+				sphere->SetVelocity(vec2(0));
 				return true;
 			}
 		}
