@@ -195,7 +195,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="BaseApplication.h" />
-    <ClInclude Include="BoudingSphere.h" />
+    <ClInclude Include="BoundingSphere.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Colours.h" />

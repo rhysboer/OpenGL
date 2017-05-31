@@ -3,6 +3,7 @@
 #include "PhysicsObject.h"
 #include "AIE\Gizmos.h"
 #include "glm.hpp"
+#include "BoundingSphere.h"
 
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 
@@ -43,7 +44,7 @@ public:
 	static bool Sphere2Box(PhysicsObject*, PhysicsObject*);
 
 	static bool Box2Plane(PhysicsObject*, PhysicsObject*);
-	static bool Box2Sphere(PhysicsObject*, PhysicsObject*) { return false; }
+	static bool Box2Sphere(PhysicsObject*, PhysicsObject*);
 	static bool Box2Box(PhysicsObject*, PhysicsObject*);
 
 private:

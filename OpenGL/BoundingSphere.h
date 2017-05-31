@@ -7,11 +7,22 @@
 #define MAX 1e37f
 
 using glm::vec3;
+using glm::vec2;
 
-class BoudingSphere {
+class BoundingSphere {
 public:
-	BoudingSphere() : centre(0), radius(0) {}
-	~BoudingSphere() {}
+	BoundingSphere() : centre(0), radius(0) {}
+	BoundingSphere(vec3 sphereCentre, float sphereRadius) {
+		centre = sphereCentre;
+		radius = sphereRadius;
+	}
+
+	BoundingSphere(vec2 sphereCentre, float sphereRadius) {
+		centre = vec3(sphereCentre,0);
+		radius = sphereRadius;
+	}
+
+	~BoundingSphere() {}
 
 	void Fit(const std::vector<vec3>& points) {
 		vec3 min(MAX), max(MIN);
@@ -28,6 +39,17 @@ public:
 
 		centre = (min + max) * 0.5f;
 		radius = glm::distance(min, centre);
+	}
+
+	bool IsPointInside(const vec3 point) {
+		if(glm::distance(point, centre) < radius)
+			return true;
+
+		return false;
+	}
+
+	bool IsPointInside(const vec2 point) {
+		return IsPointInside(vec3(point, 0));
 	}
 
 	vec3 centre = vec3(0);

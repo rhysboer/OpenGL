@@ -4,6 +4,11 @@ AABB::AABB() {
 	Reset();
 }
 
+AABB::AABB(vec2 p1, vec2 p2, vec2 p3, vec2 p4) {
+	Reset();
+	Fit(p1, p2, p3, p4);
+}
+
 AABB::AABB(vec3 p1, vec3 p2, vec3 p3, vec3 p4) {
 	Reset();
 	Fit(p1, p2, p3, p4);
@@ -66,11 +71,22 @@ bool AABB::IsOverlapping(const AABB & box) {
 
 bool AABB::IsOverlapping(const AABB & box1, const AABB & box2) {
 	if(box1.m_min.x <= box2.m_max.x && box1.m_max.x >= box2.m_min.x && box1.m_min.y <= box2.m_max.y &&
-		box1.m_max.y >= box2.m_min.y && box1.m_min.z <= box2.m_max.z && box1.m_max.z >= box2.m_min.z) { // 
+		box1.m_max.y >= box2.m_min.y && box1.m_min.z <= box2.m_max.z && box1.m_max.z >= box2.m_min.z) { 
 		return true;
 	}
 
 	return false;
+}
+
+bool AABB::IsPointInside(const vec2 point) {
+	if(point.x > m_min.x && point.x < m_max.x && point.y > m_min.y && point.y < m_max.y)
+		return true;
+
+	return false;
+}
+
+bool AABB::IsPointInside(const vec3 point) {
+	return IsPointInside(vec2(point));
 }
 
 Points2D AABB::GetPoints2D() {

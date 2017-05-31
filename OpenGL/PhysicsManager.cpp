@@ -130,7 +130,60 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 	return false;
 }
 
-bool PhysicsManager::Sphere2Box(PhysicsObject *, PhysicsObject *) {
+bool PhysicsManager::Sphere2Box(PhysicsObject *obj1, PhysicsObject *obj2) {
+	// CREATE COLLISION
+
+	/* Create 4 spheres around the 4 corners of the cube
+		Set the radius to the radius of the sphere
+
+	Create 2 AABB boxs (Height & Width Box)
+		Height Box = Same width as the original box but + sphere radius on the height
+		Width Box = Same height as the original box but + sphere radius on the width
+
+	Check if sphere center is inside any of them
+
+	if so collision has happened
+	*/
+
+	Sphere* sphere = dynamic_cast<Sphere*>(obj2);
+	Box* box = dynamic_cast<Box*>(obj2);
+
+	if(sphere != nullptr && box != nullptr) {
+		// Top Left | Top Right | Bot Left | Bot Right
+		BoundingSphere cornerSphere[4];
+		// Height Box | Width Box
+		AABB boxes[2];
+
+		// Set Spheres on all 4 corners
+		cornerSphere[0] = BoundingSphere(box->GetAABB().GetPoints2D().topLeft, sphere->GetRadius());
+		cornerSphere[1] = BoundingSphere(box->GetAABB().GetPoints2D().topRight, sphere->GetRadius());
+		cornerSphere[2] = BoundingSphere(box->GetAABB().GetPoints2D().botLeft, sphere->GetRadius());
+		cornerSphere[3] = BoundingSphere(box->GetAABB().GetPoints2D().botRight, sphere->GetRadius());
+
+		// Height Box
+		boxes[0] = AABB(box->GetAABB().GetPoints2D().topLeft + vec2(0, sphere->GetRadius()), box->GetAABB().GetPoints2D().topRight + vec2(0, sphere->GetRadius()),
+			box->GetAABB().GetPoints2D().botLeft - vec2(0, sphere->GetRadius()), box->GetAABB().GetPoints2D().botRight - vec2(0, sphere->GetRadius()));
+
+		// Width Box
+		boxes[1] = AABB(box->GetAABB().GetPoints2D().topLeft - vec2(sphere->GetRadius(), 0), box->GetAABB().GetPoints2D().topRight + vec2(sphere->GetRadius(), 0),
+			box->GetAABB().GetPoints2D().botLeft - vec2(sphere->GetRadius(), 0), box->GetAABB().GetPoints2D().botRight + vec2(sphere->GetRadius(), 0));
+
+		// Check if sphere center is in Corner Spheres
+		for(int i = 0; i < 4; i++) {
+			if(cornerSphere[i].IsPointInside(sphere->GetPosition())) {
+				/* COLLISION */
+				return true;
+			}
+		}
+
+		// Check if point is inside box
+		for(int i = 0; i < 2; i++) {
+			if(boxes[i].IsPointInside(sphere->GetPosition())) {
+				/* COLLISION */
+				return true;
+			}
+		}
+	}
 
 	return false;
 }
@@ -152,7 +205,7 @@ bool PhysicsManager::Box2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
 			float distance = glm::dot(plane->GetNormal(), box->GetPosition()) - plane->GetDistance();
 
 			if(abs(distance) <= radius) {
-				/* Collision */
+				/* COLLISION */
 				box->SetVelocity(vec2(0));
 
 				return true;
@@ -161,6 +214,10 @@ bool PhysicsManager::Box2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
 	}
 
 	return false;
+}
+
+bool PhysicsManager::Box2Sphere(PhysicsObject *obj1, PhysicsObject *obj2) {
+	return Sphere2Box(obj2, obj1);
 }
 
 bool PhysicsManager::Box2Box(PhysicsObject *obj1, PhysicsObject *obj2) {

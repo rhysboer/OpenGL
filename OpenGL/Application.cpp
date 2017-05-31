@@ -1,7 +1,7 @@
 #include "Application.h"
 
 // remove
-#include "BoudingSphere.h"
+#include "BoundingSphere.h"
 #include "Frustum.h"
 
 
@@ -150,7 +150,7 @@ const bool Application::Update() {
 	vec4 plane(0, 1, 0, -1);
 	vec4 planeColour = Colours::Green;
 
-	BoudingSphere sphere;
+	BoundingSphere sphere;
 	sphere.centre = vec3(5, cosf((float)glfwGetTime()) + 1, 0);
 	sphere.radius = 0.5f;
 

@@ -230,10 +230,10 @@
     <ClInclude Include="Colours.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoudingSphere.h">
+    <ClInclude Include="AABB.h">
       <Filter>Header Files\Physics\Bounding</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
+    <ClInclude Include="BoundingSphere.h">
       <Filter>Header Files\Physics\Bounding</Filter>
     </ClInclude>
   </ItemGroup>
