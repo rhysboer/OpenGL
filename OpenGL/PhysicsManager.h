@@ -3,6 +3,7 @@
 #include "PhysicsObject.h"
 #include "AIE\Gizmos.h"
 #include "glm.hpp"
+#include "Time.h"
 #include "BoundingSphere.h"
 
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
@@ -50,7 +51,8 @@ public:
 private:
 
 	glm::vec2 m_gravity = glm::vec2(0, 0); // -9.81f
-	float m_timeStep = 0;
+	double m_timeStep = 0;
+	double m_currTime = 0;
 
 	std::vector<PhysicsObject*> m_actors;
 };

@@ -22,6 +22,7 @@ c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\time.
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\water.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\gizmos.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\aabb.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\application.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\baseapplication.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\box.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\camera.obj
@@ -29,6 +30,13 @@ c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\colou
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\flycamera.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\frustum.obj
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\imgui.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\gl_core_4_4.obj
+c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.ilk
+c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.exe
+c:\users\s171372\documents\visual studio 2015\projects\opengl\debug\opengl.pdb
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\cl.command.1.tlog
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\cl.read.1.tlog
 c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\cl.write.1.tlog
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\link.command.1.tlog
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\link.read.1.tlog
+c:\users\s171372\documents\visual studio 2015\projects\opengl\opengl\win32\opengl.tlog\link.write.1.tlog

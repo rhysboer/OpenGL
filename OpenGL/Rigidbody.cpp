@@ -12,29 +12,28 @@ Rigidbody::~Rigidbody() {
 }
 
 void Rigidbody::FixedUpdate(glm::vec2 gravity, float timeStep) {
-	{ // GUI
-		std::string name = "Physics Object " + std::to_string((int)timeStep) + "##" + std::to_string((int)timeStep);
+	m_position += m_velocity * Time::DeltaTime();
 
-		glm::vec2 grav = gravity * Time::DeltaTime();
-		ImGui::Begin(name.c_str());
+	ApplyForce(gravity);
+}
+
+void Rigidbody::Debug(int id) {
+	{ // GUI
+		std::string str = std::string("Physic Object ");
+		str += std::to_string(id);
+
+		ImGui::Begin(str.c_str());
 		ImGui::Text("Object");
-		ImGui::DragFloat2("Gravity", &grav[0]);
 		ImGui::DragFloat2("Position", &m_position[0]);
 		ImGui::DragFloat2("Velocity", &m_velocity[0]);
+		ImGui::DragFloat2("Momentum", &GetMomentum()[0]);
 		ImGui::DragFloat("Mass", &m_mass);
 		ImGui::End();
 	} // END GUI
-
-	m_velocity += gravity * Time::DeltaTime();
-
-	m_position += m_velocity;
-}
-
-void Rigidbody::Debug() {
 }
 
 void Rigidbody::ApplyForce(glm::vec2 force) {
-	m_velocity = force / m_mass; //?
+	m_velocity += force / m_mass; //?
 }
 
 void Rigidbody::ApplyForceToActor(Rigidbody * actor2, glm::vec2 force) {

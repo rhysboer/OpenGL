@@ -14,7 +14,7 @@ public:
 	PhysicsObject() {};
 
 	virtual void FixedUpdate(glm::vec2 gravity, float timeStep) = 0;
-	virtual void Debug() = 0;
+	virtual void Debug(int id) = 0;
 	virtual void MakeGizmo() = 0;
 	virtual void ResetPosition() {};
 

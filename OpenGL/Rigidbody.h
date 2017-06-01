@@ -13,7 +13,7 @@ public:
 	~Rigidbody();
 
 	virtual void FixedUpdate(glm::vec2 gravity, float timeStep);
-	virtual void Debug();
+	virtual void Debug(int id);
 
 	void ApplyForce(glm::vec2 force);
 	void ApplyForceToActor(Rigidbody* actor2, glm::vec2 force);
@@ -26,6 +26,7 @@ public:
 
 	// Set Functions
 	void SetVelocity(const glm::vec2 velocity) { m_velocity = velocity; }
+	void SetPosition(const glm::vec2 position) { m_position = position; }
 
 protected:
 	glm::vec2 GetMomentum();

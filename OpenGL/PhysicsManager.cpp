@@ -11,9 +11,15 @@ PhysicsManager::~PhysicsManager() {
 
 void PhysicsManager::Update(float dt) {
 	int i = 0;
-	for(auto iter = m_actors.begin(); iter != m_actors.end(); ++iter) {
-		(*iter)->FixedUpdate(m_gravity, i);
-		++i;
+
+	m_currTime += Time::DeltaTime();
+	if(m_currTime > m_timeStep) {
+		for(auto iter = m_actors.begin(); iter != m_actors.end(); ++iter) {
+			(*iter)->FixedUpdate(m_gravity, i);
+			++i;
+		}
+
+		m_currTime = 0;
 	}
 
 	CheckForCollisions();
@@ -26,8 +32,10 @@ void PhysicsManager::UpdateGizmos() {
 }
 
 void PhysicsManager::DebugScene() {
+	int i = 0;
 	for(auto iter = m_actors.begin(); iter != m_actors.end(); ++iter) {
-		(*iter)->Debug();
+		(*iter)->Debug(i);
+		++i;
 	}
 }
 
@@ -45,17 +53,16 @@ void PhysicsManager::RemoveActor(PhysicsObject * actor) {
 		m_actors.erase(iter);
 }
 
-static fn CollisionFunctionArray[] = 
+// -------------------- //
+//		Collisons		//
+// -------------------- //
+
+static fn CollisionFunctionArray[] =
 {
 	PhysicsManager::Plane2Plane,	PhysicsManager::Plane2Sphere,	PhysicsManager::Plane2Box,
 	PhysicsManager::Sphere2Plane,	PhysicsManager::Sphere2Sphere,	PhysicsManager::Sphere2Box,
 	PhysicsManager::Box2Plane,		PhysicsManager::Box2Sphere,		PhysicsManager::Box2Box,
 };
-
-
-// -------------------- //
-//		Collisons		//
-// -------------------- //
 
 void PhysicsManager::CheckForCollisions() {
 	int size = m_actors.size();
@@ -102,11 +109,18 @@ bool PhysicsManager::Sphere2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
 		float intersection = sphere->GetRadius() - sphereToPlane;
 		if(intersection > 0) {
 			/* COLLISION */
-			sphere->SetVelocity(glm::vec2(0));
+
+			glm::vec2 planeNormal = plane->GetNormal();
+			if(sphereToPlane < 0) {
+				planeNormal *= -1;
+			}
+
+			glm::vec2 forceVector = -1 * sphere->GetMass() * planeNormal * (glm::dot(planeNormal, sphere->GetVelocity()));
+			sphere->ApplyForce(2.0f * forceVector);
+			sphere->SetPosition(sphere->GetPosition() + collisionNormal * intersection * 0.5f);
 
 			return true;
 		}
-
 	}
 
 	return false;
@@ -117,11 +131,29 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 	Sphere* sphere2 = dynamic_cast<Sphere*>(obj2);
 
 	if(sphere1 != nullptr && sphere2 != nullptr) {
-		if((glm::distance(sphere1->GetPosition(), sphere2->GetPosition())) < (sphere1->GetRadius() + sphere2->GetRadius())) {
+		vec2 delta = sphere2->GetPosition() - sphere1->GetPosition();
+		float distance = glm::length(delta);
+		float intersection = sphere1->GetRadius() + sphere2->GetRadius() - distance;
+
+		if(intersection > 0) {
 			/* COLLISION */
 
-			sphere1->SetVelocity(glm::vec2(0));
-			sphere2->SetVelocity(glm::vec2(0));
+			/* Vector perpendicular to the point of collision */
+			vec2 collisionNormal = glm::normalize(delta);
+			/* The relative velocity of the two object colliding */
+			vec2 relativeVelocity = sphere1->GetVelocity() - sphere2->GetVelocity();
+			/* Collsion normal scaled by the dot product of the collision normal */
+			vec2 collisionVector = collisionNormal * (glm::dot(relativeVelocity, collisionNormal));
+			/* How much force get applied to the object */
+			vec2 forceVector = collisionVector * 1.0f / (1.0f / sphere1->GetMass() + 1.0f / sphere2->GetMass());
+
+			sphere1->ApplyForceToActor(sphere2, forceVector*2.0f);
+
+			/* The vector along which will move the two objects so they are no longer colliding */
+			vec2 separationVector = collisionNormal * intersection * 0.5f;
+
+			sphere1->SetPosition(sphere1->GetPosition() - separationVector);
+			sphere2->SetPosition(sphere2->GetPosition() - separationVector);
 
 			return true;
 		}

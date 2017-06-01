@@ -50,8 +50,9 @@ const bool Application::Startup() {
 	);
 
 	// Camera Settings
-	m_camera.SetLookAt(vec3(10), vec3(0), vec3(0, 1, 0));
+	m_camera.SetLookAt(vec3(1), vec3(0), vec3(0, 1, 0));
 	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
+	m_camera.SetPosition(vec3(0, 10, 38));
 
 	// QUANTERNIONS TEST
 	m_position[0] = vec3(10, 5, 10);
@@ -79,22 +80,26 @@ const bool Application::Startup() {
 	// --------------------------------------
 	//			 Physics Manager
 	// --------------------------------------
-	physicsManager = new PhysicsManager();
+	m_physicsManager = new PhysicsManager();
+	m_physicsManager->SetGravity(vec2(0, -9.8f)); // -0.08f
+	m_physicsManager->SetTimeStep(0.01f);
 	
 	for(int i = 0; i < 2; i++) {
-		m_sphere[i] = new Sphere(vec2(i * 10, 10), vec2(0, 0), 10, 5, Colours::Green);
-		physicsManager->AddActor(m_sphere[i]);
-		//physicsManager->SetGravity(vec2(0, 0)); // -0.08f
 
-		Box* box = new Box(vec2(-10 * i, 20), 2, 2, 5, Colours::Blue);
-		physicsManager->AddActor(box);
+		Box* box = new Box(vec2(-10 * i, 20), 2, 2, 5,Colours::Blue);
+		//box->ApplyForce(vec2(0, -3.0f));
+		m_physicsManager->AddActor(box);
 
 	}
 
-
+	m_sphere[0] = new Sphere(vec2(0 * 10, 55), vec2(0, 0), 100, 5, Colours::Orange);
+	m_sphere[1] = new Sphere(vec2(1 * 50, 55), vec2(0, 0), 100, 5, Colours::Yellow);
+	m_sphere[1]->ApplyForce(vec2(-250, 0));
+	m_physicsManager->AddActor(m_sphere[0]);
+	m_physicsManager->AddActor(m_sphere[1]);
 
 	Plane* plane = new Plane(vec2(0, 1), 0);
-	physicsManager->AddActor(plane);
+	m_physicsManager->AddActor(plane);
 
 
 
@@ -124,16 +129,6 @@ const bool Application::Update() {
 	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colours::Red, &m_sunMat);
 	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colours::Green, &m_earthMat);
 	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colours::Purple, &m_moonMat);
-
-	// CUBE & QUANTERNIONS
-	float s = cos((float)glfwGetTime()) * 0.5f + 0.5f;
-
-	vec3 p = (1.0f - s) * m_position[0] + s * m_position[1];
-	quat r = glm::slerp(m_rotation[0], m_rotation[1], s);
-	mat4 m = glm::translate(p) * glm::toMat4(r);
-
-	Gizmos::addTransform(m);
-	Gizmos::addAABBFilled(p, vec3(.5f), Colours::Red, &m);
 
 	// Grid
 	for(int i = 0; i < 21; ++i) {
@@ -171,8 +166,9 @@ const bool Application::Update() {
 	if(InputManager::IsKeyDown(GLFW_KEY_T))
 		m_sphere[0]->ApplyForceToActor(m_sphere[1], vec2(0.1f, 0));
 	
-	physicsManager->Update(Time::DeltaTime());
-	physicsManager->UpdateGizmos();
+	m_physicsManager->Update(Time::DeltaTime());
+	m_physicsManager->UpdateGizmos();
+	m_physicsManager->DebugScene();
 	
 
 
@@ -201,7 +197,7 @@ void Application::Draw() {
 	m_objLoader->Draw(m_camera);
 
 	Gizmos::draw(m_camera.GetProjectionView());
-	physicsManager->Draw(m_camera.GetProjectionView());
+	m_physicsManager->Draw(m_camera.GetProjectionView());
 
 	// Render Post Processing
 	m_effects->EndRender();
