@@ -45,13 +45,15 @@ void Box::MakeGizmo() {
 	Gizmos::add2DAABBFilled(m_position, m_size, m_colour);
 
 	// Debug Draw AABB
+	/*
 	glm::vec2 topLeft = glm::vec2(m_boundBox.GetMin().x, m_boundBox.GetMax().y);
 	glm::vec2 topRight = glm::vec2(m_boundBox.GetMax().x, m_boundBox.GetMax().y);
 	glm::vec2 botLeft = glm::vec2(m_boundBox.GetMin().x, m_boundBox.GetMin().y);
 	glm::vec2 botRight = glm::vec2(m_boundBox.GetMax().x, m_boundBox.GetMin().y);
-
+	
 	Gizmos::add2DLine(topLeft, topRight, glm::vec4(1));
 	Gizmos::add2DLine(topRight, botRight, glm::vec4(1));
 	Gizmos::add2DLine(botRight, botLeft, glm::vec4(1));
 	Gizmos::add2DLine(botLeft, topLeft, glm::vec4(1));
+	*/
 }

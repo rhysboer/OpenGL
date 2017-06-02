@@ -89,7 +89,5 @@ private:
 
 	// Physics
 	PhysicsManager* m_physicsManager = nullptr;
-
-	Sphere* m_sphere[2];
 };
 

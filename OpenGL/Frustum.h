@@ -13,7 +13,5 @@ public:
 
 	static void GetFrustumPlanes(const mat4& transform, vec4* planes);
 
-private:
-
 };
 

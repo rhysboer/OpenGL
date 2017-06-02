@@ -47,7 +47,7 @@ private:
 	// Shader
 	ShaderLoader m_shader = ShaderLoader();
 
-	bool m_isEnabled = true;
+	bool m_isEnabled = false;
 	bool m_isPaused = false;
 
 	Particle* m_particles;

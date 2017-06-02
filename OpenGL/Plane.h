@@ -3,10 +3,12 @@
 #include "Colours.h"
 #include "AIE\Gizmos.h"
 
+#include "GLM\gtx\rotate_vector.hpp"
+
 class Plane : public PhysicsObject {
 public:
-	Plane();
-	Plane(glm::vec2 normal, float distance);
+	//Plane();
+	Plane(glm::vec2 normal, float height, float rotation = 0.0f);
 	~Plane();
 
 	virtual void FixedUpdate(glm::vec2 gravity, float timeStep);

@@ -43,6 +43,48 @@ void PhysicsManager::Draw(glm::mat4 m_projection) {
 	Gizmos::draw2D(m_projection);
 }
 
+void PhysicsManager::GUI() {
+	static vec2 m_spawnLocation = vec2(0);
+	static vec2 m_force = vec2(0);
+	static vec4 m_colour = vec4(1,0,0,1);
+	static vec2 m_size = vec2(2);
+	static float m_mass = 1.0f;
+	static float m_rotation = 0.0f;
+
+	auto spawnCircle = [&]() {
+		Sphere* sphere = new Sphere(m_spawnLocation, m_force, m_mass, m_size.x, m_colour);
+		AddActor(sphere);
+	};
+
+	auto spawnBox = [&]() {
+		Box* box = new Box(m_spawnLocation, m_size.x, m_size.y, m_mass, m_colour);
+		AddActor(box);
+	};
+
+	auto spawnPlane = [&]() {
+		Plane* plane = new Plane(m_spawnLocation, m_size.x, m_rotation);
+		AddActor(plane);
+	};
+
+	ImGui::Begin("Physics Manager");
+	ImGui::Text("Settings");
+	ImGui::DragFloat2("Gravity", &m_gravity[0]);
+	ImGui::DragFloat("Time Step", &m_timeStep, 0.01f, 0.0f, 60.0f);
+	ImGui::Text("Spawning");
+	ImGui::DragFloat2("Location", &m_spawnLocation[0]);
+	ImGui::DragFloat2("Force", &m_force[0]);
+	ImGui::DragFloat2("Size", &m_size[0]);
+	ImGui::ColorEdit4("Colour", &m_colour[0]);
+	ImGui::DragFloat("Rotation", &m_rotation);
+	ImGui::DragFloat("Mass", &m_mass);
+
+	if(ImGui::Button("Spawn Circle")) { spawnCircle(); }; ImGui::SameLine();
+	if(ImGui::Button("Spawn Box")) { spawnBox(); }; ImGui::SameLine();
+	if(ImGui::Button("Spawn Plane")) { spawnPlane(); };
+
+	ImGui::End();
+}
+
 void PhysicsManager::AddActor(PhysicsObject * actor) {
 	m_actors.push_back(actor);
 }
@@ -139,7 +181,7 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 			/* COLLISION */
 
 			/* Vector perpendicular to the point of collision */
-			vec2 collisionNormal = glm::normalize(delta);
+			vec2 collisionNormal = (delta != vec2(0)) ? glm::normalize(delta) : vec2(0);
 			/* The relative velocity of the two object colliding */
 			vec2 relativeVelocity = sphere1->GetVelocity() - sphere2->GetVelocity();
 			/* Collsion normal scaled by the dot product of the collision normal */

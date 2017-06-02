@@ -6,6 +6,8 @@
 #include "Time.h"
 #include "BoundingSphere.h"
 
+#include "imgui.h"
+
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 
 class Sphere;
@@ -22,6 +24,9 @@ public:
 	void DebugScene();
 
 	void Draw(glm::mat4 m_projection); // ???
+
+	// Spawn Menu
+	void GUI();
 
 	// Actor Management
 	void AddActor(PhysicsObject* actor);
@@ -51,8 +56,8 @@ public:
 private:
 
 	glm::vec2 m_gravity = glm::vec2(0, 0); // -9.81f
-	double m_timeStep = 0;
-	double m_currTime = 0;
+	float m_timeStep = 0;
+	float m_currTime = 0;
 
 	std::vector<PhysicsObject*> m_actors;
 };
