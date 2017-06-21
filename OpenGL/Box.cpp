@@ -1,23 +1,26 @@
 #include "Box.h"
 
 Box::Box() {
-	m_shape = ShapeType::AABB;
+	m_shape		= ShapeType::AABB;
 
-	m_size = glm::vec2(1);
-	m_position = glm::vec2(0);
-	m_mass = 1;
-	m_colour = glm::vec4(1);
+	m_size		= glm::vec2(1);
+	m_position	= glm::vec2(0);
+	m_mass		= 1;
+	m_colour	= glm::vec4(1);
 
 	m_boundBox.Fit(glm::vec2(0), glm::vec2(0), glm::vec2(0), glm::vec2(0));
 }
 
-Box::Box(glm::vec2 position, float length, float height, float mass, glm::vec4 colour) {
-	m_shape = ShapeType::AABB;
+Box::Box(glm::vec2 position, float length, float height, float mass, glm::vec4 colour, float angularDrag, float linearDrag) {
+	m_shape		= ShapeType::AABB;
 
-	m_size = glm::vec2(length, height);
-	m_position = position;
-	m_mass = mass;
-	m_colour = colour;
+	m_size		= glm::vec2(length, height);
+	m_position	= position;
+	m_mass		= mass;
+	m_colour	= colour;
+
+	m_angularDrag	= angularDrag;
+	m_angularDrag	= linearDrag;
 
 	m_boundBox.Fit(
 		glm::vec2(position.x - length, position.y + height), // Top Left

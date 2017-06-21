@@ -75,22 +75,42 @@ const bool Application::Startup() {
 	//			 Physics Manager
 	// --------------------------------------
 	m_physicsManager = new PhysicsManager();
-	m_physicsManager->SetGravity(vec2(0, -5.0f));
+	m_physicsManager->SetGravity(vec2(0, -8.0f));
 	m_physicsManager->SetTimeStep(0.01f);
 	
 	Plane* plane[2];
-	Sphere* sphere[5];
+	Box* box;
+	Sphere* sphere[4];
+	
+	//box = new Box(vec2(5, 8), 1, 1, 10.0f, Colours::Green);
 
 	plane[0] = new Plane(vec2(0, 1), 0, 40.0f);
 	plane[1] = new Plane(vec2(0, 1), 0, -40.0f);
+	
+	sphere[0] = new Sphere(glm::vec2(19, 21), glm::vec2(-2,0), 10, 1, Colours::Grey, 0.99f, 1.0f);
+	sphere[1] = new Sphere(glm::vec2(-13, 22), glm::vec2(2,0), 10, 1, Colours::Orange, 0.99f, 1.0f);
+	sphere[2] = new Sphere(glm::vec2(1, 5), glm::vec2(-2, 0), 10, 1, Colours::Grey, 0.99f, 1.0f);
+	sphere[3] = new Sphere(glm::vec2(-12, 28), glm::vec2(2, 0), 10, 1, Colours::Orange, 0.99f, 1.0f);
 
+	sphere[0]->SetElasticity(0.8f);
+	sphere[1]->SetElasticity(0.8f);
+	sphere[2]->SetElasticity(0.8f);
+	sphere[3]->SetElasticity(0.8f);
+
+	sphere[2]->SetStatic(true);
+
+	//m_physicsManager->AddActor(box);
+	m_physicsManager->AddActor(sphere[0]);
+	m_physicsManager->AddActor(sphere[1]);
+	m_physicsManager->AddActor(sphere[2]);
+	m_physicsManager->AddActor(sphere[3]);
 	m_physicsManager->AddActor(plane[0]);
 	m_physicsManager->AddActor(plane[1]);
-
-	for(int i = 0; i < 5; i++) {
-		sphere[i] = new Sphere(vec2(i * 10, 55), vec2(0, 0), 100, 5, Colours::Purple);
-		m_physicsManager->AddActor(sphere[i]);
-	}
+	
+	//for(int i = 0; i < 5; i++) {
+	//	sphere[i] = new Sphere(vec2(i * 10, 55), vec2(0, 0), 100, 5, Colours::Purple);
+	//	m_physicsManager->AddActor(sphere[i]);
+	//}
 	
 	Gizmos::create();
 	return true;

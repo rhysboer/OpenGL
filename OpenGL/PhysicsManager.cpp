@@ -158,7 +158,10 @@ bool PhysicsManager::Sphere2Plane(PhysicsObject *obj1, PhysicsObject *obj2) {
 			}
 
 			glm::vec2 forceVector = -1 * sphere->GetMass() * planeNormal * (glm::dot(planeNormal, sphere->GetVelocity()));
-			sphere->ApplyForce(2.0f * forceVector);
+
+			float combinedElasticity = (sphere->GetElasticity() + 1.0f) / 2.0f;
+
+			sphere->ApplyForce(forceVector+(forceVector*combinedElasticity)); // sphere->ApplyForce(2.0f * forceVector);
 			sphere->SetPosition(sphere->GetPosition() + collisionNormal * intersection * 0.5f);
 
 			return true;
@@ -176,27 +179,30 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 		vec2 delta = sphere2->GetPosition() - sphere1->GetPosition();
 		float distance = glm::length(delta);
 		float intersection = sphere1->GetRadius() + sphere2->GetRadius() - distance;
-
+		
 		if(intersection > 0) {
 			/* COLLISION */
-
+		
 			/* Vector perpendicular to the point of collision */
-			vec2 collisionNormal = (delta != vec2(0)) ? glm::normalize(delta) : vec2(0);
+			vec2 collisionNormal = glm::normalize(delta);//(delta != vec2(0)) ? glm::normalize(delta) : vec2(0);
 			/* The relative velocity of the two object colliding */
 			vec2 relativeVelocity = sphere1->GetVelocity() - sphere2->GetVelocity();
 			/* Collsion normal scaled by the dot product of the collision normal */
 			vec2 collisionVector = collisionNormal * (glm::dot(relativeVelocity, collisionNormal));
 			/* How much force get applied to the object */
 			vec2 forceVector = collisionVector * 1.0f / (1.0f / sphere1->GetMass() + 1.0f / sphere2->GetMass());
-
-			sphere1->ApplyForceToActor(sphere2, forceVector*2.0f);
-
+		
+			/* Combined both sphere elasticities */
+			float combinedElasticity = (sphere1->GetElasticity() + sphere2->GetElasticity()) / 2.0f;
+			sphere1->ApplyForceToActor(sphere2, forceVector+(forceVector*combinedElasticity));
+		
+		
 			/* The vector along which will move the two objects so they are no longer colliding */
 			vec2 separationVector = collisionNormal * intersection * 0.5f;
-
+		
 			sphere1->SetPosition(sphere1->GetPosition() - separationVector);
-			sphere2->SetPosition(sphere2->GetPosition() - separationVector);
-
+			sphere2->SetPosition(sphere2->GetPosition() + separationVector);
+		
 			return true;
 		}
 	}
