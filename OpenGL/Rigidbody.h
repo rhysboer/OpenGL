@@ -22,11 +22,12 @@ public:
 	void ApplyForceToActor(Rigidbody* actor2, glm::vec2 force);
 
 	// Get Functions
-	glm::vec2 GetPosition() { return m_position; }
-	glm::vec2 GetVelocity() { return m_velocity; }
-	float GetRotation() { return m_rotation; }
-	float GetMass() { return m_mass; }
-	float GetElasticity() { return m_elasticity; }
+	glm::vec2 GetPosition() const { return m_position; }
+	glm::vec2 GetVelocity() const { return m_velocity; }
+	float GetRotation() const { return m_rotation; }
+	float GetMass() const { return m_mass; }
+	float GetElasticity() const { return m_elasticity; }
+	bool IsStatic() const { return m_isStatic; }
 
 	// Set Functions
 	void SetVelocity(const glm::vec2 velocity) { m_velocity = velocity; }

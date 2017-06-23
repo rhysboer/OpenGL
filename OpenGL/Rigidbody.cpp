@@ -26,11 +26,15 @@ Rigidbody::~Rigidbody() {
 }
 
 void Rigidbody::FixedUpdate(glm::vec2 gravity, float timeStep) {
-	if(m_isStatic == true) return;
+	if(m_isStatic == true) {
+		m_velocity = glm::vec2(0);
+		return;
+	}
 
 	ApplyForce(gravity * m_mass * Time::DeltaTime());
 	m_position += m_velocity * Time::DeltaTime();
-	m_velocity *= m_linearDrag; // do delta time
+
+	m_velocity *= m_linearDrag; 
 	m_angularVelocity -= m_angularVelocity * m_angularDrag * Time::DeltaTime();
 	m_rotation += m_angularVelocity * Time::DeltaTime();
 
@@ -39,6 +43,7 @@ void Rigidbody::FixedUpdate(glm::vec2 gravity, float timeStep) {
 
 	if(glm::length(m_angularDrag) < MIN_ROTATION_THRESHOLD)
 		m_angularVelocity = 0;
+
 }
 
 void Rigidbody::Debug(int id) {
@@ -52,6 +57,8 @@ void Rigidbody::Debug(int id) {
 		ImGui::DragFloat2("Velocity", &m_velocity[0]);
 		ImGui::DragFloat2("Momentum", &GetMomentum()[0]);
 		ImGui::DragFloat("Mass", &m_mass);
+		ImGui::Checkbox("Is Static", &m_isStatic);
+		ImGui::DragFloat("Elasticity", &m_elasticity, 0.005f, 0.0f, 1.0f);
 		ImGui::End();
 	} // END GUI
 }

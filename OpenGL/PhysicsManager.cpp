@@ -10,13 +10,10 @@ PhysicsManager::~PhysicsManager() {
 }
 
 void PhysicsManager::Update(float dt) {
-	int i = 0;
-
 	m_currTime += Time::DeltaTime();
 	if(m_currTime > m_timeStep) {
 		for(auto iter = m_actors.begin(); iter != m_actors.end(); ++iter) {
-			(*iter)->FixedUpdate(m_gravity, i);
-			++i;
+			(*iter)->FixedUpdate(m_gravity, 0);
 		}
 
 		m_currTime = 0;
@@ -44,10 +41,10 @@ void PhysicsManager::Draw(glm::mat4 m_projection) {
 }
 
 void PhysicsManager::GUI() {
-	static vec2 m_spawnLocation = vec2(0);
+	static vec2 m_spawnLocation = vec2(0, 5);
 	static vec2 m_force = vec2(0);
 	static vec4 m_colour = vec4(1,0,0,1);
-	static vec2 m_size = vec2(2);
+	static vec2 m_size = vec2(1);
 	static float m_mass = 1.0f;
 	static float m_rotation = 0.0f;
 
@@ -79,8 +76,8 @@ void PhysicsManager::GUI() {
 	ImGui::DragFloat("Mass", &m_mass);
 
 	if(ImGui::Button("Spawn Circle")) { spawnCircle(); }; ImGui::SameLine();
-	if(ImGui::Button("Spawn Box")) { spawnBox(); }; ImGui::SameLine();
-	if(ImGui::Button("Spawn Plane")) { spawnPlane(); };
+	//if(ImGui::Button("Spawn Box")) { spawnBox(); }; ImGui::SameLine();
+	//if(ImGui::Button("Spawn Plane")) { spawnPlane(); };
 
 	ImGui::End();
 }
@@ -200,8 +197,13 @@ bool PhysicsManager::Sphere2Sphere(PhysicsObject * obj1, PhysicsObject *obj2) {
 			/* The vector along which will move the two objects so they are no longer colliding */
 			vec2 separationVector = collisionNormal * intersection * 0.5f;
 		
-			sphere1->SetPosition(sphere1->GetPosition() - separationVector);
-			sphere2->SetPosition(sphere2->GetPosition() + separationVector);
+			if(sphere2->IsStatic()) {
+				sphere1->SetPosition(sphere1->GetPosition() - (separationVector * 2.0f));
+
+			} else {
+				sphere1->SetPosition(sphere1->GetPosition() - separationVector);
+				sphere2->SetPosition(sphere2->GetPosition() + separationVector);
+			}
 		
 			return true;
 		}

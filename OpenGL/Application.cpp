@@ -50,9 +50,9 @@ const bool Application::Startup() {
 	);
 
 	// Camera Settings
-	m_camera.SetLookAt(vec3(1), vec3(0), vec3(0, 1, 0));
+	m_camera.SetLookAt(vec3(1,1,10), vec3(0,1,0), vec3(0, 1, 0));
 	m_camera.SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
-	m_camera.SetPosition(vec3(0, 10, 38));
+	m_camera.SetPosition(vec3(0, 10, 35));//(vec3(0, 10, 38));
 
 	// Terrain 
 	m_terrain.init(50, 50);
@@ -92,10 +92,10 @@ const bool Application::Startup() {
 	sphere[2] = new Sphere(glm::vec2(1, 5), glm::vec2(-2, 0), 10, 1, Colours::Grey, 0.99f, 1.0f);
 	sphere[3] = new Sphere(glm::vec2(-12, 28), glm::vec2(2, 0), 10, 1, Colours::Orange, 0.99f, 1.0f);
 
-	sphere[0]->SetElasticity(0.8f);
-	sphere[1]->SetElasticity(0.8f);
-	sphere[2]->SetElasticity(0.8f);
-	sphere[3]->SetElasticity(0.8f);
+	sphere[0]->SetElasticity(0.7f);
+	sphere[1]->SetElasticity(0.7f);
+	sphere[2]->SetElasticity(0.7f);
+	sphere[3]->SetElasticity(0.7f);
 
 	sphere[2]->SetStatic(true);
 
@@ -112,7 +112,7 @@ const bool Application::Startup() {
 	//	m_physicsManager->AddActor(sphere[i]);
 	//}
 	
-	Gizmos::create();
+	Gizmos::create(200000, 200000, 200000, 200000);
 	return true;
 }
 
@@ -135,9 +135,9 @@ const bool Application::Update() {
 	m_earthMat = m_sunMat * m_earthLocal;
 	m_moonMat = m_earthMat * m_moonLocal;
 
-	Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colours::Red, &m_sunMat);
-	Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colours::Green, &m_earthMat);
-	Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colours::Purple, &m_moonMat);
+	//Gizmos::addSphere(vec3(m_sunMat[3]), 1.f, 25, 25, Colours::Red, &m_sunMat);
+	//Gizmos::addSphere(vec3(m_earthMat[3]), 0.5f, 20, 20, Colours::Green, &m_earthMat);
+	//Gizmos::addSphere(vec3(m_moonMat[3]), 0.2f, 10, 10, Colours::Purple, &m_moonMat);
 
 	// Grid
 	for(int i = 0; i < 21; ++i) {
@@ -148,6 +148,7 @@ const bool Application::Update() {
 
 	/* Frustum Culling */
 	//////////////////////////////////////////
+	/*
 	vec4 planes[6];
 	Frustum::GetFrustumPlanes(m_camera.GetProjectionView(), planes);
 
@@ -170,6 +171,7 @@ const bool Application::Update() {
 			Gizmos::addSphere(sphere.centre, sphere.radius, 8, 8, Colours::Purple);
 		}
 	}
+	*/
 	//////////////////////////////////////////
 
 	

@@ -26,27 +26,28 @@ void Camera::SetPerspective(float fov, float aspect, float _near, float _far) {
 }
 
 void Camera::SetLookAt(vec3 towards, vec3 center, vec3 worldUp) {
-	vec3 direction(glm::normalize(center - towards)); // Cameras reverse facing direction
-	vec3 rightAngle(glm::normalize(glm::cross(direction, worldUp))); // Cameras right angle
-	vec3 up(cross(rightAngle, direction)); // Cameras up axis
+	//vec3 direction(glm::normalize(center - towards)); // Cameras reverse facing direction
+	//vec3 rightAngle(glm::normalize(glm::cross(direction, worldUp))); // Cameras right angle
+	//vec3 up(cross(rightAngle, direction)); // Cameras up axis
+	//
+	//m_worldMat[0][0] = rightAngle.x;
+	//m_worldMat[1][0] = rightAngle.y;
+	//m_worldMat[2][0] = rightAngle.z;
+	//
+	//m_worldMat[0][1] = up.x;
+	//m_worldMat[1][1] = up.y;
+	//m_worldMat[2][1] = up.z;
+	//
+	//m_worldMat[0][2] = -direction.x;
+	//m_worldMat[1][2] = -direction.y;
+	//m_worldMat[2][2] = -direction.z;
+	//
+	//m_worldMat[3][0] = -glm::dot(rightAngle, towards);                
+	//m_worldMat[3][1] = -glm::dot(up, towards);                        
+	//m_worldMat[3][2] = glm::dot(direction, towards);         
 
-	m_worldMat[0][0] = rightAngle.x;
-	m_worldMat[1][0] = rightAngle.y;
-	m_worldMat[2][0] = rightAngle.z;
-
-	m_worldMat[0][1] = up.x;
-	m_worldMat[1][1] = up.y;
-	m_worldMat[2][1] = up.z;
-
-	m_worldMat[0][2] = -direction.x;
-	m_worldMat[1][2] = -direction.y;
-	m_worldMat[2][2] = -direction.z;
-
-	m_worldMat[3][0] = -glm::dot(rightAngle, towards);                
-	m_worldMat[3][1] = -glm::dot(up, towards);                        
-	m_worldMat[3][2] = glm::dot(direction, towards);         
-
-	m_worldMat = glm::inverse(m_worldMat);
+	//m_worldMat = glm::inverse(m_worldMat);
+	m_worldMat = glm::inverse(glm::lookAt(towards, center, worldUp));
 }						        
 
 void Camera::SetPosition(vec3 position) {
@@ -71,10 +72,8 @@ void Camera::Move(vec3 translate) {
 
 void Camera::Rotate(float angle, vec3 axis) {
 	if(axis != vec3(0)) {
-		vec3 axisNorm = glm::normalize(axis);
-
 		m_worldMat = m_worldMat * glm::inverse(glm::rotate(angle, axis));
-
+		
 		UpdateProjectionViewTransform();
 	}
 }
