@@ -1,3 +1,5 @@
 *.db
 OpenGL.VC.VC.opendb
 OpenGL.sdf
+.vs/OpenGL/v15/ipch/AutoPCH/863b30e69ad5eba5/APPLICATION.ipch
+.vs/OpenGL/v15/Browse.VC.opendb
